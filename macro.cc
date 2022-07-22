@@ -52,3 +52,40 @@ void gaussiane_angolo()
     delete f;
     delete c;
 }
+
+void proiezioni_masse(double start, double stop, int n_int)
+{
+    TFile *f = new TFile("grafici.root", "READ");
+    f->cd();
+    TH2D *h2 = (TH2D *)f->Get("Resolution");
+
+    TFile *f_mass = new TFile("./analisi_risoluzione_energia/proiezioni_massa_invariante.root", "RECREATE");
+    f_mass->cd();
+
+    TCanvas *c = new TCanvas("c", "c", 1000, 450, 900, 650);
+    c->cd();
+
+    double inc = (stop - start) / n_int;
+    for (double i = start; i < stop; i = i + inc)
+    {
+        std::string s1 = std::to_string(i);
+        s1.resize(4);
+        std::string s2 = std::to_string(i + inc);
+        s2.resize(4);
+
+        TH1D *temp = h2->ProjectionY("temp", h2->GetXaxis()->FindBin(i), h2->GetXaxis()->FindBin(i + inc));
+        temp->SetTitle(("proiezone massa invariante " + s1 + "-" + s2 + " GeV").c_str());
+        temp->GetYaxis()->SetTitle("conteggi");
+        temp->GetXaxis()->SetRangeUser(0, 1);
+        temp->Draw();
+
+        static int count = 1;
+        c->SetName(("intervallo" + std::to_string(count++)).c_str());
+        c->Write();
+        delete temp;
+    }
+
+    delete h2;
+    delete f;
+    delete c;
+}
