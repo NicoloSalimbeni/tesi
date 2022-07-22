@@ -7,6 +7,7 @@
 #include "TAxis.h"
 #include "TGraphErrors.h"
 #include "TLegend.h"
+#include "TPad.h"
 
 #include <string>
 #include <iostream>
@@ -108,6 +109,7 @@ void medie_rms_proiezioni(double start = 2.6, double stop = 4, int n_int = 10)
     f_mass->cd();
 
     TCanvas *c = new TCanvas("c", "c", 1500, 600);
+    c->SetName("media_rms");
     c->Divide(2, 1);
 
     TGraphErrors *g_mean = new TGraphErrors();
@@ -120,7 +122,7 @@ void medie_rms_proiezioni(double start = 2.6, double stop = 4, int n_int = 10)
     g_rms->SetNameTitle("g_rms", "rms medio nel grafico (massa,risoluzione)");
     g_rms->SetMarkerStyle(20);
     g_rms->GetXaxis()->SetTitle("Massa invariante [GeV]");
-    g_rms->GetYaxis()->SetTitle("RMS risoluzione");
+    g_rms->GetYaxis()->SetTitle("RMS");
 
     double inc = (stop - start) / n_int;
     for (double i = start; i < stop; i = i + inc)
@@ -148,6 +150,7 @@ void medie_rms_proiezioni(double start = 2.6, double stop = 4, int n_int = 10)
     gPad->SetGrid();
     g_rms->Draw("AP");
     c->Write();
+    c->SaveAs("./analisi_risoluzione_energia/media_rms.png");
 
     // delete g_mean;
     delete h2;
