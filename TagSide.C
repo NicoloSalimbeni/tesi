@@ -48,7 +48,7 @@ void TagSide::Loop(std::string dump)
    MassRatio = new TH1D("MassRatio", " 1-M(sum)/M(const)", 100, -0.2, 0.2);
    CosAlpha = new TH2D("CosAlpha", "Cos-angle vs L ", 50, 0., 25., 50, 0.901, 1.001);
 
-   T_Angle = new TH2D("T_Angle", "(L/#sigma_{L},#alpha)", 100, 0, 100, 100, -0.001, 3.15);
+   T_Angle = new TH2D("T_Angle", "(L/#sigma_{L},#alpha)", 100, 0, 100, 100, -0.001, 0.15);
    T_Angle->GetXaxis()->SetTitle("L/#sigma_{L}");
    T_Angle->GetYaxis()->SetTitle("#alpha");
    T_Angle->GetZaxis()->SetTitle("Counts");
