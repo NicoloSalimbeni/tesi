@@ -31,10 +31,9 @@ solve_eq2(double a, double b, double c)
    }
    double sol_mag = (-b + sqrt(delta)) / (2 * a);
    double sol_min = (-b - sqrt(delta)) / (2 * a);
-   std::cout << sol_mag << " " << sol_min << std::endl;
    if (sol_min > 0)
    {
-      std::cout << "risulato imprevisto" << std::endl;
+      std::cout << "indecisione sull'energia" << std::endl;
       return -1;
    }
    return sol_mag;
@@ -104,9 +103,8 @@ void TagSide::Loop(std::string dump)
    Double_t a;
    Double_t b;
    Double_t c;
-   Double_t t;
-   Double_t p;
    Double_t en;
+   Double_t pvz;
 
    std::cout << "Analysis started, wait...\t" << std::flush;
 
@@ -161,12 +159,13 @@ void TagSide::Loop(std::string dump)
       }
 
       // calcolo energia 2)
-      t = tlv_visibile.Vect().Mag2() + pow(tlv_visibile.T(), 2) - pow(VtxMass, 2);
-      a = 4 * pow(tlv_visibile.Pz(), 2) - 4 * pow(tlv_visibile.T(), 2);
-      b = -4 * t * tlv_visibile.Pz() + 8 * pow(tlv_visibile.T(), 2) * tlv_visibile.Pz();
-      c = t * t - 4 * pow(tlv_visibile.T(), 2) * (tlv_visibile.Vect().Mag2());
-      p = solve_eq2(a, b, c);
-      en = sqrt(p * p - VtxMass * VtxMass);
+
+      pvz = (tlv_visibile.Vect().Dot(tlv_bTag->Vect())) / tlv_bTag->Vect().Mag();
+      a = 4 * (pow(tlv_visibile.T(), 2) - pvz * pvz);
+      b = 4 * tlv_visibile.T() * (pow(visible_mass, 2) + pow(VtxMass, 2));
+      c = -4 * pow(VtxMass * pvz, 2);
+      en = solve_eq2(a, b, c);
+      // std::cout << en << " " << tlv_bTag->T() << std::endl;
       B_energy->Fill(en - tlv_bTag->T());
    }
    std::cout << "completed without errors! :-)" << std::endl;
