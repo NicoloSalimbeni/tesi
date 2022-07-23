@@ -5,6 +5,8 @@
 #include <TStyle.h>
 #include <TCanvas.h>
 #include "TAxis.h"
+#include "TMath.h"
+#include "TProfile.h"
 
 #include <string>
 #include <iostream>
@@ -15,6 +17,27 @@ TH1D *MassRatio;
 TH2D *CosAlpha;
 TH2D *T_Angle;
 TH2D *Resolution;
+TH1D *B_energy;
+TProfile *En_profile;
+
+double
+solve_eq2(double a, double b, double c)
+{
+   double delta = b * b - 4 * a * c;
+   if (delta < 0)
+   {
+      std::cout << "delta negativo" << std::endl;
+      return -1;
+   }
+   double sol_mag = (-b + sqrt(delta)) / (2 * a);
+   double sol_min = (-b - sqrt(delta)) / (2 * a);
+   if (sol_min > 0)
+   {
+      std::cout << "risulato imprevisto" << std::endl;
+      return -1;
+   }
+   return sol_mag;
+}
 
 void TagSide::Loop(std::string dump)
 {
@@ -58,6 +81,16 @@ void TagSide::Loop(std::string dump)
    Resolution->GetYaxis()->SetTitle("risoluzione energia");
    Resolution->GetZaxis()->SetTitle("Counts");
 
+   En_profile = new TProfile("En_profile", "Profilo Massa vs risoluzione", 100, 1, 4.5, 0, 1);
+   En_profile->GetXaxis()->SetTitle("massa visibile [GeV]");
+   En_profile->GetYaxis()->SetTitle("risoluzione energia");
+
+   // B_energy = new TH1D("B_energy",
+   //                     "residui energia calcolata energia vera",
+   //                     100, -0.02, 0.02);
+   // B_energy->GetXaxis()->SetTitle("Energia B [GeV]");
+   // B_energy->GetYaxis()->SetTitle("conteggi");
+
    Long64_t nentries = fChain->GetEntriesFast();
 
    // variabili da usare nel ciclo for per evitare di doverle costruire e distruggere ogni volta
@@ -65,6 +98,14 @@ void TagSide::Loop(std::string dump)
    //  1)
    Double_t visible_mass; // massa visibile
    Double_t ris_mass;     // risoluzione massa
+
+   // 2)
+   Double_t a;
+   Double_t b;
+   Double_t c;
+   Double_t t;
+   Double_t p;
+   Double_t en;
 
    std::cout << "Analysis started, wait...\t" << std::flush;
 
@@ -88,22 +129,44 @@ void TagSide::Loop(std::string dump)
       double alpha = tlv_Btag.Angle(tlv_vertex->Vect());
       CosAlpha->Fill(tlv_vertex->T(), cos(alpha));
 
-      // cose che ho aggiunto io
+      //=====================COSE CHE HO AGGIUNTO IO===============================================
       T_Angle->Fill(tlv_vertex->T(), alpha); // istogramma (L/sigma,angolo tra due direzioni)
+      bool charge = VtxCharge + 1;           // 0 se negativo 2 se positivo
+
+      TLorentzVector tlv_visibile;
+      if (charge)
+      {
+         tlv_visibile = *tlv_mumTag + *tlv_kapTag;
+      }
+      else
+      {
+         tlv_visibile = *tlv_mupTag + *tlv_kamTag;
+      }
 
       // risoluzione e massa visibile
-      if (VtxCharge == 1)
+      if (charge)
       { // variabili 1)
-         visible_mass = (*tlv_mumTag + *tlv_kapTag).M();
+         visible_mass = tlv_visibile.M();
          ris_mass = (tlv_bTag->T() - (tlv_mumTag->T() + tlv_kapTag->T())) / tlv_bTag->T();
          Resolution->Fill(visible_mass, ris_mass);
+         En_profile->Fill(visible_mass, ris_mass, 1);
       }
-      if (VtxCharge == -1)
+      if (charge)
       { // variabili 1)
-         visible_mass = (*tlv_mupTag + *tlv_kamTag).M();
+         visible_mass = tlv_visibile.M();
          ris_mass = (tlv_bTag->T() - (tlv_mupTag->T() + tlv_kamTag->T())) / tlv_bTag->T();
          Resolution->Fill(visible_mass, ris_mass);
+         En_profile->Fill(visible_mass, ris_mass, 1);
       }
+
+      // // calcolo energia 2)
+      // t = tlv_visibile.Vect().Mag2() + pow(tlv_visibile.T(), 2) - pow(VtxMass, 2);
+      // a = 4 * pow(tlv_visibile.Pz(), 2) - 4 * pow(tlv_visibile.T(), 2);
+      // b = -4 * t * tlv_visibile.Pz() + 8 * pow(tlv_visibile.T(), 2) * tlv_visibile.Pz();
+      // c = t * t - 4 * pow(tlv_visibile.T(), 2) * (tlv_visibile.Vect().Mag2());
+      // p = solve_eq2(a, b, c);
+      // en = sqrt(p * p - VtxMass * VtxMass);
+      // B_energy->Fill(en - tlv_bTag->T());
    }
    std::cout << "completed without errors! :-)" << std::endl;
 }
