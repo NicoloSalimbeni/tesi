@@ -31,6 +31,7 @@ solve_eq2(double a, double b, double c)
    }
    double sol_mag = (-b + sqrt(delta)) / (2 * a);
    double sol_min = (-b - sqrt(delta)) / (2 * a);
+   std::cout << sol_mag << " " << sol_min << std::endl;
    if (sol_min > 0)
    {
       std::cout << "risulato imprevisto" << std::endl;
@@ -85,11 +86,11 @@ void TagSide::Loop(std::string dump)
    En_profile->GetXaxis()->SetTitle("massa visibile [GeV]");
    En_profile->GetYaxis()->SetTitle("risoluzione energia");
 
-   // B_energy = new TH1D("B_energy",
-   //                     "residui energia calcolata energia vera",
-   //                     100, -0.02, 0.02);
-   // B_energy->GetXaxis()->SetTitle("Energia B [GeV]");
-   // B_energy->GetYaxis()->SetTitle("conteggi");
+   B_energy = new TH1D("B_energy",
+                       "residui energia calcolata energia vera",
+                       100, -0.02, 0.02);
+   B_energy->GetXaxis()->SetTitle("Energia B [GeV]");
+   B_energy->GetYaxis()->SetTitle("conteggi");
 
    Long64_t nentries = fChain->GetEntriesFast();
 
@@ -159,14 +160,14 @@ void TagSide::Loop(std::string dump)
          En_profile->Fill(visible_mass, ris_mass, 1);
       }
 
-      // // calcolo energia 2)
-      // t = tlv_visibile.Vect().Mag2() + pow(tlv_visibile.T(), 2) - pow(VtxMass, 2);
-      // a = 4 * pow(tlv_visibile.Pz(), 2) - 4 * pow(tlv_visibile.T(), 2);
-      // b = -4 * t * tlv_visibile.Pz() + 8 * pow(tlv_visibile.T(), 2) * tlv_visibile.Pz();
-      // c = t * t - 4 * pow(tlv_visibile.T(), 2) * (tlv_visibile.Vect().Mag2());
-      // p = solve_eq2(a, b, c);
-      // en = sqrt(p * p - VtxMass * VtxMass);
-      // B_energy->Fill(en - tlv_bTag->T());
+      // calcolo energia 2)
+      t = tlv_visibile.Vect().Mag2() + pow(tlv_visibile.T(), 2) - pow(VtxMass, 2);
+      a = 4 * pow(tlv_visibile.Pz(), 2) - 4 * pow(tlv_visibile.T(), 2);
+      b = -4 * t * tlv_visibile.Pz() + 8 * pow(tlv_visibile.T(), 2) * tlv_visibile.Pz();
+      c = t * t - 4 * pow(tlv_visibile.T(), 2) * (tlv_visibile.Vect().Mag2());
+      p = solve_eq2(a, b, c);
+      en = sqrt(p * p - VtxMass * VtxMass);
+      B_energy->Fill(en - tlv_bTag->T());
    }
    std::cout << "completed without errors! :-)" << std::endl;
 }
