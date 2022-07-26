@@ -9,6 +9,8 @@
 #include "TLegend.h"
 #include "TPad.h"
 
+#include "./utilies.cc"
+
 #include <string>
 #include <iostream>
 
@@ -42,7 +44,7 @@ void gaussiane_angolo(double start = 0, double stop = 100, int n_int = 5)
         temp->GetXaxis()->SetRangeUser(0, 0.15);
         temp->Draw();
 
-        TF1 *f_fit = new TF1("f_fit", "[2]*exp( -pow((x-[0])/[1],2) )/sqrt(2*pi*[1]*[1]) + [3]", 0, 0.15);
+        TF1 *f_fit = new TF1("f_fit", "[2]*exp( -pow((x-[0])/[1],2) )/sqrt(2*pi*[1]*[1]) + [3]*exp([4]*x)", 0, 0.03);
         f_fit->SetParameter(0, 0);
         f_fit->SetParameter(1, 0.01);
         f_fit->SetParameter(2, 6000);
