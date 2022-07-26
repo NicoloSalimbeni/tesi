@@ -19,6 +19,7 @@ TH1D *MassRatio;
 TH2D *CosAlpha;
 TH2D *T_Angle;
 TH2D *Resolution;
+TH2D *Resolution_corr;
 TH1D *B_energy_res;
 TProfile *En_profile;
 
@@ -72,20 +73,12 @@ void TagSide::Loop(std::string dump)
    B_energy_res->GetXaxis()->SetTitle("Energia B [GeV]");
    B_energy_res->GetYaxis()->SetTitle("conteggi");
 
+   Resolution_corr = new TH2D("Resolution_corr", "risoluzione corretta vs massa visibile", 100, 1, 4.5, 100, 0, 1);
+   Resolution->GetXaxis()->SetTitle("massa visibile [GeV]");
+   Resolution->GetYaxis()->SetTitle("risoluzione corretta energia");
+   Resolution->GetZaxis()->SetTitle("Counts");
+
    Long64_t nentries = fChain->GetEntriesFast();
-
-   // variabili da usare nel ciclo for per evitare di doverle costruire e distruggere ogni volta
-   // per facilitare la lettura verranno divise a gruppi e numerate
-   //  1)
-   Double_t visible_mass; // massa visibile
-   Double_t ris_mass;     // risoluzione massa
-
-   // 2)
-   Double_t a;
-   Double_t b;
-   Double_t c;
-   Double_t en;
-   Double_t pvz;
 
    std::cout << "Analysis started, wait...\t" << std::flush;
 
@@ -123,21 +116,43 @@ void TagSide::Loop(std::string dump)
       }
 
       // risoluzione e massa visibile
+      static Double_t visible_mass;
+      static Double_t ris_mass;
+      static Double_t en_corr;
+      static Double_t ris_corr;
+
       visible_mass = tlv_visibile.M();
       if (VtxCharge == 1)
-      { // variabili 1)
+      {
+         // risoluzione normale
          ris_mass = (tlv_bTag->T() - (tlv_mumTag->T() + tlv_kapTag->T())) / tlv_bTag->T();
          Resolution->Fill(visible_mass, ris_mass);
          En_profile->Fill(visible_mass, ris_mass, 1);
+
+         // risoluzione energia corretta
+         en_corr = tlv_visibile.T() * VtxMass / tlv_visibile.M();
+         ris_corr = (tlv_bTag->T() - en_corr) / tlv_bTag->T();
+         Resolution_corr->Fill(visible_mass, ris_corr);
       }
       if (VtxCharge == -1)
       { // variabili 1)
+         // risoluzione normale
          ris_mass = (tlv_bTag->T() - (tlv_mupTag->T() + tlv_kamTag->T())) / tlv_bTag->T();
          Resolution->Fill(visible_mass, ris_mass);
          En_profile->Fill(visible_mass, ris_mass, 1);
+
+         // risoluzione energia corretta
+         en_corr = tlv_visibile.T() * VtxMass / tlv_visibile.M();
+         ris_corr = (tlv_bTag->T() - en_corr) / tlv_bTag->T();
+         Resolution_corr->Fill(visible_mass, ris_corr);
       }
 
       // calcolo energia 2)
+      static Double_t a;
+      static Double_t b;
+      static Double_t c;
+      static Double_t en;
+      static Double_t pvz;
 
       pvz = (tlv_visibile.Vect().Dot(tlv_bTag->Vect())) / tlv_bTag->Vect().Mag();
       a = 4 * (pow(tlv_visibile.T(), 2) - pvz * pvz);
