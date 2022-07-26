@@ -1,4 +1,5 @@
 #include "TMacro.h"
+#include "TF1.h"
 
 #include <iostream>
 
@@ -18,4 +19,9 @@ double solve_eq2(double a, double b, double c)
         return -1;
     }
     return sol_mag;
+}
+
+Double_t int_settore_circolare(Double_t a_min, Double_t a_max)
+{
+    return 2 * TMath::Pi() * (TMath::Cos(a_min) - TMath::Cos(a_max));
 }

@@ -8,13 +8,14 @@
 #include "TGraphErrors.h"
 #include "TLegend.h"
 #include "TPad.h"
+#include "TStyle.h"
 
-#include "./utilies.cc"
+#include "./utilities.cc"
 
 #include <string>
 #include <iostream>
 
-void gaussiane_angolo(double start = 0, double stop = 100, int n_int = 5)
+void gaussiane_angolo(double start = 0, double stop = 100, int n_int = 10)
 {
     // faccio un fit a intervalli regolari con una gaussiana più un costante
     TFile *f = new TFile("grafici.root", "READ");
@@ -26,28 +27,43 @@ void gaussiane_angolo(double start = 0, double stop = 100, int n_int = 5)
 
     TCanvas *c = new TCanvas("c", "c", 1000, 450, 900, 650);
     c->cd();
+    gStyle->SetOptFit(100);
 
     double inc = (stop - start) / n_int;
     for (int i = start; i < stop; i = i + inc)
     {
-        c->SetName(("istogramma_intervallo_" + std::to_string(i)).c_str());
+        c->SetName(("isto_intervallo_" + std::to_string(i)).c_str());
 
-        TH1D *temp = h2->ProjectionY("temp", h2->GetXaxis()->FindBin(i), h2->GetXaxis()->FindBin(i + inc));
         std::string s1 = std::to_string(i);
         std::string s2 = std::to_string((i + inc));
-        s1.resize(2);
-        s2.resize(2);
+        s1.resize(3);
+        s2.resize(3);
+        std::string titolo = "proiezone L/#sigma_{L} " + s1 + "-" + s2;
 
-        temp->SetTitle(("proiezone L/#sigma_{L} " + s1 + "-" + s2).c_str());
+        // FIXME il titolo non viene letto tutto
+        TH1D *temp = h2->ProjectionY("temp", h2->GetXaxis()->FindBin(i), h2->GetXaxis()->FindBin(i + inc));
+        temp->Rebin(1);
+
+        // correggo i bin sullo spazio delle fasi
+        for (int i = 1; i <= temp->GetNbinsX(); i++)
+        {
+            static Double_t area_cir;
+            area_cir = int_settore_circolare(temp->GetBinLowEdge(i), temp->GetBinLowEdge(i + 1));
+            temp->SetBinContent(i, temp->GetBinContent(i) / area_cir);
+        }
+
+        temp->SetTitle(titolo.c_str());
         temp->Rebin(2);
         temp->GetYaxis()->SetTitle("conteggi");
         temp->GetXaxis()->SetRangeUser(0, 0.15);
         temp->Draw();
 
-        TF1 *f_fit = new TF1("f_fit", "[2]*exp( -pow((x-[0])/[1],2) )/sqrt(2*pi*[1]*[1]) + [3]*exp([4]*x)", 0, 0.03);
+        TF1 *f_fit = new TF1("f_fit", "[2]*exp( -pow((x-[0])/[1],2) )/sqrt(2*pi*[1]*[1]) + [3]*exp([4]*x)", temp->GetBinLowEdge(2), 0.03);
         f_fit->SetParameter(0, 0);
+        f_fit->SetParLimits(0, 0, 0.03);
         f_fit->SetParameter(1, 0.01);
-        f_fit->SetParameter(2, 6000);
+        f_fit->SetParLimits(1, 0.005, 0.04);
+        f_fit->SetParameter(2, temp->GetMaximum());
         f_fit->SetParameter(3, 0);
 
         TFitResultPtr r = temp->Fit(f_fit, "RS");
