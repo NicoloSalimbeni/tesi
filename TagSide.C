@@ -18,8 +18,12 @@ TagSide t; // lo definisco qua per non doverlo fare a mano ogni volta
 TH1D *MassRatio;
 TH2D *CosAlpha;
 TH2D *T_Angle;
+
 TH2D *Resolution;
-TH2D *Resolution_corr;
+TH2D *Resolution_coll;
+TH2D *Resolution_imp_coll;
+TH2D *Resolution_non_coll;
+
 TH1D *B_energy_res;
 TProfile *En_profile;
 
@@ -73,10 +77,20 @@ void TagSide::Loop(std::string dump)
    B_energy_res->GetXaxis()->SetTitle("Energia B [GeV]");
    B_energy_res->GetYaxis()->SetTitle("conteggi");
 
-   Resolution_corr = new TH2D("Resolution_corr", "risoluzione corretta vs massa visibile", 100, 1, 4.5, 100, 0, 1);
-   Resolution->GetXaxis()->SetTitle("massa visibile [GeV]");
-   Resolution->GetYaxis()->SetTitle("risoluzione corretta energia");
-   Resolution->GetZaxis()->SetTitle("Counts");
+   Resolution_coll = new TH2D("Resolution_coll", "risoluzione vs massa visibile collinear", 100, 1, 4.5, 200, -1, 1);
+   Resolution_coll->GetXaxis()->SetTitle("massa visibile [GeV]");
+   Resolution_coll->GetYaxis()->SetTitle("risoluzione corretta energia");
+   Resolution_coll->GetZaxis()->SetTitle("Counts");
+
+   Resolution_imp_coll = new TH2D("Resolution_imp_coll", "risoluzione vs massa visibile improved collinear", 100, 1, 4.5, 200, -2, 0);
+   Resolution_imp_coll->GetXaxis()->SetTitle("massa visibile [GeV]");
+   Resolution_imp_coll->GetYaxis()->SetTitle("risoluzione corretta energia");
+   Resolution_imp_coll->GetZaxis()->SetTitle("Counts");
+
+   Resolution_non_coll = new TH2D("Resolution_coll", "risoluzione corretta vs massa visibile non collinear", 100, 1, 4.5, 200, -1, 1);
+   Resolution_non_coll->GetXaxis()->SetTitle("massa visibile [GeV]");
+   Resolution_non_coll->GetYaxis()->SetTitle("risoluzione corretta energia");
+   Resolution_non_coll->GetZaxis()->SetTitle("Counts");
 
    Long64_t nentries = fChain->GetEntriesFast();
 
@@ -116,51 +130,54 @@ void TagSide::Loop(std::string dump)
       }
 
       // risoluzione e massa visibile
-      static Double_t visible_mass;
+
       static Double_t ris_mass;
-      static Double_t en_corr;
-      static Double_t ris_corr;
 
-      visible_mass = tlv_visibile.M();
-      if (VtxCharge == 1)
-      {
-         // risoluzione normale
-         ris_mass = (tlv_bTag->T() - (tlv_mumTag->T() + tlv_kapTag->T())) / tlv_bTag->T();
-         Resolution->Fill(visible_mass, ris_mass);
-         En_profile->Fill(visible_mass, ris_mass, 1);
+      // risoluzione normale
+      ris_mass = (tlv_Btag.T() - tlv_visibile.T()) / tlv_Btag.T();
+      Resolution->Fill(tlv_visibile.M(), ris_mass);
+      En_profile->Fill(tlv_visibile.M(), ris_mass, 1);
 
-         // risoluzione energia corretta
-         en_corr = tlv_visibile.T() * VtxMass / tlv_visibile.M();
-         ris_corr = (tlv_bTag->T() - en_corr) / tlv_bTag->T();
-         Resolution_corr->Fill(visible_mass, ris_corr);
-      }
-      if (VtxCharge == -1)
-      { // variabili 1)
-         // risoluzione normale
-         ris_mass = (tlv_bTag->T() - (tlv_mupTag->T() + tlv_kamTag->T())) / tlv_bTag->T();
-         Resolution->Fill(visible_mass, ris_mass);
-         En_profile->Fill(visible_mass, ris_mass, 1);
+      // risoluzione energia collineare
+      static Double_t en_coll;
+      static Double_t ris_coll;
+      en_coll = tlv_visibile.T() * VtxMass / tlv_visibile.M();
+      ris_coll = (tlv_Btag.T() - en_coll) / tlv_Btag.T();
+      Resolution_coll->Fill(tlv_visibile.M(), ris_coll);
 
-         // risoluzione energia corretta
-         en_corr = tlv_visibile.T() * VtxMass / tlv_visibile.M();
-         ris_corr = (tlv_bTag->T() - en_corr) / tlv_bTag->T();
-         Resolution_corr->Fill(visible_mass, ris_corr);
-      }
+      // risoluzione improved collinear
+      static Double_t en_imp_coll;
+      static Double_t ris_imp_coll;
 
-      // calcolo energia 2)
+      en_imp_coll = (tlv_Btag.M2() + tlv_visibile.M2()) / (2 * tlv_visibile.T() - 2 * tlv_visibile.P());
+      ris_imp_coll = (tlv_Btag.T() - en_imp_coll) / tlv_Btag.T();
+      Resolution_imp_coll->Fill(tlv_visibile.M(), ris_imp_coll);
+
+      // risoluzione non collinear
+      static Double_t en_non_coll;
+      static Double_t ris_non_coll;
+      static Double_t pvz;
+
+      pvz = (tlv_visibile.Vect().Dot(tlv_Btag.Vect())) / tlv_Btag.Vect().Mag();
+      en_non_coll = (pow(tlv_Btag.M(), 2) + pow(tlv_visibile.M(), 2)) / (2 * tlv_visibile.T() - 2 * pvz);
+      ris_non_coll = (tlv_Btag.T() - en_non_coll) / tlv_Btag.T();
+      Resolution_non_coll->Fill(tlv_visibile.M(), ris_non_coll);
+
+      // soluzione analitica FIXME non so come scegliere l'energia
       static Double_t a;
       static Double_t b;
       static Double_t c;
       static Double_t en;
-      static Double_t pvz;
 
-      pvz = (tlv_visibile.Vect().Dot(tlv_bTag->Vect())) / tlv_bTag->Vect().Mag();
       a = 4 * (pow(tlv_visibile.T(), 2) - pvz * pvz);
-      b = 4 * tlv_visibile.T() * (pow(visible_mass, 2) + pow(VtxMass, 2));
-      c = -4 * pow(VtxMass * pvz, 2);
-      en = solve_eq2(a, b, c);
-      // std::cout << en << " " << tlv_bTag->T() << std::endl;
-      B_energy_res->Fill(tlv_bTag->T() - en);
+      b = -4 * tlv_visibile.T() * (tlv_visibile.M2() + tlv_Btag.M2());
+      c = 4 * pow(tlv_Btag.M() * pvz, 2) + pow(tlv_Btag.M2() + tlv_visibile.M2(), 2);
+      en = solve_eq2(a, b, c, tlv_visibile, pvz, tlv_Btag);
+
+      if (en != -1 && pvz > 0)
+      {
+         B_energy_res->Fill(tlv_Btag.T() - en);
+      }
    }
    std::cout << "completed without errors! :-)" << std::endl;
 }
