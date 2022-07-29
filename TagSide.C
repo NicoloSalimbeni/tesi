@@ -87,7 +87,7 @@ void TagSide::Loop(std::string dump)
    Resolution_imp_coll->GetYaxis()->SetTitle("risoluzione corretta energia");
    Resolution_imp_coll->GetZaxis()->SetTitle("Counts");
 
-   Resolution_non_coll = new TH2D("Resolution_coll", "risoluzione corretta vs massa visibile non collinear", 100, 1, 4.5, 200, -1, 1);
+   Resolution_non_coll = new TH2D("Resolution_non_coll", "risoluzione corretta vs massa visibile non collinear", 100, 1, 4.5, 200, -1, 1);
    Resolution_non_coll->GetXaxis()->SetTitle("massa visibile [GeV]");
    Resolution_non_coll->GetYaxis()->SetTitle("risoluzione corretta energia");
    Resolution_non_coll->GetZaxis()->SetTitle("Counts");

@@ -80,18 +80,19 @@ void gaussiane_angolo(double start = 0, double stop = 100, int n_int = 10)
     delete c;
 }
 
-void proiezioni_masse(double start = 2.6, double stop = 4, int n_int = 10)
+void proiezioni_masse(std::string oggetto, double start = 2.6, double stop = 4, int n_int = 10)
 {
     TFile *f = new TFile("grafici.root", "READ");
     f->cd();
-    TH2D *h2 = (TH2D *)f->Get("Resolution");
+    TH2D *h2 = (TH2D *)f->Get(oggetto.c_str());
 
-    TFile *f_mass = new TFile("./analisi_risoluzione_energia/proiezioni_massa_invariante.root", "UPDATE");
+    TFile *f_mass = new TFile(("./analisi_risoluzione_energia/proiezioni_" + oggetto + ".root").c_str(), "RECREATE");
     f_mass->cd();
 
     TCanvas *c = new TCanvas("c", "c", 1000, 450, 900, 650);
     c->cd();
 
+    int *count = new int(1);
     double inc = (stop - start) / n_int;
     for (double i = start; i < stop; i = i + inc)
     {
@@ -103,15 +104,16 @@ void proiezioni_masse(double start = 2.6, double stop = 4, int n_int = 10)
         TH1D *temp = h2->ProjectionY("temp", h2->GetXaxis()->FindBin(i), h2->GetXaxis()->FindBin(i + inc));
         temp->SetTitle(("proiezone massa invariante " + s1 + "-" + s2 + " GeV").c_str());
         temp->GetYaxis()->SetTitle("conteggi");
-        temp->GetXaxis()->SetRangeUser(0, 1);
+        temp->GetXaxis()->SetLimits(-2, 1);
+        temp->GetXaxis()->SetRangeUser(-2, 1);
         temp->Draw();
 
-        static int count = 1;
-        c->SetName(("intervallo" + std::to_string(count++)).c_str());
+        c->SetName(("intervallo" + std::to_string((*count)++)).c_str());
         c->Write();
         delete temp;
     }
 
+    delete count;
     delete h2;
     delete f;
     delete c;

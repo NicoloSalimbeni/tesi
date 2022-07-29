@@ -1,3 +1,6 @@
+#ifndef utilities_h
+#define utilities_h
+
 #include "TMacro.h"
 #include "TF1.h"
 #include "TLorentzVector.h"
@@ -63,3 +66,5 @@ Double_t int_settore_circolare(Double_t a_min, Double_t a_max)
 {
     return 2 * TMath::Pi() * (TMath::Cos(a_min) - TMath::Cos(a_max));
 }
+
+#endif
