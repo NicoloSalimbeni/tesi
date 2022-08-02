@@ -62,7 +62,7 @@ void TagSide::Loop(std::string dump)
    MassRatio = new TH1D("MassRatio", " 1-M(sum)/M(const)", 100, -0.2, 0.2);
    CosAlpha = new TH2D("CosAlpha", "Cos-angle vs L ", 50, 0., 25., 50, 0.901, 1.001);
 
-   T_Angle = new TH2D("T_Angle", "(L/#sigma_{L},#alpha)", 100, 0, 100, 100, -0.001, 0.15);
+   T_Angle = new TH2D("T_Angle", "(L/#sigma_{L},#alpha)", 100, 0, 100, 100, 0, 0.10);
    T_Angle->GetXaxis()->SetTitle("L/#sigma_{L}");
    T_Angle->GetYaxis()->SetTitle("#alpha");
    T_Angle->GetZaxis()->SetTitle("Counts");
@@ -86,7 +86,7 @@ void TagSide::Loop(std::string dump)
    Resolution_coll->GetZaxis()->SetTitle("Counts");
    Resolution_coll->SetStats(0);
 
-   coll_profile = new TProfile("coll_profile", "Profilo Massa vs risoluzione collinear", 100, 1, 4.5, -3, 1);
+   coll_profile = new TProfile("Profile_coll", "Profilo Massa vs risoluzione collinear", 100, 1, 4.5, -3, 1);
    coll_profile->GetXaxis()->SetTitle("massa visibile [GeV]");
    coll_profile->GetYaxis()->SetTitle("risoluzione energia");
    coll_profile->SetStats(0);
@@ -97,7 +97,7 @@ void TagSide::Loop(std::string dump)
    Resolution_imp_coll->GetZaxis()->SetTitle("Counts");
    Resolution_imp_coll->SetStats(0);
 
-   imp_coll_profile = new TProfile("imp_coll_profile", "Profilo Massa vs risoluzione improved collinear", 100, 1, 4.5, -3, 1);
+   imp_coll_profile = new TProfile("Profile_imp_coll", "Profilo Massa vs risoluzione improved collinear", 100, 1, 4.5, -3, 1);
    imp_coll_profile->GetXaxis()->SetTitle("massa visibile [GeV]");
    imp_coll_profile->GetYaxis()->SetTitle("risoluzione energia");
    imp_coll_profile->SetStats(0);
@@ -108,7 +108,7 @@ void TagSide::Loop(std::string dump)
    Resolution_non_coll->GetZaxis()->SetTitle("Counts");
    Resolution_non_coll->SetStats(0);
 
-   non_coll_profile = new TProfile("non_coll_profile", "Profilo Massa vs risoluzione non collinear", 100, 1, 4.5, -3, 1);
+   non_coll_profile = new TProfile("Profile_non_coll", "Profilo Massa vs risoluzione non collinear", 100, 1, 4.5, -3, 1);
    non_coll_profile->GetXaxis()->SetTitle("massa visibile [GeV]");
    non_coll_profile->GetYaxis()->SetTitle("risoluzione energia");
    non_coll_profile->SetStats(0);
@@ -224,4 +224,36 @@ void TagSide::Loop(std::string dump)
    c->SaveAs("./analisi_risoluzione_energia/improved_collinear/Profile_imp_coll.png");
    non_coll_profile->Draw();
    c->SaveAs("./analisi_risoluzione_energia/non_collinear/Profile_non_coll.png");
+
+   // salvo l'angolo
+   T_Angle->Draw("CONT4Z");
+   c->SaveAs("./analisi_angolo/Distribuzione_angolo.png");
+
+   // salvo nel TFile
+   TFile *f = new TFile("grafici.root", "UPDATE");
+   f->cd();
+
+   f->Delete("Resolution_coll;*");
+   f->Delete("Resolution_imp_coll;*");
+   f->Delete("Resolution_non_coll;*");
+
+   f->Delete("Profile_coll;*");
+   f->Delete("Profile_imp_coll;*");
+   f->Delete("Profile_non_coll;*");
+
+   f->Delete("MassRatio;*");
+   f->Delete("CosAlpha;*");
+   f->Delete("T_Angle;*");
+
+   Resolution_coll->Write();
+   Resolution_imp_coll->Write();
+   Resolution_non_coll->Write();
+
+   coll_profile->Write();
+   imp_coll_profile->Write();
+   non_coll_profile->Write();
+
+   MassRatio->Write();
+   CosAlpha->Write();
+   T_Angle->Write();
 }

@@ -15,34 +15,59 @@
 #include <string>
 #include <iostream>
 
-void gaussiane_angolo(double start = 0, double stop = 100, int n_int = 10)
+void gaussiane_angolo(double start = 0, double stop = 100, int n_int = 10, int reb = 1)
 {
     // faccio un fit a intervalli regolari con una gaussiana più un costante
     TFile *f = new TFile("grafici.root", "READ");
     f->cd();
     TH2D *h2 = (TH2D *)f->Get("T_Angle");
 
-    TFile *f_gauss = new TFile("./analisi_angolo/fit_gaussiani_angolo.root", "RECREATE");
+    TFile *f_gauss = new TFile("./analisi_angolo/fit_gaussiani_angolo.root", "UPDATE");
     f_gauss->cd();
 
-    TCanvas *c = new TCanvas("c", "c", 1000, 450, 900, 650);
-    c->cd();
+    TCanvas *c = new TCanvas("c", "c", 1800, 1300);
+    c->Divide(3, 3);
     gStyle->SetOptFit(100);
 
+    int count = 1;
     double inc = (stop - start) / n_int;
     for (int i = start; i < stop; i = i + inc)
     {
+        c->cd(count++);
         c->SetName(("isto_intervallo_" + std::to_string(i)).c_str());
 
         std::string s1 = std::to_string(i);
         std::string s2 = std::to_string((i + inc));
-        s1.resize(3);
-        s2.resize(3);
+        if (i < 10)
+        {
+            s1.resize(1);
+        }
+        else if (i < 100)
+        {
+            s1.resize(2);
+        }
+        else if (i >= 100)
+        {
+            s1.resize(3);
+        }
+
+        if (i + inc < 10)
+        {
+            s2.resize(1);
+        }
+        else if (i + inc < 100)
+        {
+            s2.resize(2);
+        }
+        else if (i + inc >= 100)
+        {
+            s2.resize(3);
+        }
+
         std::string titolo = "proiezone L/#sigma_{L} " + s1 + "-" + s2;
 
-        // FIXME il titolo non viene letto tutto
-        TH1D *temp = h2->ProjectionY("temp", h2->GetXaxis()->FindBin(i), h2->GetXaxis()->FindBin(i + inc));
-        temp->Rebin(1);
+        TH1D *temp = h2->ProjectionY(("temp" + s1).c_str(), h2->GetXaxis()->FindBin(i), h2->GetXaxis()->FindBin(i + inc));
+        temp->Rebin(reb);
 
         // correggo i bin sullo spazio delle fasi
         for (int i = 1; i <= temp->GetNbinsX(); i++)
@@ -53,31 +78,41 @@ void gaussiane_angolo(double start = 0, double stop = 100, int n_int = 10)
         }
 
         temp->SetTitle(titolo.c_str());
-        temp->Rebin(2);
         temp->GetYaxis()->SetTitle("conteggi");
         temp->GetXaxis()->SetRangeUser(0, 0.15);
         temp->Draw();
 
-        TF1 *f_fit = new TF1("f_fit", "[2]*exp( -pow((x-[0])/[1],2) )/sqrt(2*pi*[1]*[1]) + [3]*exp([4]*x)", temp->GetBinLowEdge(2), 0.03);
+        TF1 *f_fit;
+        if (reb == 1)
+        {
+            f_fit = new TF1("f_fit", "[2]*exp( -pow((x-[0])/[1],2) )/sqrt(2*pi*[1]*[1]) + [3]*exp([4]*x)", temp->GetBinLowEdge(2), 0.03);
+        }
+        else if (reb != 1)
+        {
+            f_fit = new TF1("f_fit", "[2]*exp( -pow((x-[0])/[1],2) )/sqrt(2*pi*[1]*[1]) + [3]*exp([4]*x)", 0, 0.03);
+        }
+
         f_fit->SetParameter(0, 0);
-        f_fit->SetParLimits(0, 0, 0.03);
+        f_fit->SetParLimits(0, -0.01, 0.03);
         f_fit->SetParameter(1, 0.01);
         f_fit->SetParLimits(1, 0.005, 0.04);
         f_fit->SetParameter(2, temp->GetMaximum());
         f_fit->SetParameter(3, 0);
 
         TFitResultPtr r = temp->Fit(f_fit, "RS");
-        r->SetName(("ris_isto_" + std::to_string(i)).c_str());
+        if (reb == 1)
+        {
+            r->SetName(("ris_isto_" + std::to_string(i)).c_str());
+            f_gauss->Delete(("ris_isto_" + std::to_string(i) + ";*").c_str());
+        }
+        else if (reb != 1)
+        {
+            r->SetName(("ris_isto_rebin" + std::to_string(reb) + "_" + std::to_string(i)).c_str());
+            f_gauss->Delete(("ris_isto_rebin" + std::to_string(reb) + "_" + std::to_string(i) + ";*").c_str());
+        }
 
-        c->Write();
         r->Write();
-        delete temp;
-        delete f_fit;
     }
-
-    delete h2;
-    delete f;
-    delete c;
 }
 
 void proiezioni_masse(std::string oggetto, double start = 2.6, double stop = 4, int n_int = 10)
