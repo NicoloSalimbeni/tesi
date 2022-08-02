@@ -177,3 +177,67 @@ void medie_rms_proiezioni(double start = 2.6, double stop = 4, int n_int = 10)
     delete f;
     // delete c
 }
+
+void proiezioni_masse_tot(double start = 2.6, double stop = 4, int n_int = 9)
+{
+    TFile *f = new TFile("grafici.root", "READ");
+    f->cd();
+    TH2D *h_coll = (TH2D *)f->Get("Resolution_coll");
+    TH2D *h_imp_coll = (TH2D *)f->Get("Resolution_imp_coll");
+    TH2D *h_non_coll = (TH2D *)f->Get("Resolution_non_coll");
+
+    TFile *f_mass = new TFile("./analisi_risoluzione_energia/proiezioni_totale.root", "RECREATE");
+    f_mass->cd();
+
+    TCanvas *c = new TCanvas("c", "c", 1000, 450, 1800, 1300);
+    c->cd();
+    c->Divide(3, 3);
+
+    int count = 1;
+    double inc = (stop - start) / n_int;
+    for (double i = start; i < stop; i = i + inc)
+    {
+        c->cd(count);
+        std::string s1 = std::to_string(i);
+        s1.resize(4);
+        std::string s2 = std::to_string(i + inc);
+        s2.resize(4);
+
+        TH1D *temp_coll = h_coll->ProjectionY(("temp_coll" + s1).c_str(), h_coll->GetXaxis()->FindBin(i), h_coll->GetXaxis()->FindBin(i + inc));
+        temp_coll->SetTitle(("proiezone massa invariante " + s1 + "-" + s2 + " GeV").c_str());
+        temp_coll->GetYaxis()->SetTitle("conteggi");
+        temp_coll->GetXaxis()->SetLimits(-3, 1);
+        temp_coll->GetXaxis()->SetRangeUser(-3, 1);
+        temp_coll->SetFillStyle(3002);
+        temp_coll->SetLineWidth(2);
+        temp_coll->SetLineColor(kRed);
+        temp_coll->SetFillColorAlpha(kRed, 0.35);
+        temp_coll->GetYaxis()->SetMaxDigits(3);
+        temp_coll->SetStats(0);
+        temp_coll->Draw();
+
+        TH1D *temp_imp_coll = h_imp_coll->ProjectionY(("temp_imp_coll" + s1).c_str(), h_imp_coll->GetXaxis()->FindBin(i), h_imp_coll->GetXaxis()->FindBin(i + inc));
+        temp_imp_coll->SetLineWidth(2);
+        temp_imp_coll->SetLineColor(kBlue);
+        temp_imp_coll->SetFillStyle(3002);
+        temp_imp_coll->SetFillColorAlpha(kBlue, 0.35);
+        temp_imp_coll->SetStats(0);
+        temp_imp_coll->Draw("SAME");
+
+        TH1D *temp_non_coll = h_non_coll->ProjectionY(("temp_non_coll" + s1).c_str(), h_non_coll->GetXaxis()->FindBin(i), h_non_coll->GetXaxis()->FindBin(i + inc));
+        temp_non_coll->SetLineWidth(2);
+        temp_non_coll->SetLineColor(kGreen);
+        temp_non_coll->SetFillStyle(3002);
+        temp_non_coll->SetFillColorAlpha(kGreen, 0.35);
+        temp_non_coll->SetStats(0);
+        temp_non_coll->Draw("SAME");
+
+        count++;
+    }
+
+    c->SaveAs("./analisi_risoluzione_energia/proiezioni_totali.png");
+    delete h_coll;
+    delete h_imp_coll;
+    delete h_non_coll;
+    delete f;
+}

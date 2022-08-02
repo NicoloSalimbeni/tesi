@@ -71,6 +71,7 @@
         "typeinfo": "cpp",
         "valarray": "cpp",
         "variant": "cpp",
-        "TagSide.C": "cpp"
+        "TagSide.C": "cpp",
+        "ProbeSide.C": "cpp"
     }
 }

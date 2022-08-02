@@ -26,6 +26,9 @@ TH2D *Resolution_non_coll;
 
 TH1D *B_energy_res;
 TProfile *En_profile;
+TProfile *coll_profile;
+TProfile *imp_coll_profile;
+TProfile *non_coll_profile;
 
 void TagSide::Loop(std::string dump)
 {
@@ -77,20 +80,38 @@ void TagSide::Loop(std::string dump)
    B_energy_res->GetXaxis()->SetTitle("Energia B [GeV]");
    B_energy_res->GetYaxis()->SetTitle("conteggi");
 
-   Resolution_coll = new TH2D("Resolution_coll", "risoluzione vs massa visibile collinear", 100, 1, 4.5, 200, -1, 1);
+   Resolution_coll = new TH2D("Resolution_coll", "risoluzione vs massa visibile collinear", 100, 1, 4.5, 300, -3, 1);
    Resolution_coll->GetXaxis()->SetTitle("massa visibile [GeV]");
    Resolution_coll->GetYaxis()->SetTitle("risoluzione corretta energia");
    Resolution_coll->GetZaxis()->SetTitle("Counts");
+   Resolution_coll->SetStats(0);
 
-   Resolution_imp_coll = new TH2D("Resolution_imp_coll", "risoluzione vs massa visibile improved collinear", 100, 1, 4.5, 200, -2, 0);
+   coll_profile = new TProfile("coll_profile", "Profilo Massa vs risoluzione collinear", 100, 1, 4.5, -3, 1);
+   coll_profile->GetXaxis()->SetTitle("massa visibile [GeV]");
+   coll_profile->GetYaxis()->SetTitle("risoluzione energia");
+   coll_profile->SetStats(0);
+
+   Resolution_imp_coll = new TH2D("Resolution_imp_coll", "risoluzione vs massa visibile improved collinear", 100, 1, 4.5, 300, -3, 1);
    Resolution_imp_coll->GetXaxis()->SetTitle("massa visibile [GeV]");
    Resolution_imp_coll->GetYaxis()->SetTitle("risoluzione corretta energia");
    Resolution_imp_coll->GetZaxis()->SetTitle("Counts");
+   Resolution_imp_coll->SetStats(0);
 
-   Resolution_non_coll = new TH2D("Resolution_non_coll", "risoluzione corretta vs massa visibile non collinear", 100, 1, 4.5, 200, -1, 1);
+   imp_coll_profile = new TProfile("imp_coll_profile", "Profilo Massa vs risoluzione improved collinear", 100, 1, 4.5, -3, 1);
+   imp_coll_profile->GetXaxis()->SetTitle("massa visibile [GeV]");
+   imp_coll_profile->GetYaxis()->SetTitle("risoluzione energia");
+   imp_coll_profile->SetStats(0);
+
+   Resolution_non_coll = new TH2D("Resolution_non_coll", "risoluzione corretta vs massa visibile non collinear", 100, 1, 4.5, 300, -3, 1);
    Resolution_non_coll->GetXaxis()->SetTitle("massa visibile [GeV]");
    Resolution_non_coll->GetYaxis()->SetTitle("risoluzione corretta energia");
    Resolution_non_coll->GetZaxis()->SetTitle("Counts");
+   Resolution_non_coll->SetStats(0);
+
+   non_coll_profile = new TProfile("non_coll_profile", "Profilo Massa vs risoluzione non collinear", 100, 1, 4.5, -3, 1);
+   non_coll_profile->GetXaxis()->SetTitle("massa visibile [GeV]");
+   non_coll_profile->GetYaxis()->SetTitle("risoluzione energia");
+   non_coll_profile->SetStats(0);
 
    Long64_t nentries = fChain->GetEntriesFast();
 
@@ -144,6 +165,7 @@ void TagSide::Loop(std::string dump)
       en_coll = tlv_visibile.T() * VtxMass / tlv_visibile.M();
       ris_coll = (tlv_Btag.T() - en_coll) / tlv_Btag.T();
       Resolution_coll->Fill(tlv_visibile.M(), ris_coll);
+      coll_profile->Fill(tlv_visibile.M(), ris_coll, 1);
 
       // risoluzione improved collinear
       static Double_t en_imp_coll;
@@ -152,6 +174,7 @@ void TagSide::Loop(std::string dump)
       en_imp_coll = (tlv_Btag.M2() + tlv_visibile.M2()) / (2 * tlv_visibile.T() - 2 * tlv_visibile.P());
       ris_imp_coll = (tlv_Btag.T() - en_imp_coll) / tlv_Btag.T();
       Resolution_imp_coll->Fill(tlv_visibile.M(), ris_imp_coll);
+      imp_coll_profile->Fill(tlv_visibile.M(), ris_imp_coll, 1);
 
       // risoluzione non collinear
       static Double_t en_non_coll;
@@ -162,6 +185,7 @@ void TagSide::Loop(std::string dump)
       en_non_coll = (pow(tlv_Btag.M(), 2) + pow(tlv_visibile.M(), 2)) / (2 * tlv_visibile.T() - 2 * pvz);
       ris_non_coll = (tlv_Btag.T() - en_non_coll) / tlv_Btag.T();
       Resolution_non_coll->Fill(tlv_visibile.M(), ris_non_coll);
+      non_coll_profile->Fill(tlv_visibile.M(), ris_non_coll, 1);
 
       // soluzione analitica FIXME non so come scegliere l'energia
       static Double_t a;
@@ -180,4 +204,24 @@ void TagSide::Loop(std::string dump)
       }
    }
    std::cout << "completed without errors! :-)" << std::endl;
+
+   // salvo i png
+   TCanvas *c = new TCanvas("c", "c", 900, 650);
+   c->cd();
+
+   // salvo le risoluzioni
+   Resolution_coll->Draw("CONT4Z");
+   c->SaveAs("./analisi_risoluzione_energia/collinear/Resolution_coll.png");
+   Resolution_imp_coll->Draw("CONT4Z");
+   c->SaveAs("./analisi_risoluzione_energia/improved_collinear/Resolution_imp_coll.png");
+   Resolution_non_coll->Draw("CONT4Z");
+   c->SaveAs("./analisi_risoluzione_energia/non_collinear/Resolution_non_coll.png");
+
+   // salvo i profili
+   coll_profile->Draw();
+   c->SaveAs("./analisi_risoluzione_energia/collinear/Profile_coll.png");
+   imp_coll_profile->Draw();
+   c->SaveAs("./analisi_risoluzione_energia/improved_collinear/Profile_imp_coll.png");
+   non_coll_profile->Draw();
+   c->SaveAs("./analisi_risoluzione_energia/non_collinear/Profile_non_coll.png");
 }
