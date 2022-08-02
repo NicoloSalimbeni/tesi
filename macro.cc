@@ -82,23 +82,16 @@ void gaussiane_angolo(double start = 0, double stop = 100, int n_int = 10, int r
         temp->GetXaxis()->SetRangeUser(0, 0.15);
         temp->Draw();
 
-        TF1 *f_fit;
-        if (reb == 1)
-        {
-            f_fit = new TF1("f_fit", "[2]*exp( -pow((x-[0])/[1],2) )/sqrt(2*pi*[1]*[1]) + [3]*exp([4]*x)", temp->GetBinLowEdge(2), 0.03);
-        }
-        else if (reb != 1)
-        {
-            f_fit = new TF1("f_fit", "[2]*exp( -pow((x-[0])/[1],2) )/sqrt(2*pi*[1]*[1]) + [3]*exp([4]*x)", 0, 0.03);
-        }
+        TF1 *f_fit = new TF1("f_fit", "[2]*exp( -pow((x-[0])/[1],2) )/sqrt(2*pi*[1]*[1]) + [3]*exp([4]*x)", 0, 0.03);
 
         f_fit->SetParameter(0, 0);
-        f_fit->SetParLimits(0, -0.01, 0.03);
+        f_fit->SetParLimits(0, 0, 0.000001);
         f_fit->SetParameter(1, 0.01);
         f_fit->SetParLimits(1, 0.005, 0.04);
         f_fit->SetParameter(2, temp->GetMaximum());
         f_fit->SetParameter(3, 0);
 
+        temp->Fit(f_fit, "RS");
         TFitResultPtr r = temp->Fit(f_fit, "RS");
         if (reb == 1)
         {
