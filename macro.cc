@@ -27,7 +27,7 @@ void gaussiane_angolo(double start = 0, double stop = 100, int n_int = 10, int r
 
     TCanvas *c = new TCanvas("c", "c", 1800, 1300);
     c->Divide(3, 3);
-    gStyle->SetOptFit(100);
+    gStyle->SetOptFit();
 
     int count = 1;
     double inc = (stop - start) / n_int;
@@ -105,6 +105,7 @@ void gaussiane_angolo(double start = 0, double stop = 100, int n_int = 10, int r
         }
 
         r->Write();
+        c->SaveAs("./analisi_angolo/Fit_gaussini.png");
     }
 }
 
