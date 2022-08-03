@@ -213,7 +213,7 @@ void TagSide::Loop(std::string dump)
       a = 4 * (pow(tlv_visibile.T(), 2) - pvz * pvz);
       b = -4 * tlv_visibile.T() * (tlv_visibile.M2() + tlv_Btag.M2());
       c = 4 * pow(tlv_Btag.M() * pvz, 2) + pow(tlv_Btag.M2() + tlv_visibile.M2(), 2);
-      en = solve_eq2(a, b, c, tlv_visibile, pvz, tlv_Btag, 'i');
+      en = solve_eq2(a, b, c, tlv_visibile, pvz, tlv_Btag, 'c');
 
       Resolution_an_min->Fill(tlv_visibile.M(), (tlv_Btag.T() - sol_min) / tlv_Btag.T());
       Resolution_an_mag->Fill(tlv_visibile.M(), (tlv_Btag.T() - sol_mag) / tlv_Btag.T());
@@ -224,7 +224,7 @@ void TagSide::Loop(std::string dump)
    }
    std::cout << "completed without errors! :-)" << std::endl;
 
-   // ============ salvo i png ======================
+   // ============ saljvo i png ======================
    TCanvas *c = new TCanvas("c", "c", 900, 650);
    c->cd();
 
