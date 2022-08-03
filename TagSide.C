@@ -82,7 +82,7 @@ void TagSide::Loop(std::string dump)
    En_profile->GetYaxis()->SetTitle("risoluzione energia");
 
    B_energy_res = new TH1D("B_energy", "residui energia calcolata energia vera", 100, -200, 200);
-   B_energy_res->GetXaxis()->SetTitle("Energia B [GeV]");
+   B_energy_res->GetXaxis()->SetTitle("residui energia B [GeV]");
    B_energy_res->GetYaxis()->SetTitle("conteggi");
 
    Resolution_coll = new TH2D("Resolution_coll", "risoluzione vs massa visibile collinear", 100, 1, 4.5, 300, -3, 1);
