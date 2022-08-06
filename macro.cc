@@ -9,14 +9,17 @@
 #include "TLegend.h"
 #include "TPad.h"
 #include "TStyle.h"
+#include "TMath.h"
+#include "TMinuitMinimizer.h"
 
 #include "./utilities.cc"
 
 #include <string>
 #include <iostream>
 
-void gaussiane_angolo(double start = 0, double stop = 100, int n_int = 10, int reb = 1)
+void gaussiane_angolo(double start = 0, double stop = 90, int n_int = 9, int reb = 2)
 {
+
     // faccio un fit a intervalli regolari con una gaussiana più un costante
     TFile *f = new TFile("grafici.root", "READ");
     f->cd();
@@ -83,13 +86,15 @@ void gaussiane_angolo(double start = 0, double stop = 100, int n_int = 10, int r
         temp->Draw();
 
         TF1 *f_fit = new TF1("f_fit", "[2]*exp( -pow((x-[0])/[1],2) )/sqrt(2*pi*[1]*[1]) + [3]*exp([4]*x)", 0, 0.03);
+        f_fit->SetParNames("#mu", "#sigma", "N", "Ne", "#lambda");
 
-        f_fit->SetParameter(0, 0);
-        f_fit->SetParLimits(0, 0, 0.000001);
+        f_fit->FixParameter(0, 0);
         f_fit->SetParameter(1, 0.01);
-        f_fit->SetParLimits(1, 0.005, 0.04);
+        f_fit->SetParLimits(1, 0.0005, 0.04);
         f_fit->SetParameter(2, temp->GetMaximum());
         f_fit->SetParameter(3, 0);
+        // f_fit->SetParameter(4, -15);
+        // f_fit->SetParLimits(4, -50, 0);
 
         temp->Fit(f_fit, "RS");
         TFitResultPtr r = temp->Fit(f_fit, "RS");
@@ -105,8 +110,8 @@ void gaussiane_angolo(double start = 0, double stop = 100, int n_int = 10, int r
         }
 
         r->Write();
-        c->SaveAs("./analisi_angolo/Fit_gaussini.png");
     }
+    c->SaveAs("./analisi_angolo/Fit_gaussini.png");
 }
 
 void proiezioni_masse(std::string oggetto, double start = 2.6, double stop = 4, int n_int = 10)

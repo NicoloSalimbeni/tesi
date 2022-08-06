@@ -34,6 +34,7 @@ Double_t solve_eq2(Double_t a, Double_t b, Double_t c, TLorentzVector tlv_v, Dou
         Double_t pBm = sqrt(sol_min * sol_min - mass_B * mass_B);
         Double_t cosp = (sol_mag * tlv_v.T() - (tlv_v.M2() + mass_B * mass_B) / 2) / (tlv_v.P() * pBp);
         Double_t cosm = (sol_min * tlv_v.T() - (tlv_v.M2() + mass_B * mass_B) / 2) / (tlv_v.P() * pBm);
+
         if (cosm < cosp)
         {
             return sol_mag;
