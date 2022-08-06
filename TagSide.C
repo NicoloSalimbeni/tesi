@@ -7,6 +7,8 @@
 #include "TAxis.h"
 #include "TMath.h"
 #include "TProfile.h"
+#include "TF1.h"
+#include "TFitResult.h"
 
 #include "./utilities.cc"
 
@@ -100,7 +102,7 @@ void TagSide::Loop(std::string dump)
    Resolution_coll->SetStats(0);
    Resolution_coll->GetZaxis()->SetMaxDigits(3);
 
-   coll_profile = new TProfile("Profile_coll", "Profilo Massa vs risoluzione collinear", 100, 1, 4.5, -3, 1);
+   coll_profile = new TProfile("Profile_coll", "Profilo Massa vs risoluzione collinear", 25, 1, 4.5, -3, 1);
    coll_profile->GetXaxis()->SetTitle("massa visibile [GeV]");
    coll_profile->GetYaxis()->SetTitle("risoluzione energia");
    coll_profile->SetStats(0);
@@ -112,7 +114,7 @@ void TagSide::Loop(std::string dump)
    Resolution_imp_coll->SetStats(0);
    Resolution_imp_coll->GetZaxis()->SetMaxDigits(3);
 
-   imp_coll_profile = new TProfile("Profile_imp_coll", "Profilo Massa vs risoluzione improved collinear", 100, 1, 4.5, -3, 1);
+   imp_coll_profile = new TProfile("Profile_imp_coll", "Profilo Massa vs risoluzione improved collinear", 25, 1, 4.5, -3, 1);
    imp_coll_profile->GetXaxis()->SetTitle("massa visibile [GeV]");
    imp_coll_profile->GetYaxis()->SetTitle("risoluzione energia");
    imp_coll_profile->SetStats(0);
@@ -124,7 +126,7 @@ void TagSide::Loop(std::string dump)
    Resolution_non_coll->SetStats(0);
    Resolution_non_coll->GetZaxis()->SetMaxDigits(3);
 
-   non_coll_profile = new TProfile("Profile_non_coll", "Profilo Massa vs risoluzione non collinear", 100, 1, 4.5, -3, 1);
+   non_coll_profile = new TProfile("Profile_non_coll", "Profilo Massa vs risoluzione non collinear", 25, 1, 4.5, -3, 1);
    non_coll_profile->GetXaxis()->SetTitle("massa visibile [GeV]");
    non_coll_profile->GetYaxis()->SetTitle("risoluzione energia");
    non_coll_profile->SetStats(0);
@@ -153,7 +155,7 @@ void TagSide::Loop(std::string dump)
    Resolution_an_corr->GetYaxis()->SetMaxDigits(1);
    Resolution_an_corr->GetZaxis()->SetMaxDigits(3);
 
-   an_corr_profile = new TProfile("Profile_an_corr", "Profilo Massa vs risoluzione, risultati esatti", 100, 1, 4.5, -3, 1);
+   an_corr_profile = new TProfile("Profile_an_corr", "Profilo Massa vs risoluzione, risultati esatti", 25, 1, 4.5, -3, 1);
    an_corr_profile->GetXaxis()->SetTitle("massa visibile [GeV]");
    an_corr_profile->GetYaxis()->SetTitle("risoluzione energia");
    an_corr_profile->SetStats(0);
@@ -166,7 +168,7 @@ void TagSide::Loop(std::string dump)
    Resolution_an_mean->GetYaxis()->SetMaxDigits(1);
    Resolution_an_mean->GetZaxis()->SetMaxDigits(3);
 
-   an_mean_profile = new TProfile("Profile_an_mean", "Profilo Massa vs risoluzione, media soluzioni", 100, 1, 4.5, -3, 1);
+   an_mean_profile = new TProfile("Profile_an_mean", "Profilo Massa vs risoluzione, media soluzioni", 25, 1, 4.5, -3, 1);
    an_mean_profile->GetXaxis()->SetTitle("massa visibile [GeV]");
    an_mean_profile->GetYaxis()->SetTitle("risoluzione energia");
    an_mean_profile->SetStats(0);
@@ -179,7 +181,7 @@ void TagSide::Loop(std::string dump)
    Resolution_an_cos->GetYaxis()->SetMaxDigits(1);
    Resolution_an_cos->GetZaxis()->SetMaxDigits(3);
 
-   an_cos_profile = new TProfile("Profile_an_cos", "Profilo Massa vs risoluzione,  cos#theta maggiore", 100, 1, 4.5, -3, 1);
+   an_cos_profile = new TProfile("Profile_an_cos", "Profilo Massa vs risoluzione,  cos#theta maggiore", 25, 1, 4.5, -3, 1);
    an_cos_profile->GetXaxis()->SetTitle("massa visibile [GeV]");
    an_cos_profile->GetYaxis()->SetTitle("risoluzione energia");
    an_cos_profile->SetStats(0);
@@ -306,6 +308,46 @@ void TagSide::Loop(std::string dump)
    }
    std::cout << "completed without errors! :-)" << std::endl;
 
+   //=============FIT TPROFILE======================
+
+   TFile *file_fit_profile = new TFile("./analisi_risoluzione_energia/file_fit_profile.root", "RECREATE");
+   file_fit_profile->cd();
+
+   TF1 *f_an_corr_1 = new TF1("f_an_corr_1", "pol1", 1.5, 3.2);
+   TF1 *f_an_corr_2 = new TF1("f_an_corr_2", "pol1", 3.2, 4);
+   TFitResultPtr fit_res_an_corr_1 = an_corr_profile->Fit(f_an_corr_1, "SR");
+   TFitResultPtr fit_res_an_corr_2 = an_corr_profile->Fit(f_an_corr_2, "SR+");
+   fit_res_an_corr_1->SetNameTitle("fit_res_an_corr_1", "pol1");
+   fit_res_an_corr_2->SetNameTitle("fit_res_an_corr_2", "pol1");
+   fit_res_an_corr_1->Write();
+   fit_res_an_corr_2->Write();
+
+   TF1 *f_an_mean = new TF1("f_an_mean", "pol4", 1, 4.2);
+   TFitResultPtr fit_res_an_mean = an_mean_profile->Fit(f_an_mean, "SR");
+   fit_res_an_mean->SetNameTitle("fit_res_an_mean", "pol4");
+   fit_res_an_mean->Write();
+
+   TF1 *f_an_cos = new TF1("f_an_cos", "pol4", 1, 4);
+   TFitResultPtr fit_res_an_cos = an_cos_profile->Fit(f_an_mean, "SR");
+   fit_res_an_cos->SetNameTitle("fit_res_an_cos", "pol4");
+   fit_res_an_cos->Write();
+
+   TF1 *f_coll = new TF1("f_coll", "pol4", 1, 4.2);
+   TFitResultPtr fit_res_coll = coll_profile->Fit(f_coll, "SR");
+   fit_res_coll->SetNameTitle("fit_res_coll", "pol4");
+   fit_res_coll->Write();
+
+   TF1 *f_imp_coll = new TF1("f_imp_coll", "pol4", 1, 4.2);
+   TFitResultPtr fit_res_imp_coll = imp_coll_profile->Fit(f_imp_coll, "SR");
+   fit_res_imp_coll->SetNameTitle("fit_res_imp_coll", "pol4");
+   fit_res_imp_coll->Write();
+
+   TF1 *f_non_coll = new TF1("f_non_coll", "pol4", 1, 4.2);
+   TFitResultPtr fit_res_non_coll = non_coll_profile->Fit(f_non_coll, "SR");
+   fit_res_non_coll->SetNameTitle("fit_res_non_coll", "pol4");
+   fit_res_non_coll->Write();
+
+   file_fit_profile->Close();
    // ============ salvo i png ======================
    TCanvas *c = new TCanvas("c", "c", 900, 650);
    c->cd();
