@@ -30,6 +30,7 @@ TH2D *Resolution_an_min;
 TH2D *Resolution_an_cos;
 TH2D *Resolution_an_mean;
 TH2D *Resolution_an_corr;
+TH2D *Resolution_an_coll;
 
 TH1D *B_energy_res;
 TProfile *En_profile;
@@ -39,6 +40,7 @@ TProfile *non_coll_profile;
 TProfile *an_mean_profile;
 TProfile *an_corr_profile;
 TProfile *an_cos_profile;
+TProfile *an_coll_profile;
 
 extern Double_t sol_mag; // definiti in utilities.cc
 extern Double_t sol_min;
@@ -186,6 +188,19 @@ void TagSide::Loop(std::string dump)
    an_cos_profile->GetYaxis()->SetTitle("risoluzione energia");
    an_cos_profile->SetStats(0);
 
+   Resolution_an_coll = new TH2D("Resolution_an_coll", "risoluzione vs massa visibile,  analitica collineare, cos#theta maggiore", 100, 1, 4.5, 300, -3, 1);
+   Resolution_an_coll->GetXaxis()->SetTitle("massa visibile [GeV]");
+   Resolution_an_coll->GetYaxis()->SetTitle("risoluzione energia");
+   Resolution_an_coll->GetZaxis()->SetTitle("Counts");
+   Resolution_an_coll->SetStats(0);
+   Resolution_an_coll->GetYaxis()->SetMaxDigits(1);
+   Resolution_an_coll->GetZaxis()->SetMaxDigits(3);
+
+   an_coll_profile = new TProfile("Profile_an_coll", "Profilo Massa vs risoluzione, analitica collineare, cos#theta maggiore", 25, 1, 4.5, -3, 1);
+   an_coll_profile->GetXaxis()->SetTitle("massa visibile [GeV]");
+   an_coll_profile->GetYaxis()->SetTitle("risoluzione energia");
+   an_coll_profile->SetStats(0);
+
    Long64_t nentries = fChain->GetEntriesFast();
 
    std::cout << "Analysis started, wait...\t" << std::flush;
@@ -301,6 +316,22 @@ void TagSide::Loop(std::string dump)
       Resolution_an_corr->Fill(vis_mass, ris_an_corr);
       an_corr_profile->Fill(vis_mass, ris_an_corr, 1);
 
+      // studio del caso cos(theta)=1 e E_B != P_B
+      static Double_t a_an_coll;
+      static Double_t b_an_coll;
+      static Double_t c_an_coll;
+
+      a_an_coll = 4 * (pow(tlv_visibile.T(), 2) - tlv_visibile.P() * tlv_visibile.P());
+      b_an_coll = -4 * tlv_visibile.T() * (vis_mass2 + tlv_Btag.M2());
+      c_an_coll = 4 * pow(tlv_Btag.M() * tlv_visibile.P(), 2) + pow(tlv_Btag.M2() + vis_mass2, 2);
+
+      static Double_t en_an_coll;
+      en_an_coll = solve_eq2(a_an_coll, b_an_coll, c_an_coll, tlv_visibile, pvz, tlv_Btag, 'c');
+      static Double_t res_an_coll;
+      res_an_coll = (tlv_Btag.T() - en_an_coll) / tlv_Btag.T();
+      Resolution_an_coll->Fill(vis_mass, res_an_coll);
+      an_coll_profile->Fill(vis_mass, res_an_coll, 1);
+
       if (en_corr != -1)
       {
          B_energy_res->Fill((tlv_Btag.T() - en_corr) / tlv_Btag.T());
@@ -328,8 +359,13 @@ void TagSide::Loop(std::string dump)
    fit_res_an_mean->Write();
 
    TF1 *f_an_cos = new TF1("f_an_cos", "pol4", 1, 4);
-   TFitResultPtr fit_res_an_cos = an_cos_profile->Fit(f_an_mean, "SR");
+   TFitResultPtr fit_res_an_cos = an_cos_profile->Fit(f_an_cos, "SR");
    fit_res_an_cos->SetNameTitle("fit_res_an_cos", "pol4");
+   fit_res_an_cos->Write();
+
+   TF1 *f_an_coll = new TF1("f_an_coll", "pol4", 1, 4);
+   TFitResultPtr fit_res_an_coll = an_coll_profile->Fit(f_an_coll, "SR");
+   fit_res_an_cos->SetNameTitle("fit_res_an_coll", "pol4");
    fit_res_an_cos->Write();
 
    TF1 *f_coll = new TF1("f_coll", "pol4", 1, 4.2);
@@ -369,6 +405,8 @@ void TagSide::Loop(std::string dump)
    c->SaveAs("./analisi_risoluzione_energia/analitica/Resolution_an_mean.png");
    Resolution_an_cos->Draw("CONT4Z");
    c->SaveAs("./analisi_risoluzione_energia/analitica/Resolution_an_cos.png");
+   Resolution_an_coll->Draw("CONT4Z");
+   c->SaveAs("./analisi_risoluzione_energia/analitica/Resolution_an_coll.png");
 
    // salvo i profili
    coll_profile->Draw();
@@ -383,6 +421,8 @@ void TagSide::Loop(std::string dump)
    c->SaveAs("./analisi_risoluzione_energia/analitica/Profile_an_mean.png");
    an_cos_profile->Draw();
    c->SaveAs("./analisi_risoluzione_energia/analitica/Profile_an_cos.png");
+   an_coll_profile->Draw();
+   c->SaveAs("./analisi_risoluzione_energia/analitica/Profile_an_coll.png");
 
    // salvo l'angolo
    T_Angle->Draw("CONT4Z");
@@ -398,6 +438,7 @@ void TagSide::Loop(std::string dump)
    f->Delete("Resolution_an_mag;*");
    f->Delete("Resolution_an_min;*");
    f->Delete("Resolution_an_cos;*");
+   f->Delete("Resolution_an_coll;*");
 
    f->Delete("Profile_coll;*");
    f->Delete("Profile_imp_coll;*");
@@ -405,6 +446,7 @@ void TagSide::Loop(std::string dump)
    f->Delete("Profile_an_corr;*");
    f->Delete("Profile_an_mean;*");
    f->Delete("Profile_an_cos;*");
+   f->Delete("Profile_an_coll;*");
 
    f->Delete("MassRatio;*");
    f->Delete("CosAlpha;*");
@@ -417,10 +459,12 @@ void TagSide::Loop(std::string dump)
    Resolution_an_mag->Write();
    Resolution_an_corr->Write();
    Resolution_an_mean->Write();
+   Resolution_an_coll->Write();
 
    coll_profile->Write();
    imp_coll_profile->Write();
    non_coll_profile->Write();
+   an_coll_profile->Write();
 
    MassRatio->Write();
    CosAlpha->Write();

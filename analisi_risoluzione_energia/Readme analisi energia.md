@@ -9,6 +9,7 @@ in questo readme sono presenti le informazioni base che servono per interpretare
     * due png con la risoluzione calcolata con l'energia maggiore e minore (provenienti dell'equazione di secondo grado)
     * un .png che contiene un istogramma costruito con i residui (energia_vera-energia_calcolata) scegliendo l'energia_calcolata come quella che corrisponde al cos(theta) più vicino a 1 tra le due soluzioni dell'equazione di secondo grado.
     * i plot bidimensionali della risoluzione e i TProfile per l'energia del B calcolata con la soluzione dell'equazione di secondo grada scelta in base al coseno maggiore (__*an_cos*__), scelta a posteriori (__*an_corr*__), e con la media della due soluzioni (__*an_mean*__)
+    * il plot della risoluzione e il TProfile usando l'approssimazione collineare ma E_B != da P_B, in questa caso scegliendo la soluzione dell'equazione di secondo grado con il coseno maggiore (__*an_coll*__)
 
 - il png proiezioni_totali.png che contiene le proiezioni per vari intervalli di massa invariante sulla risoluzione per gli istogramma bidimensionali salvati nei file Resolution...png. In questo file gli istogrammi rossi fanno riferimento al metodo collinear, quelli blu all'improved collinear e quelli verdi all'improved non collinear.
 

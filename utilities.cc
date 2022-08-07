@@ -44,7 +44,14 @@ Double_t solve_eq2(Double_t a, Double_t b, Double_t c, TLorentzVector tlv_v, Dou
             return sol_min;
         }
     }
-
+    if (op == 'v') // inutile non funziona mai
+    {
+        if (tlv_v.T() > sol_min)
+        {
+            std::cout << "funziona" << std::endl;
+            return sol_mag;
+        }
+    }
     // Double_t mag = abs(2 * sol_mag * tlv_v.T() - 2 * sqrt(sol_mag * sol_mag - 5.27915 * 5.27915) * pvz - 5.27915 * 5.27915 - tlv_v.M2());
     // Double_t min = abs(2 * sol_min * tlv_v.T() - 2 * sqrt(sol_min * sol_min - 5.27915 * 5.27915) * pvz - 5.27915 * 5.27915 - tlv_v.M2());
 
