@@ -20,6 +20,7 @@ TagSide t; // lo definisco qua per non doverlo fare a mano ogni volta
 TH1D *MassRatio;
 TH2D *CosAlpha;
 TH2D *T_Angle;
+TH1D *inv_mass;
 
 TH2D *Resolution;
 TH2D *Resolution_coll;
@@ -201,6 +202,14 @@ void TagSide::Loop(std::string dump)
    an_coll_profile->GetYaxis()->SetTitle("risoluzione energia");
    an_coll_profile->SetStats(0);
 
+   inv_mass = new TH1D("inv_mass", "massa invariante", 60, 0, 6);
+   inv_mass->GetXaxis()->SetTitle("massa invariante [GeV]");
+   inv_mass->GetYaxis()->SetTitle("conteggi/100 MeV");
+   inv_mass->SetLineWidth(2);
+   inv_mass->SetFillStyle(3002);
+   inv_mass->SetLineColor(kBlue);
+   inv_mass->SetFillColorAlpha(kBlue, 0.35);
+
    Long64_t nentries = fChain->GetEntriesFast();
 
    std::cout << "Analysis started, wait...\t" << std::flush;
@@ -242,6 +251,9 @@ void TagSide::Loop(std::string dump)
       static Double_t vis_mass2;
       vis_mass = tlv_visibile.M();
       vis_mass2 = tlv_visibile.M2();
+
+      // massa invariante
+      inv_mass->Fill(vis_mass);
 
       // RISOLUZIONE
 
@@ -428,6 +440,10 @@ void TagSide::Loop(std::string dump)
    T_Angle->Draw("CONT4Z");
    c->SaveAs("./analisi_angolo/Distribuzione_angolo.png");
 
+   // salvo massa invariante
+   inv_mass->Draw();
+   c->SaveAs("massa_invariante.png");
+
    // salvo nel TFile
    TFile *f = new TFile("grafici.root", "UPDATE");
    f->cd();
@@ -451,6 +467,7 @@ void TagSide::Loop(std::string dump)
    f->Delete("MassRatio;*");
    f->Delete("CosAlpha;*");
    f->Delete("T_Angle;*");
+   f->Delete("inv_mass;*");
 
    Resolution_coll->Write();
    Resolution_imp_coll->Write();
@@ -469,4 +486,5 @@ void TagSide::Loop(std::string dump)
    MassRatio->Write();
    CosAlpha->Write();
    T_Angle->Write();
+   inv_mass->Write();
 }
