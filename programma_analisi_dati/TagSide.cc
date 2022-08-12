@@ -20,11 +20,13 @@
 #include "./AnalysisFramework/AnalysisSteering.h"
 
 #include "./AnalysisPlugins/ViPrint.h"
+#include "./AnalysisPlugins/ViSave.h"
 
 #include <string>
 #include <iostream>
 
 ViPrint *print = new ViPrint();
+ViSave *save = new ViSave();
 
 Double_t vis_mass;
 Double_t vis_mass2;
@@ -105,4 +107,5 @@ void TagSide::Loop(std::string dump)
 
    // salvo e stampo
    AnalysisSteering::AcceptAll(print);
+   AnalysisSteering::AcceptAll(save);
 }

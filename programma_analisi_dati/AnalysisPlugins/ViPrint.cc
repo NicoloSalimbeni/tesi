@@ -23,6 +23,7 @@ void ViPrint::Visit(ObjColl *obj)
 
     obj->GetP()->Draw();
     c->SaveAs("../analisi_risoluzione_energia/collinear/Profile_coll.png");
+    c->Close();
 }
 
 void ViPrint::Visit(ObjImpColl *obj)
@@ -35,6 +36,7 @@ void ViPrint::Visit(ObjImpColl *obj)
 
     obj->GetP()->Draw();
     c->SaveAs("../analisi_risoluzione_energia/improved_collinear/Profile_imp_coll.png");
+    c->Close();
 }
 
 void ViPrint::Visit(ObjNonColl *obj)
@@ -47,6 +49,7 @@ void ViPrint::Visit(ObjNonColl *obj)
 
     obj->GetP()->Draw();
     c->SaveAs("../analisi_risoluzione_energia/non_collinear/Profile_non_coll.png");
+    c->Close();
 }
 
 void ViPrint::Visit(ObjAn *obj)
@@ -71,6 +74,7 @@ void ViPrint::Visit(ObjAn *obj)
     c->SaveAs("../analisi_risoluzione_energia/analitica/Profile_an_mean.png");
     obj->GetPCos()->Draw();
     c->SaveAs("../analisi_risoluzione_energia/analitica/Profile_an_cos.png");
+    c->Close();
 }
 
 void ViPrint::Visit(ObjAnColl *obj) {} // TODO

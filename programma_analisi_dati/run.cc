@@ -18,6 +18,7 @@ void run()
     gROOT->ProcessLine(".L ./AnalysisObjects/ObjNonColl.cc");
 
     gROOT->ProcessLine(".L ./AnalysisPlugins/ViPrint.cc");
+    gROOT->ProcessLine(".L ./AnalysisPlugins/ViSave.cc");
 
     gROOT->ProcessLine(".L TagSide.cc");
 
