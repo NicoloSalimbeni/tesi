@@ -18,10 +18,13 @@ public:
     TF1 *GetF() const;
     void Accept(); // TODO accetta i visitor (pattern)
 
-private:
-    TH2D *h2;
-    TProfile *p;
+protected:
+    TH2D *hris;
+    TProfile *pris;
     TF1 *f_fit;
+
+    Double_t ris;
+    Double_t en;
 };
 
 #endif

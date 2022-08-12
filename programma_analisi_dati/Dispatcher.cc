@@ -28,6 +28,6 @@ void Dispatcher::Notify(const TLorentzVector &tlv_Btag, const TLorentzVector &tl
     while (it != ei)
     {
         (*it++)->Update(tlv_Btag, tlv_visibile);
-        return;
     }
+    return;
 }

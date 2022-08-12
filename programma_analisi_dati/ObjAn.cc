@@ -48,7 +48,7 @@ ObjAn::ObjAn()
     an_mean_profile->GetYaxis()->SetTitle("risoluzione energia");
     an_mean_profile->SetStats(0);
 
-    Resolution_an_cos = new TH2D("Resolution_an_cos", "risoluzione vs massa visibile,  cos#theta maggiore", 100, 1, 4.5, 300, -0.004, 0.004);
+    Resolution_an_cos = new TH2D("Resolution_an_cos", "risoluzione vs massa visibile,  cos#theta maggiore", 100, 1, 4.5, 300, -3, 1);
     Resolution_an_cos->GetXaxis()->SetTitle("massa visibile [GeV]");
     Resolution_an_cos->GetYaxis()->SetTitle("risoluzione energia");
     Resolution_an_cos->GetZaxis()->SetTitle("Counts");

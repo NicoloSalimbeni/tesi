@@ -13,6 +13,9 @@
 
 #include "Utilities.h"
 #include "ObjAn.h"
+#include "ObjColl.h"
+#include "ObjImpColl.h"
+#include "ObjNonColl.h"
 #include "Dispatcher.h"
 
 #include <string>
@@ -24,6 +27,10 @@ Double_t vis_mass2;
 Double_t pvz;
 
 ObjAn *an_analitica = new ObjAn();
+ObjColl *an_coll = new ObjColl();
+ObjImpColl *an_impcoll = new ObjImpColl();
+ObjNonColl *an_noncoll = new ObjNonColl();
+
 void TagSide::Loop(std::string dump)
 {
    //   In a ROOT session, you can do:

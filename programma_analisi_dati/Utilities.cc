@@ -62,3 +62,15 @@ Double_t Utilities::int_settore_circolare(Double_t a_min, Double_t a_max)
 {
     return 2 * TMath::Pi() * (TMath::Cos(a_min) - TMath::Cos(a_max));
 }
+
+void Utilities::Update(const TLorentzVector &tlv_Btag, const TLorentzVector &tlv_visibile)
+{
+    pvz = (tlv_visibile.Vect().Dot(tlv_Btag.Vect())) / tlv_Btag.Vect().Mag();
+    a = 4 * (pow(tlv_visibile.T(), 2) - pvz * pvz);
+    b = -4 * tlv_visibile.T() * (vis_mass2 + tlv_Btag.M2());
+    c = 4 * pow(tlv_Btag.M() * pvz, 2) + pow(tlv_Btag.M2() + vis_mass2, 2);
+
+    delta = b * b - 4 * a * c;
+    sol_mag = (-b + sqrt(delta)) / (2 * a);
+    sol_min = (-b - sqrt(delta)) / (2 * a);
+}

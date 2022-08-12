@@ -11,19 +11,19 @@ AnalysisObject::AnalysisObject()
 
 AnalysisObject::~AnalysisObject()
 {
-    delete h2;
-    delete p;
+    delete hris;
+    delete pris;
     delete f_fit;
 }
 
 TH2D *AnalysisObject::GetH() const
 {
-    return h2;
+    return hris;
 }
 
 TProfile *AnalysisObject::GetP() const
 {
-    return p;
+    return pris;
 }
 
 TF1 *AnalysisObject::GetF() const
