@@ -11,12 +11,12 @@
 #include "TFitResult.h"
 #include "TLorentzVector.h"
 
-#include "UtilitiesAnalysis.h"
-#include "ObjAn.h"
-#include "ObjColl.h"
-#include "ObjImpColl.h"
-#include "ObjNonColl.h"
-#include "Dispatcher.h"
+#include "./AnalysisUtilities/UtilitiesAnalysis.h"
+#include "./AnalysisObjects/ObjAn.h"
+#include "./AnalysisObjects/ObjColl.h"
+#include "./AnalysisObjects/ObjImpColl.h"
+#include "./AnalysisObjects/ObjNonColl.h"
+#include "./AnalysisFramework/Dispatcher.h"
 
 #include <string>
 #include <iostream>

@@ -1,6 +1,6 @@
 #ifndef ObjImpColl_h
 #define ObjImpColl_h
-#include "AnalysisObject.h"
+#include "../AnalysisFramework/AnalysisObject.h"
 
 class ObjImpColl : public AnalysisObject
 {

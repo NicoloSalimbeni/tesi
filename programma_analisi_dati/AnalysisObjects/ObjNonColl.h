@@ -1,6 +1,6 @@
 #ifndef ObjNonColl_h
 #define ObjNonColl_h
-#include "AnalysisObject.h"
+#include "../AnalysisFramework/AnalysisObject.h"
 
 class ObjNonColl : public AnalysisObject
 {

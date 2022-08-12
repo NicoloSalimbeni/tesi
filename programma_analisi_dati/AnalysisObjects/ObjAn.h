@@ -1,6 +1,6 @@
 #ifndef ObjAn_h
 #define ObjAn_h
-#include "AnalysisObject.h"
+#include "../AnalysisFramework/AnalysisObject.h"
 #include "TH2D.h"
 #include "TProfile.h"
 

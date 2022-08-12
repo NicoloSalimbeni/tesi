@@ -1,14 +1,14 @@
 void LoadClass()
 {
-    gROOT->ProcessLine(".L Utilities.cc");
-    gROOT->ProcessLine(".L UtilitiesAnalysis.cc");
-    gROOT->ProcessLine(".L Observer.cc");
-    gROOT->ProcessLine(".L Dispatcher.cc");
-    gROOT->ProcessLine(".L AnalysisObject.cc");
-    gROOT->ProcessLine(".L ObjAn.cc");
-    gROOT->ProcessLine(".L ObjAnColl.cc");
-    gROOT->ProcessLine(".L ObjColl.cc");
-    gROOT->ProcessLine(".L ObjImpColl.cc");
-    gROOT->ProcessLine(".L ObjNonColl.cc");
+    gROOT->ProcessLine(".L ./AnalysisUtilities/Utilities.cc");
+    gROOT->ProcessLine(".L ./AnalysisUtilities/UtilitiesAnalysis.cc");
+    gROOT->ProcessLine(".L ./AnalysisFramework/Observer.cc");
+    gROOT->ProcessLine(".L ./AnalysisFramework/Dispatcher.cc");
+    gROOT->ProcessLine(".L ./AnalysisFramework/AnalysisObject.cc");
+    gROOT->ProcessLine(".L ./AnalysisObjects/ObjAn.cc");
+    gROOT->ProcessLine(".L ./AnalysisObjects/ObjAnColl.cc");
+    gROOT->ProcessLine(".L ./AnalysisObjects/ObjColl.cc");
+    gROOT->ProcessLine(".L ./AnalysisObjects/ObjImpColl.cc");
+    gROOT->ProcessLine(".L ./AnalysisObjects/ObjNonColl.cc");
     gROOT->ProcessLine(".L TagSide.cc");
 }
