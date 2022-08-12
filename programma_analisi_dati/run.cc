@@ -1,6 +1,6 @@
 #include "TROOT.h"
 
-void LoadClass()
+void run()
 {
     gROOT->ProcessLine(".L ./AnalysisUtilities/Utilities.cc");
     gROOT->ProcessLine(".L ./AnalysisUtilities/UtilitiesAnalytic.cc");
