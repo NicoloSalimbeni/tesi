@@ -3,14 +3,14 @@
 
 ObjColl::ObjColl()
 {
-    hris = new TH2D("Resolution_coll", "risoluzione vs massa hrisear", 100, 1, 4.5, 300, -3, 1);
+    hris = new TH2D("Resolution_coll", "risoluzione vs massa hrisear", 100, 1, 4.5, 300, -3, 3);
     hris->GetXaxis()->SetTitle("massa visibile [GeV]");
     hris->GetYaxis()->SetTitle("risoluzione energia");
     hris->GetZaxis()->SetTitle("Counts");
     hris->SetStats(0);
     hris->GetZaxis()->SetMaxDigits(3);
 
-    pris = new TProfile("Profile_coll", "Profilo Massa vs risoluzione collinear", 25, 1, 4.5, -3, 1);
+    pris = new TProfile("Profile_coll", "Profilo Massa vs risoluzione collinear", 25, 1, 4.5, -3, 3);
     pris->GetXaxis()->SetTitle("massa visibile [GeV]");
     pris->GetYaxis()->SetTitle("risoluzione energia");
     pris->SetStats(0);

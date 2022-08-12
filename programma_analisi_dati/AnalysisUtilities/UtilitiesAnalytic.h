@@ -1,15 +1,14 @@
-// questa classe gestisce l'analisi della soluzione analitica
-#ifndef UtilitiesAnalysis_h
-#define UtilitiesAnalysis_h
+#ifndef UtilitiesAnalytic_h
+#define UtilitiesAnalytic_h
 
 #include "TLorentzVector.h"
 #include "Utilities.h"
 
-class UtilitiesAnalysis : public Utilities
+class UtilitiesAnalytic : public Utilities
 {
 public:
-    UtilitiesAnalysis();
-    ~UtilitiesAnalysis();
+    UtilitiesAnalytic();
+    ~UtilitiesAnalytic();
 
     Double_t GetSolMag();
     Double_t GetSolMin();

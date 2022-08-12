@@ -2,7 +2,7 @@
 #include "TLorentzVector.h"
 #include "TH2D.h"
 #include "TProfile.h"
-#include "../AnalysisUtilities/UtilitiesAnalysis.h"
+#include "../AnalysisUtilities/UtilitiesAnalytic.h"
 
 ObjAn::ObjAn()
 {
@@ -30,7 +30,7 @@ ObjAn::ObjAn()
     Resolution_an_corr->GetYaxis()->SetMaxDigits(1);
     Resolution_an_corr->GetZaxis()->SetMaxDigits(3);
 
-    an_corr_profile = new TProfile("Profile_an_corr", "Profilo Massa vs risoluzione, risultati esatti", 25, 1, 4.5, -3, 1);
+    an_corr_profile = new TProfile("Profile_an_corr", "Profilo Massa vs risoluzione, risultati esatti", 25, 1, 4.5, -3, 3);
     an_corr_profile->GetXaxis()->SetTitle("massa visibile [GeV]");
     an_corr_profile->GetYaxis()->SetTitle("risoluzione energia");
     an_corr_profile->SetStats(0);
@@ -43,7 +43,7 @@ ObjAn::ObjAn()
     Resolution_an_mean->GetYaxis()->SetMaxDigits(1);
     Resolution_an_mean->GetZaxis()->SetMaxDigits(3);
 
-    an_mean_profile = new TProfile("Profile_an_mean", "Profilo Massa vs risoluzione, media soluzioni", 25, 1, 4.5, -3, 1);
+    an_mean_profile = new TProfile("Profile_an_mean", "Profilo Massa vs risoluzione, media soluzioni", 25, 1, 4.5, -3, 3);
     an_mean_profile->GetXaxis()->SetTitle("massa visibile [GeV]");
     an_mean_profile->GetYaxis()->SetTitle("risoluzione energia");
     an_mean_profile->SetStats(0);
@@ -56,7 +56,7 @@ ObjAn::ObjAn()
     Resolution_an_cos->GetYaxis()->SetMaxDigits(1);
     Resolution_an_cos->GetZaxis()->SetMaxDigits(3);
 
-    an_cos_profile = new TProfile("Profile_an_cos", "Profilo Massa vs risoluzione,  cos#theta maggiore", 25, 1, 4.5, -3, 1);
+    an_cos_profile = new TProfile("Profile_an_cos", "Profilo Massa vs risoluzione,  cos#theta maggiore", 25, 1, 4.5, -3, 3);
     an_cos_profile->GetXaxis()->SetTitle("massa visibile [GeV]");
     an_cos_profile->GetYaxis()->SetTitle("risoluzione energia");
     an_cos_profile->SetStats(0);
@@ -68,7 +68,7 @@ ObjAn::~ObjAn()
     return;
 }
 
-extern UtilitiesAnalysis *util;
+extern UtilitiesAnalytic *util;
 
 void ObjAn::AddPoint(const TLorentzVector &tlv_Btag, const TLorentzVector &tlv_visibile)
 {

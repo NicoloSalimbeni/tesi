@@ -9,7 +9,7 @@ ObjImpColl::ObjImpColl()
     hris->SetStats(0);
     hris->GetZaxis()->SetMaxDigits(3);
 
-    pris = new TProfile("Profile_imp_coll", "Profilo Massa vs risoluzione improved collinear", 25, 1, 4.5, -3, 1);
+    pris = new TProfile("Profile_imp_coll", "Profilo Massa vs risoluzione improved collinear", 25, 1, 4.5, -3, 3);
     pris->GetXaxis()->SetTitle("massa visibile [GeV]");
     pris->GetYaxis()->SetTitle("risoluzione energia");
     pris->SetStats(0);

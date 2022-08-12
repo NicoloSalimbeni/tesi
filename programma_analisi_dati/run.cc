@@ -1,7 +1,9 @@
+#include "TROOT.h"
+
 void LoadClass()
 {
     gROOT->ProcessLine(".L ./AnalysisUtilities/Utilities.cc");
-    gROOT->ProcessLine(".L ./AnalysisUtilities/UtilitiesAnalysis.cc");
+    gROOT->ProcessLine(".L ./AnalysisUtilities/UtilitiesAnalytic.cc");
     gROOT->ProcessLine(".L ./AnalysisFramework/Observer.cc");
     gROOT->ProcessLine(".L ./AnalysisFramework/Dispatcher.cc");
     gROOT->ProcessLine(".L ./AnalysisFramework/AnalysisObject.cc");
@@ -11,4 +13,7 @@ void LoadClass()
     gROOT->ProcessLine(".L ./AnalysisObjects/ObjImpColl.cc");
     gROOT->ProcessLine(".L ./AnalysisObjects/ObjNonColl.cc");
     gROOT->ProcessLine(".L TagSide.cc");
+
+    gROOT->ProcessLine("TagSide t;");
+    gROOT->ProcessLine("t.Loop()");
 }

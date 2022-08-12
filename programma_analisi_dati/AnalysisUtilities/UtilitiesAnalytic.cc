@@ -2,18 +2,18 @@
 #include "TMacro.h"
 #include "TF1.h"
 #include "TLorentzVector.h"
-#include "UtilitiesAnalysis.h"
+#include "UtilitiesAnalytic.h"
 #include <iostream>
 
-UtilitiesAnalysis::UtilitiesAnalysis()
+UtilitiesAnalytic::UtilitiesAnalytic()
 {
 }
 
-UtilitiesAnalysis::~UtilitiesAnalysis()
+UtilitiesAnalytic::~UtilitiesAnalytic()
 {
 }
 
-void UtilitiesAnalysis::SolveEq2_cos()
+void UtilitiesAnalytic::SolveEq2_cos()
 {
     Double_t pBp = sqrt(sol_mag * sol_mag - mass_B * mass_B);
     Double_t pBm = sqrt(sol_min * sol_min - mass_B * mass_B);
@@ -35,7 +35,7 @@ void UtilitiesAnalysis::SolveEq2_cos()
     return;
 }
 
-void UtilitiesAnalysis::SolveEq2_post()
+void UtilitiesAnalytic::SolveEq2_post()
 {
     if (abs(sol_mag - en_B) < abs(sol_min - en_B))
     {
@@ -52,7 +52,7 @@ void UtilitiesAnalysis::SolveEq2_post()
     return;
 }
 
-void UtilitiesAnalysis::Update(const TLorentzVector &tlv_Btag, const TLorentzVector &tlv_visibile)
+void UtilitiesAnalytic::Update(const TLorentzVector &tlv_Btag, const TLorentzVector &tlv_visibile)
 {
     en_vis = tlv_visibile.T();
     en_B = tlv_Btag.T();
@@ -75,27 +75,27 @@ void UtilitiesAnalysis::Update(const TLorentzVector &tlv_Btag, const TLorentzVec
     return;
 }
 
-Double_t UtilitiesAnalysis::GetSolMag()
+Double_t UtilitiesAnalytic::GetSolMag()
 {
     return sol_mag;
 }
 
-Double_t UtilitiesAnalysis::GetSolMin()
+Double_t UtilitiesAnalytic::GetSolMin()
 {
     return sol_min;
 }
 
-Double_t UtilitiesAnalysis::GetSolMean()
+Double_t UtilitiesAnalytic::GetSolMean()
 {
     return (sol_mag + sol_min) / 2;
 }
 
-Double_t UtilitiesAnalysis::GetSolCos()
+Double_t UtilitiesAnalytic::GetSolCos()
 {
     return sol_cos;
 }
 
-Double_t UtilitiesAnalysis::GetSolPost()
+Double_t UtilitiesAnalytic::GetSolPost()
 {
     return sol_post;
 }

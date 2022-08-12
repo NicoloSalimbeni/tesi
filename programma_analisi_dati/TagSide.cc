@@ -11,7 +11,7 @@
 #include "TFitResult.h"
 #include "TLorentzVector.h"
 
-#include "./AnalysisUtilities/UtilitiesAnalysis.h"
+#include "./AnalysisUtilities/UtilitiesAnalytic.h"
 #include "./AnalysisObjects/ObjAn.h"
 #include "./AnalysisObjects/ObjColl.h"
 #include "./AnalysisObjects/ObjImpColl.h"
@@ -20,13 +20,12 @@
 
 #include <string>
 #include <iostream>
-TagSide t;
 
 Double_t vis_mass;
 Double_t vis_mass2;
 Double_t pvz;
 
-UtilitiesAnalysis *util = new UtilitiesAnalysis();
+UtilitiesAnalytic *util = new UtilitiesAnalytic();
 
 ObjAn *an_analitica = new ObjAn();
 ObjColl *an_coll = new ObjColl();
