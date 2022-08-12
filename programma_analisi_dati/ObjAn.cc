@@ -2,7 +2,7 @@
 #include "TLorentzVector.h"
 #include "TH2D.h"
 #include "TProfile.h"
-#include "Utilities.h"
+#include "UtilitiesAnalysis.h"
 
 ObjAn::ObjAn()
 {
@@ -48,7 +48,7 @@ ObjAn::ObjAn()
     an_mean_profile->GetYaxis()->SetTitle("risoluzione energia");
     an_mean_profile->SetStats(0);
 
-    Resolution_an_cos = new TH2D("Resolution_an_cos", "risoluzione vs massa visibile,  cos#theta maggiore", 100, 1, 4.5, 300, -3, 1);
+    Resolution_an_cos = new TH2D("Resolution_an_cos", "risoluzione vs massa visibile,  cos#theta maggiore", 100, 1, 4.5, 300, -0.004, 0.004);
     Resolution_an_cos->GetXaxis()->SetTitle("massa visibile [GeV]");
     Resolution_an_cos->GetYaxis()->SetTitle("risoluzione energia");
     Resolution_an_cos->GetZaxis()->SetTitle("Counts");
@@ -68,50 +68,39 @@ ObjAn::~ObjAn()
     return;
 }
 
+extern UtilitiesAnalysis *util;
+
 void ObjAn::AddPoint(const TLorentzVector &tlv_Btag, const TLorentzVector &tlv_visibile)
 {
-
+    Double_t sol_mag = util->GetSolMag();
+    Double_t sol_min = util->GetSolMin();
     Double_t vis_mass = tlv_visibile.M();
-    Double_t vis_mass2 = tlv_visibile.M2();
-
-    Double_t a;
-    Double_t b;
-    Double_t c;
-    Double_t pvz;
-    pvz = (tlv_visibile.Vect().Dot(tlv_Btag.Vect())) / tlv_Btag.Vect().Mag();
-
-    a = 4 * (pow(tlv_visibile.T(), 2) - pvz * pvz);
-    b = -4 * tlv_visibile.T() * (vis_mass2 + tlv_Btag.M2());
-    c = 4 * pow(tlv_Btag.M() * pvz, 2) + pow(tlv_Btag.M2() + vis_mass2, 2);
-
-    Double_t sol_mag = Utilities::SolveEq2_mag(a, b, c);
-    Double_t sol_min = Utilities::SolveEq2_min(a, b, c);
-
+    Double_t en_B = tlv_Btag.T();
     // soluzione analitica scelta con il coseno maggiore
     static Double_t en_cos;
-    en_cos = Utilities::SolveEq2_cos(a, b, c, tlv_visibile, pvz);
+    en_cos = util->GetSolCos();
     static Double_t res_an_cos;
-    res_an_cos = (tlv_Btag.T() - en_cos) / tlv_Btag.T();
+    res_an_cos = (en_B - en_cos) / en_B;
     Resolution_an_cos->Fill(vis_mass, res_an_cos);
     an_cos_profile->Fill(vis_mass, res_an_cos, 1);
 
     // entrambe le soluzioni con maggiore e minore
-    Resolution_an_min->Fill(vis_mass, (tlv_Btag.T() - sol_min) / tlv_Btag.T());
-    Resolution_an_mag->Fill(vis_mass, (tlv_Btag.T() - sol_mag) / tlv_Btag.T());
+    Resolution_an_min->Fill(vis_mass, (en_B - sol_min) / en_B);
+    Resolution_an_mag->Fill(vis_mass, (en_B - sol_mag) / en_B);
 
     // media delle soluzioni analitiche
-    static Double_t sol_mean;
-    static Double_t ris_an_mean;
-    sol_mean = (sol_mag + sol_min) / 2;
-    ris_an_mean = (tlv_Btag.T() - sol_mean) / tlv_Btag.T();
+    Double_t sol_mean = util->GetSolMean();
+    Double_t ris_an_mean;
+
+    ris_an_mean = (en_B - sol_mean) / en_B;
     Resolution_an_mean->Fill(vis_mass, ris_an_mean);
     an_mean_profile->Fill(vis_mass, ris_an_mean, 1);
 
     // studio della soluzione scelta a posteriori
     static Double_t en_corr;
-    en_corr = Utilities::SolveEq2_post(a, b, c, tlv_Btag);
+    en_corr = util->GetSolPost();
     static Double_t ris_an_corr;
-    ris_an_corr = (tlv_Btag.T() - en_corr) / tlv_Btag.T();
+    ris_an_corr = (en_B - en_corr) / en_B;
     Resolution_an_corr->Fill(vis_mass, ris_an_corr);
     an_corr_profile->Fill(vis_mass, ris_an_corr, 1);
 }

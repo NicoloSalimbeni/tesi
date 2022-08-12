@@ -1,6 +1,7 @@
 void LoadClass()
 {
     gROOT->ProcessLine(".L Utilities.cc");
+    gROOT->ProcessLine(".L UtilitiesAnalysis.cc");
     gROOT->ProcessLine(".L Observer.cc");
     gROOT->ProcessLine(".L Dispatcher.cc");
     gROOT->ProcessLine(".L AnalysisObject.cc");

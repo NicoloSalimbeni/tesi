@@ -11,7 +11,7 @@
 #include "TFitResult.h"
 #include "TLorentzVector.h"
 
-#include "Utilities.h"
+#include "UtilitiesAnalysis.h"
 #include "ObjAn.h"
 #include "ObjColl.h"
 #include "ObjImpColl.h"
@@ -25,6 +25,8 @@ TagSide t;
 Double_t vis_mass;
 Double_t vis_mass2;
 Double_t pvz;
+
+UtilitiesAnalysis *util = new UtilitiesAnalysis();
 
 ObjAn *an_analitica = new ObjAn();
 ObjColl *an_coll = new ObjColl();
@@ -92,7 +94,7 @@ void TagSide::Loop(std::string dump)
       {
          tlv_visibile = *tlv_mupTag + *tlv_kamTag;
       }
-
+      util->Update(tlv_Btag, tlv_visibile);
       Dispatcher::Notify(tlv_Btag, tlv_visibile);
    }
    std::cout << "completed without errors! :-)" << std::endl;

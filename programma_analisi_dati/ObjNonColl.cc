@@ -1,5 +1,4 @@
 #include "ObjNonColl.h"
-#include "Utilities.h"
 
 ObjNonColl::ObjNonColl()
 {
