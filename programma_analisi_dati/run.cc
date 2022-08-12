@@ -2,8 +2,8 @@
 
 void run()
 {
+
     gROOT->ProcessLine(".L ./AnalysisUtilities/Utilities.cc");
-    gROOT->ProcessLine(".L ./AnalysisUtilities/UtilitiesAnalytic.cc");
 
     gROOT->ProcessLine(".L ./AnalysisFramework/Observer.cc");
     gROOT->ProcessLine(".L ./AnalysisFramework/Dispatcher.cc");
@@ -19,9 +19,10 @@ void run()
 
     gROOT->ProcessLine(".L ./AnalysisPlugins/ViPrint.cc");
     gROOT->ProcessLine(".L ./AnalysisPlugins/ViSave.cc");
+    gROOT->ProcessLine(".L ./AnalysisPlugins/UtilitiesAnalytic.cc");
 
     gROOT->ProcessLine(".L TagSide.cc");
 
     gROOT->ProcessLine("TagSide t;");
-    // gROOT->ProcessLine("t.Loop()");
+    gROOT->ProcessLine("t.Loop()");
 }

@@ -10,14 +10,16 @@
 #include "TF1.h"
 #include "TFitResult.h"
 #include "TLorentzVector.h"
+#include "TROOT.h"
 
-#include "./AnalysisUtilities/UtilitiesAnalytic.h"
+#include "./AnalysisPlugins/UtilitiesAnalytic.h"
 #include "./AnalysisObjects/ObjAn.h"
 #include "./AnalysisObjects/ObjColl.h"
 #include "./AnalysisObjects/ObjImpColl.h"
 #include "./AnalysisObjects/ObjNonColl.h"
 #include "./AnalysisFramework/Dispatcher.h"
 #include "./AnalysisFramework/AnalysisSteering.h"
+#include "./AnalysisUtilities/Utilities.h"
 
 #include "./AnalysisPlugins/ViPrint.h"
 #include "./AnalysisPlugins/ViSave.h"
@@ -71,7 +73,7 @@ void TagSide::Loop(std::string dump)
 
    Long64_t nentries = fChain->GetEntriesFast();
 
-   std::cout << "Analysis started, wait...\t" << std::flush;
+   std::cout << "Analysis started, wait:\t" << std::endl;
 
    Long64_t nbytes = 0, nb = 0;
    for (Long64_t jentry = 0; jentry < nentries; jentry++)
@@ -90,7 +92,7 @@ void TagSide::Loop(std::string dump)
       }
 
       //=====================COSE CHE HO AGGIUNTO IO===============================================
-
+      // inizio analiti
       TLorentzVector tlv_visibile;
       if (VtxCharge == 1)
       {
@@ -102,7 +104,16 @@ void TagSide::Loop(std::string dump)
       }
       util->Update(tlv_Btag, tlv_visibile);
       Dispatcher::Notify(tlv_Btag, tlv_visibile);
+
+      // progress bar
+      float progress;
+      if (!(jentry % (nentries / 100)))
+      {
+         progress = jentry * 1.0 / nentries;
+         Utilities::ProgressBarr(progress);
+      }
    }
+   std::cout << std::endl;
    std::cout << "completed without errors! :-)" << std::endl;
 
    // salvo e stampo

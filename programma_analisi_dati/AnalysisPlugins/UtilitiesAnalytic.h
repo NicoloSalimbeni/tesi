@@ -2,7 +2,7 @@
 #define UtilitiesAnalytic_h
 
 #include "TLorentzVector.h"
-#include "Utilities.h"
+#include "../AnalysisUtilities/Utilities.h"
 
 class UtilitiesAnalytic : public Utilities
 {

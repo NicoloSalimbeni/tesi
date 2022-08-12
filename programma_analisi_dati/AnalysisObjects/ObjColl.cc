@@ -7,7 +7,7 @@ ObjColl::ObjColl()
 {
     AnalysisSteering::subscribe(this);
 
-    hris = new TH2D("Resolution_coll", "risoluzione vs massa hrisear", 100, 1, 4.5, 300, -3, 3);
+    hris = new TH2D("Resolution_coll", "risoluzione vs massa Collinear", 100, 1, 4.5, 300, -3, 3);
     hris->GetXaxis()->SetTitle("massa visibile [GeV]");
     hris->GetYaxis()->SetTitle("risoluzione energia");
     hris->GetZaxis()->SetTitle("Counts");

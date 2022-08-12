@@ -15,7 +15,7 @@ public:
     // funzioni static
     static Double_t SolveEq2(const Double_t &a, const Double_t &b, const Double_t &c, const char sol);
     static Double_t int_settore_circolare(Double_t a_min, Double_t a_max);
-
+    static void ProgressBarr(float);
     // costanti utili
     static const Double_t mass_B; // in GeV
 
