@@ -9,13 +9,14 @@ class ObjAnColl;
 
 class Visitor
 {
+public:
     Visitor();
-    ~Visitor();
-    virtual void Visit(ObjColl *);
-    virtual void Visit(ObjImpColl *);
-    virtual void Visit(ObjNonColl *);
-    virtual void Visit(ObjAn *);
-    virtual void Visit(ObjAnColl *);
+    virtual ~Visitor();
+    virtual void Visit(ObjColl *) = 0;
+    virtual void Visit(ObjImpColl *) = 0;
+    virtual void Visit(ObjNonColl *) = 0;
+    virtual void Visit(ObjAn *) = 0;
+    virtual void Visit(ObjAnColl *) = 0;
 };
 
 #endif

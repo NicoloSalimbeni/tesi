@@ -1,7 +1,11 @@
 #include "ObjNonColl.h"
+#include "../AnalysisFramework/Visitor.h"
+#include "../AnalysisFramework/AnalysisSteering.h"
 
 ObjNonColl::ObjNonColl()
 {
+    AnalysisSteering::subscribe(this);
+
     hris = new TH2D("Resolution_non_coll", "risoluzione vs massa visibile non collinear", 100, 1, 4.5, 300, -3, 3);
     hris->GetXaxis()->SetTitle("massa visibile [GeV]");
     hris->GetYaxis()->SetTitle("risoluzione energia");
@@ -28,4 +32,9 @@ void ObjNonColl::AddPoint(const TLorentzVector &tlv_Btag, const TLorentzVector &
     ris = (tlv_Btag.T() - en) / tlv_Btag.T();
     hris->Fill(tlv_visibile.M(), ris);
     pris->Fill(tlv_visibile.M(), ris, 1);
+}
+
+void ObjNonColl::Accept(Visitor *v)
+{
+    v->Visit(this);
 }

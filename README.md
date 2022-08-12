@@ -9,4 +9,3 @@ In ogni cartella è presente un readme che spiega in breve cosa c'è all'interno
 ## file all'esterno di tutte le cartelle
 - **grafici.root**: contiene i .root di tutti gli istogrammi bidimensionali costruiti, per la risoluzione e per l'angolo
 - **TagSide.C**, **macro.cc**, **utilities.cc**: contengono il codice utilizzato per l'analisi
-

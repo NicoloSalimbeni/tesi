@@ -1,8 +1,12 @@
 #include "ObjColl.h"
 #include "../AnalysisUtilities/Utilities.h"
+#include "../AnalysisFramework/Visitor.h"
+#include "../AnalysisFramework/AnalysisSteering.h"
 
 ObjColl::ObjColl()
 {
+    AnalysisSteering::subscribe(this);
+
     hris = new TH2D("Resolution_coll", "risoluzione vs massa hrisear", 100, 1, 4.5, 300, -3, 3);
     hris->GetXaxis()->SetTitle("massa visibile [GeV]");
     hris->GetYaxis()->SetTitle("risoluzione energia");
@@ -28,4 +32,9 @@ void ObjColl::AddPoint(const TLorentzVector &tlv_Btag, const TLorentzVector &tlv
     ris = (tlv_Btag.T() - en) / tlv_Btag.T();
     hris->Fill(tlv_visibile.M(), ris);
     pris->Fill(tlv_visibile.M(), ris, 1);
+}
+
+void ObjColl::Accept(Visitor *v)
+{
+    v->Visit(this);
 }

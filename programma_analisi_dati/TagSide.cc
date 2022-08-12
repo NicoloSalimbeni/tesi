@@ -17,9 +17,14 @@
 #include "./AnalysisObjects/ObjImpColl.h"
 #include "./AnalysisObjects/ObjNonColl.h"
 #include "./AnalysisFramework/Dispatcher.h"
+#include "./AnalysisFramework/AnalysisSteering.h"
+
+#include "./AnalysisPlugins/ViPrint.h"
 
 #include <string>
 #include <iostream>
+
+ViPrint *print = new ViPrint();
 
 Double_t vis_mass;
 Double_t vis_mass2;
@@ -97,4 +102,7 @@ void TagSide::Loop(std::string dump)
       Dispatcher::Notify(tlv_Btag, tlv_visibile);
    }
    std::cout << "completed without errors! :-)" << std::endl;
+
+   // salvo e stampo
+   AnalysisSteering::AcceptAll(print);
 }

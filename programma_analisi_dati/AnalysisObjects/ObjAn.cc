@@ -3,9 +3,14 @@
 #include "TH2D.h"
 #include "TProfile.h"
 #include "../AnalysisUtilities/UtilitiesAnalytic.h"
+#include "../AnalysisFramework/Visitor.h"
+#include "../AnalysisFramework/AnalysisSteering.h"
 
 ObjAn::ObjAn()
 {
+
+    AnalysisSteering::subscribe(this);
+
     Resolution_an_mag = new TH2D("Resolution_an_mag", "risoluzione vs massa visibile,  metodo analitico soluzione maggiore", 100, 1, 4.5, 300, -0.004, 0);
     Resolution_an_mag->GetXaxis()->SetTitle("massa visibile [GeV]");
     Resolution_an_mag->GetYaxis()->SetTitle("risoluzione energia");
@@ -143,4 +148,9 @@ TProfile *ObjAn::GetPCos()
 TProfile *ObjAn::GetPCorr()
 {
     return an_corr_profile;
+}
+
+void ObjAn::Accept(Visitor *v)
+{
+    v->Visit(this);
 }

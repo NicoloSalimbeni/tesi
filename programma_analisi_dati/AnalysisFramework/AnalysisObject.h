@@ -6,6 +6,8 @@
 #include "TF1.h"
 #include "TProfile.h"
 
+class Visitor;
+
 class AnalysisObject : public Observer
 {
 public:
@@ -16,7 +18,7 @@ public:
     TH2D *GetH() const;
     TProfile *GetP() const;
     TF1 *GetF() const;
-    void Accept(); // TODO accetta i visitor (pattern)
+    virtual void Accept(Visitor *) = 0;
 
 protected:
     TH2D *hris;

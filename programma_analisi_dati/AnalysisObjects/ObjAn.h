@@ -5,6 +5,7 @@
 #include "TProfile.h"
 
 class TLorentVector;
+class Visitor;
 
 class ObjAn : public AnalysisObject
 {
@@ -22,6 +23,7 @@ public:
     TProfile *GetPCorr();
 
     void AddPoint(const TLorentzVector &tlv_B, const TLorentzVector &tlv_vis) override;
+    void Accept(Visitor *) override;
 
 private:
     // ignoro h2 in questo caso
