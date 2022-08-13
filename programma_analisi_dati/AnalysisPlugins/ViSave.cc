@@ -61,6 +61,8 @@ void ViSave::Visit(ObjAn *obj)
     f->Delete("Resolution_an_mag;*");
     f->Delete("Resolution_an_min;*");
     f->Delete("Resolution_an_cos;*");
+    f->Delete("Resolution_an_mean;*");
+    f->Delete("Resolution_an_corr;*");
     f->Delete("Profile_an_corr;*");
     f->Delete("Profile_an_mean;*");
     f->Delete("Profile_an_cos;*");

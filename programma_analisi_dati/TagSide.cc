@@ -37,13 +37,6 @@ Double_t vis_mass;
 Double_t vis_mass2;
 Double_t pvz;
 
-UtilitiesAnalytic *util = new UtilitiesAnalytic();
-
-ObjAn *an_analitica = new ObjAn();
-ObjColl *an_coll = new ObjColl();
-ObjImpColl *an_impcoll = new ObjImpColl();
-ObjNonColl *an_noncoll = new ObjNonColl();
-
 void TagSide::Loop(std::string dump)
 {
    //   In a ROOT session, you can do:
@@ -77,6 +70,10 @@ void TagSide::Loop(std::string dump)
    Long64_t nentries = fChain->GetEntriesFast();
 
    std::cout << "Analysis started, wait:\t" << std::endl;
+   extern UtilitiesAnalytic *util;
+
+   // creo gli oggetti per l'analisi
+   AnalysisFactory::create();
 
    Long64_t nbytes = 0, nb = 0;
    for (Long64_t jentry = 0; jentry < nentries; jentry++)
@@ -95,6 +92,7 @@ void TagSide::Loop(std::string dump)
       }
 
       //=====================COSE CHE HO AGGIUNTO IO===============================================
+
       // inizio analiti
       TLorentzVector tlv_visibile;
       if (VtxCharge == 1)
@@ -110,7 +108,7 @@ void TagSide::Loop(std::string dump)
 
       // progress bar
       float progress;
-      if (!(jentry % (nentries / 100)))
+      if (!(jentry % (nentries / 100))) // così lo stampo una volta ogni tanto e non sempre
       {
          progress = jentry * 1.0 / nentries;
          Utilities::ProgressBarr(progress);

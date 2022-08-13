@@ -86,7 +86,7 @@ ObjAn::~ObjAn()
     return;
 }
 
-extern UtilitiesAnalytic *util;
+UtilitiesAnalytic *util = new UtilitiesAnalytic();
 
 void ObjAn::AddPoint(const TLorentzVector &tlv_Btag, const TLorentzVector &tlv_visibile)
 {
