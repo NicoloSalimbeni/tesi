@@ -1,5 +1,6 @@
 #include "AnalysisFactory.h"
 #include "AnalysisObject.h"
+#include "AnalysisInfo.h"
 #include <map>
 
 AnalysisFactory::AnalysisFactory()
@@ -17,14 +18,17 @@ std::map<std::string, AnalysisObject *> *AnalysisFactory::GetAList()
 }
 
 // create all requested analysis objects
-std::map<std::string, AnalysisObject *> AnalysisFactory::create()
+std::map<std::string, AnalysisObject *> AnalysisFactory::create(AnalysisInfo *info)
 {
     std::map<std::string, AnalysisObject *> *aList = GetAList();
     // loop over analysis object factories
     static std::map<std::string, AbsFactory *> *fm = factoryMap();
     for (const auto &element : *fm)
     {
-        aList->insert(std::make_pair(element.first, element.second->create()));
+        if (info->Contains(element.first) || info->Contains("all"))
+        {
+            aList->insert(std::make_pair(element.first, element.second->create()));
+        }
     }
     return *aList;
 }

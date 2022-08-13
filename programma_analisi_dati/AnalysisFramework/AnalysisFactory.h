@@ -19,7 +19,7 @@ public:
     virtual ~AnalysisFactory();
 
     // create all requested analysis objects
-    static std::map<std::string, AnalysisObject *> create();
+    static std::map<std::string, AnalysisObject *> create(AnalysisInfo *info);
     // analysis object abstract factory
     class AbsFactory
     {

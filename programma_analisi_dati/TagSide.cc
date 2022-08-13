@@ -17,6 +17,7 @@
 #include "./AnalysisObjects/ObjImpColl.h"
 #include "./AnalysisObjects/ObjNonColl.h"
 
+#include "./AnalysisFramework/AnalysisInfo.h"
 #include "./AnalysisFramework/Dispatcher.h"
 #include "./AnalysisFramework/AnalysisSteering.h"
 #include "./AnalysisFramework/AnalysisFactory.h"
@@ -37,7 +38,7 @@ Double_t vis_mass;
 Double_t vis_mass2;
 Double_t pvz;
 
-void TagSide::Loop(std::string dump)
+void TagSide::Loop(std::string argoments)
 {
    //   In a ROOT session, you can do:
    //      root> .L TagSide.C
@@ -69,11 +70,24 @@ void TagSide::Loop(std::string dump)
 
    Long64_t nentries = fChain->GetEntriesFast();
 
-   std::cout << "Analysis started, wait:\t" << std::endl;
-   extern UtilitiesAnalytic *util;
+   //===========cose da fare prima del for scritte da me===========
+
+   // estrapolo dell'argomento gli oggetti da creare
+   AnalysisInfo *info = new AnalysisInfo(argoments);
+
+   if (info->Contains("none"))
+   {
+      std::cout << "\nStarted analysis with no objects, execution aborted.\n"
+                << std::endl;
+      return;
+   }
 
    // creo gli oggetti per l'analisi
-   AnalysisFactory::create();
+   AnalysisFactory::create(info);
+
+   std::cout << "\nAnalysis started, wait:\t" << std::endl;
+   extern UtilitiesAnalytic *util;
+   //==============================================================
 
    Long64_t nbytes = 0, nb = 0;
    for (Long64_t jentry = 0; jentry < nentries; jentry++)
@@ -86,7 +100,7 @@ void TagSide::Loop(std::string dump)
       // if (Cut(ientry) < 0) continue;
 
       TLorentzVector tlv_Btag = *tlv_mupTag + *tlv_mumTag + *tlv_kapTag + *tlv_kamTag;
-      if (dump == "yes")
+      if (info->Contains("dump"))
       {
          std::cout << " at event " << jentry << "  " << VtxCharge << " " << VtxMass << " " << tlv_Btag.M() << std::endl;
       }
@@ -115,7 +129,8 @@ void TagSide::Loop(std::string dump)
       }
    }
    std::cout << std::endl;
-   std::cout << "completed without errors! :-)" << std::endl;
+   std::cout << "completed without errors! :-)\n"
+             << std::endl;
 
    // salvo e stampo
    AnalysisSteering::AcceptAll(print);

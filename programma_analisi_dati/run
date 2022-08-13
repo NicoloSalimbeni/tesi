@@ -1,0 +1,47 @@
+#include "TROOT.h"
+#include <string>
+#include <iostream>
+
+
+void run(std::string s = "none")
+{
+
+    if( !(gROOT->GetClass("Utilities")==nullptr))
+    {
+        gROOT->ProcessLine(("t.Loop( \" " + s + " \" )").c_str());
+        return;
+    }
+
+
+    if( (gROOT->GetClass("Utilities")==nullptr) )
+    {
+        gROOT->ProcessLine(".L ./AnalysisUtilities/Utilities.cc");
+        gROOT->ProcessLine(".L ./AnalysisPlugins/UtilitiesAnalytic.cc");
+
+        gROOT->ProcessLine(".L ./AnalysisFramework/AnalysisInfo.cc");
+        gROOT->ProcessLine(".L ./AnalysisFramework/Observer.cc");
+        gROOT->ProcessLine(".L ./AnalysisFramework/Dispatcher.cc");
+        gROOT->ProcessLine(".L ./AnalysisFramework/AnalysisObject.cc");
+        gROOT->ProcessLine(".L ./AnalysisFramework/Visitor.cc");
+        gROOT->ProcessLine(".L ./AnalysisFramework/AnalysisSteering.cc");
+        gROOT->ProcessLine(".L ./AnalysisFramework/AnalysisFactory.cc");
+
+        gROOT->ProcessLine(".L ./AnalysisObjects/ObjAn.cc");
+        gROOT->ProcessLine(".L ./AnalysisObjects/ObjAnColl.cc");
+        gROOT->ProcessLine(".L ./AnalysisObjects/ObjColl.cc");
+        gROOT->ProcessLine(".L ./AnalysisObjects/ObjImpColl.cc");
+        gROOT->ProcessLine(".L ./AnalysisObjects/ObjNonColl.cc");
+
+        gROOT->ProcessLine(".L ./AnalysisPlugins/ViPrint.cc");
+        gROOT->ProcessLine(".L ./AnalysisPlugins/ViSave.cc");
+
+        gROOT->ProcessLine(".L TagSide.cc");
+
+        gROOT->ProcessLine("TagSide t;");
+        if(!(gROOT->GetClass("TagSide")==nullptr))
+        {
+            std::cout <<"\nLibraries for data analysis loaded correctly.\n" << endl;
+        }
+    }
+    return;
+}
