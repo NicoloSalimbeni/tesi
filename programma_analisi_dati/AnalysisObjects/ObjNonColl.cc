@@ -1,6 +1,19 @@
 #include "ObjNonColl.h"
 #include "../AnalysisFramework/Visitor.h"
 #include "../AnalysisFramework/AnalysisSteering.h"
+#include "../AnalysisFramework/AnalysisFactory.h"
+
+class ObjNonCollFactory : public AnalysisFactory::AbsFactory
+{
+public:
+    ObjNonCollFactory() : AnalysisFactory::AbsFactory("ObjNonColl"){};
+    AnalysisObject *create() override
+    {
+        return new ObjNonColl();
+    }
+};
+
+static ObjNonCollFactory NonColl_static_factory;
 
 ObjNonColl::ObjNonColl()
 {

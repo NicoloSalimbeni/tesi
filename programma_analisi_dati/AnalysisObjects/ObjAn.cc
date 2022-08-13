@@ -5,6 +5,19 @@
 #include "../AnalysisPlugins/UtilitiesAnalytic.h"
 #include "../AnalysisFramework/Visitor.h"
 #include "../AnalysisFramework/AnalysisSteering.h"
+#include "../AnalysisFramework/AnalysisFactory.h"
+
+class ObjAnFactory : public AnalysisFactory::AbsFactory
+{
+public:
+    ObjAnFactory() : AnalysisFactory::AbsFactory("ObjAn"){};
+    AnalysisObject *create() override
+    {
+        return new ObjAn();
+    }
+};
+
+static ObjAnFactory An_static_factory;
 
 ObjAn::ObjAn()
 {

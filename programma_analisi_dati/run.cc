@@ -4,12 +4,14 @@ void run()
 {
 
     gROOT->ProcessLine(".L ./AnalysisUtilities/Utilities.cc");
+    gROOT->ProcessLine(".L ./AnalysisPlugins/UtilitiesAnalytic.cc");
 
     gROOT->ProcessLine(".L ./AnalysisFramework/Observer.cc");
     gROOT->ProcessLine(".L ./AnalysisFramework/Dispatcher.cc");
     gROOT->ProcessLine(".L ./AnalysisFramework/AnalysisObject.cc");
     gROOT->ProcessLine(".L ./AnalysisFramework/Visitor.cc");
     gROOT->ProcessLine(".L ./AnalysisFramework/AnalysisSteering.cc");
+    gROOT->ProcessLine(".L ./AnalysisFramework/AnalysisFactory.cc");
 
     gROOT->ProcessLine(".L ./AnalysisObjects/ObjAn.cc");
     gROOT->ProcessLine(".L ./AnalysisObjects/ObjAnColl.cc");
@@ -19,10 +21,9 @@ void run()
 
     gROOT->ProcessLine(".L ./AnalysisPlugins/ViPrint.cc");
     gROOT->ProcessLine(".L ./AnalysisPlugins/ViSave.cc");
-    gROOT->ProcessLine(".L ./AnalysisPlugins/UtilitiesAnalytic.cc");
 
     gROOT->ProcessLine(".L TagSide.cc");
 
     gROOT->ProcessLine("TagSide t;");
-    gROOT->ProcessLine("t.Loop()");
+    // gROOT->ProcessLine("t.Loop()");
 }

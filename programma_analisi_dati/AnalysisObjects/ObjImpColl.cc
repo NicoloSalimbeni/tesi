@@ -2,6 +2,19 @@
 #include "../AnalysisFramework/Visitor.h"
 #include "../AnalysisFramework/AnalysisSteering.h"
 #include "../AnalysisFramework/AnalysisSteering.h"
+#include "../AnalysisFramework/AnalysisFactory.h"
+
+class ObjImpCollFactory : public AnalysisFactory::AbsFactory
+{
+public:
+    ObjImpCollFactory() : AnalysisFactory::AbsFactory("ObjImpColl"){};
+    AnalysisObject *create() override
+    {
+        return new ObjImpColl();
+    }
+};
+
+static ObjImpCollFactory ImpColl_static_factory;
 
 ObjImpColl::ObjImpColl()
 {

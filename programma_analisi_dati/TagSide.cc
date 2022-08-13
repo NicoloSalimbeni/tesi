@@ -12,17 +12,20 @@
 #include "TLorentzVector.h"
 #include "TROOT.h"
 
-#include "./AnalysisPlugins/UtilitiesAnalytic.h"
 #include "./AnalysisObjects/ObjAn.h"
 #include "./AnalysisObjects/ObjColl.h"
 #include "./AnalysisObjects/ObjImpColl.h"
 #include "./AnalysisObjects/ObjNonColl.h"
+
 #include "./AnalysisFramework/Dispatcher.h"
 #include "./AnalysisFramework/AnalysisSteering.h"
+#include "./AnalysisFramework/AnalysisFactory.h"
+
 #include "./AnalysisUtilities/Utilities.h"
 
 #include "./AnalysisPlugins/ViPrint.h"
 #include "./AnalysisPlugins/ViSave.h"
+#include "./AnalysisPlugins/UtilitiesAnalytic.h"
 
 #include <string>
 #include <iostream>
