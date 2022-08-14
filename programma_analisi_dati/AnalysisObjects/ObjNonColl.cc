@@ -38,6 +38,15 @@ ObjNonColl::ObjNonColl()
     std::string grado_polinomio = "pol4";
     f_fit = new TF1("f_non_coll", grado_polinomio.c_str(), 1, 4.2);
     f_fit = new TF1("f_coll", grado_polinomio.c_str(), 1, 4.2);
+
+    Int_t nbin = 50;
+    Float_t start = -3, stop = 1;
+    Float_t binwidth = (stop - start) / nbin;
+    std::string s_binwidth = std::to_string(binwidth);
+    s_binwidth.resize(5);
+    h_residui = new TH1D("Hist_residui_NonColl", "residui percentuali Non Collinear (E_{vera}-E_{stimata})/E_{vara}", nbin, start, stop);
+    h_residui->GetXaxis()->SetTitle("risoluzione");
+    h_residui->GetYaxis()->SetTitle(("Conteggi/" + s_binwidth).c_str());
 }
 
 ObjNonColl::~ObjNonColl()
@@ -46,11 +55,16 @@ ObjNonColl::~ObjNonColl()
 
 void ObjNonColl::AddPoint(const TLorentzVector &tlv_Btag, const TLorentzVector &tlv_visibile)
 {
+    Double_t visible_mass = tlv_visibile.M();
+    Double_t visible_mass2 = tlv_visibile.M2();
+    Double_t B_energy = tlv_Btag.T();
+
     pvz = (tlv_visibile.Vect().Dot(tlv_Btag.Vect())) / tlv_Btag.Vect().Mag();
-    en = (pow(tlv_Btag.M(), 2) + pow(tlv_visibile.M(), 2)) / (2 * tlv_visibile.T() - 2 * pvz);
-    ris = (tlv_Btag.T() - en) / tlv_Btag.T();
-    hris->Fill(tlv_visibile.M(), ris);
-    pris->Fill(tlv_visibile.M(), ris, 1);
+    en = (pow(tlv_Btag.M(), 2) + pow(visible_mass, 2)) / (2 * tlv_visibile.T() - 2 * pvz);
+    ris = (B_energy - en) / B_energy;
+    hris->Fill(visible_mass, ris);
+    pris->Fill(visible_mass, ris, 1);
+    h_residui->Fill(ris);
 }
 
 void ObjNonColl::Accept(Visitor *v)

@@ -140,9 +140,6 @@ void TagSide::Loop(std::string argoments)
    AnalysisSteering::AcceptAll(print);
    AnalysisSteering::AcceptAll(save);
 
-   // cancello gli elementi nelle liste create per gestire i loop
-   Dispatcher::UnsubscribeAll();
-   AnalysisSteering::UnsubscribeAll();
    std::cout << "\n"
              << std::string(79, '=') << "\n"
              << std::endl;

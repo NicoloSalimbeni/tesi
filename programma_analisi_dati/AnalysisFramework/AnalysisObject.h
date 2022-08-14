@@ -3,11 +3,11 @@
 #include "Observer.h"
 
 #include "TH2D.h"
+#include "TH1D.h"
 #include "TF1.h"
 #include "TProfile.h"
 #include "TFitResultPtr.h"
-
-class Visitor;
+#include "Visitor.h"
 
 class AnalysisObject : public Observer
 {
@@ -21,6 +21,8 @@ public:
     TH2D *GetH() const;
     TProfile *GetP() const;
     TF1 *GetF() const;
+    TH1D *GetHResidui() const;
+
     TFitResultPtr GetFitProfileResult() const;
     virtual void Accept(Visitor *) = 0;
 
@@ -28,6 +30,7 @@ protected:
     TH2D *hris;
     TProfile *pris;
     TF1 *f_fit;
+    TH1D *h_residui;
     TFitResultPtr risultati_fit;
 
     Double_t ris;

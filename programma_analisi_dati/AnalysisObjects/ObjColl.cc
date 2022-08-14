@@ -38,6 +38,15 @@ ObjColl::ObjColl()
 
     std::string grado_polinomio = "pol4";
     f_fit = new TF1("f_coll", grado_polinomio.c_str(), 1, 4.2);
+
+    Int_t nbin = 50;
+    Float_t start = -3, stop = 1;
+    Float_t binwidth = (stop - start) / nbin;
+    std::string s_binwidth = std::to_string(binwidth);
+    s_binwidth.resize(5);
+    h_residui = new TH1D("Hist_residui_Coll", "residui percentuali Collinear (E_{vera}-E_{stimata})/E_{vara}", nbin, start, stop);
+    h_residui->GetXaxis()->SetTitle("Residui");
+    h_residui->GetYaxis()->SetTitle(("Conteggi/" + s_binwidth).c_str());
 }
 
 ObjColl::~ObjColl()
@@ -46,10 +55,15 @@ ObjColl::~ObjColl()
 
 void ObjColl::AddPoint(const TLorentzVector &tlv_Btag, const TLorentzVector &tlv_visibile)
 {
-    en = tlv_visibile.T() * Utilities::mass_B / tlv_visibile.M();
-    ris = (tlv_Btag.T() - en) / tlv_Btag.T();
-    hris->Fill(tlv_visibile.M(), ris);
-    pris->Fill(tlv_visibile.M(), ris, 1);
+    Double_t visible_energy = tlv_visibile.T();
+    Double_t visible_mass = tlv_visibile.M();
+    Double_t B_energy = tlv_Btag.T();
+
+    Double_t en = visible_energy * Utilities::mass_B / visible_mass;
+    ris = (B_energy - en) / B_energy;
+    hris->Fill(visible_mass, ris);
+    pris->Fill(visible_mass, ris, 1);
+    h_residui->Fill(ris);
 }
 
 void ObjColl::Accept(Visitor *v)

@@ -6,8 +6,12 @@
 void run(std::string s = "none")
 {
 
-    if( !(gROOT->GetClass("Utilities")==nullptr))
+    if( !(gROOT->GetClass("AnalysisSteering")==nullptr) and !(gROOT->GetClass("Dispatcher")==nullptr))
     {
+        // cancello gli elementi nelle liste create per gestire i loop
+        gROOT->ProcessLine("Dispatcher::UnsubscribeAll();");
+        gROOT->ProcessLine("AnalysisSteering::UnsubscribeAll();");
+        
         gROOT->ProcessLine(("t.Loop( \" " + s + " \" )").c_str());
         gPad->Close();
         return;

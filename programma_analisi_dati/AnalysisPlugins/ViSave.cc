@@ -23,9 +23,10 @@ void ViSave::Visit(ObjColl *obj)
 
     f->Delete("Resolution_coll;*");
     f->Delete("Profile_coll;*");
+    f->Delete("Hist_residui_Coll;*");
     obj->GetH()->Write();
     obj->GetP()->Write();
-
+    obj->GetHResidui()->Write();
     f->Close();
 
     std::cout << "ObjColl saved in grafici.root" << std::endl;
@@ -38,8 +39,10 @@ void ViSave::Visit(ObjImpColl *obj)
 
     f->Delete("Resolution_imp_coll;*");
     f->Delete("Profile_imp_coll;*");
+    f->Delete("Hist_residui_ImpColl;*");
     obj->GetH()->Write();
     obj->GetP()->Write();
+    obj->GetHResidui()->Write();
 
     f->Close();
 
@@ -53,8 +56,10 @@ void ViSave::Visit(ObjNonColl *obj)
 
     f->Delete("Resolution_non_coll;*");
     f->Delete("Profile_non_coll;*");
+    f->Delete("Hist_residui_NonColl;*");
     obj->GetH()->Write();
     obj->GetP()->Write();
+    obj->GetHResidui()->Write();
 
     f->Close();
 
