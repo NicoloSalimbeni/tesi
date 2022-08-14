@@ -1,7 +1,7 @@
 #include "../AnalysisObjects/ObjColl.h"
 #include "../AnalysisObjects/ObjImpColl.h"
 #include "../AnalysisObjects/ObjNonColl.h"
-#include "../AnalysisObjects/ObjAn.h"
+#include "../AnalysisObjects/ObjAnEs.h"
 #include "../AnalysisObjects/ObjAnColl.h"
 #include "ViSave.h"
 
@@ -61,19 +61,19 @@ void ViSave::Visit(ObjNonColl *obj)
     std::cout << "ObjNonColl saved in grafici.root" << std::endl;
 }
 
-void ViSave::Visit(ObjAn *obj)
+void ViSave::Visit(ObjAnEs *obj)
 {
     f = new TFile("../grafici.root", "UPDATE");
     f->cd();
 
-    f->Delete("Resolution_an_mag;*");
-    f->Delete("Resolution_an_min;*");
-    f->Delete("Resolution_an_cos;*");
-    f->Delete("Resolution_an_mean;*");
-    f->Delete("Resolution_an_corr;*");
-    f->Delete("Profile_an_corr;*");
-    f->Delete("Profile_an_mean;*");
-    f->Delete("Profile_an_cos;*");
+    f->Delete("Resolution_anEs_mag;*");
+    f->Delete("Resolution_anEs_min;*");
+    f->Delete("Resolution_anEs_cos;*");
+    f->Delete("Resolution_anEs_mean;*");
+    f->Delete("Resolution_anEs_corr;*");
+    f->Delete("Profile_anEs_corr;*");
+    f->Delete("Profile_anEs_mean;*");
+    f->Delete("Profile_anEs_cos;*");
     obj->GetHMag()->Write();
     obj->GetHMin()->Write();
     obj->GetHMean()->Write();
@@ -86,7 +86,33 @@ void ViSave::Visit(ObjAn *obj)
 
     f->Close();
 
-    std::cout << "ObjAn saved in grafici.root" << std::endl;
+    std::cout << "ObjAnEs saved in grafici.root" << std::endl;
 }
 
-void ViSave::Visit(ObjAnColl *obj) {} // TODO
+void ViSave::Visit(ObjAnColl *obj)
+{
+    f = new TFile("../grafici.root", "UPDATE");
+    f->cd();
+
+    f->Delete("Resolution_anColl_mag;*");
+    f->Delete("Resolution_anColl_min;*");
+    f->Delete("Resolution_anColl_cos;*");
+    f->Delete("Resolution_anColl_mean;*");
+    f->Delete("Resolution_anColl_corr;*");
+    f->Delete("Profile_anColl_corr;*");
+    f->Delete("Profile_anColl_mean;*");
+    f->Delete("Profile_anColl_cos;*");
+    obj->GetHMag()->Write();
+    obj->GetHMin()->Write();
+    obj->GetHMean()->Write();
+    obj->GetHCos()->Write();
+    obj->GetHCorr()->Write();
+
+    obj->GetPMean()->Write();
+    obj->GetPCos()->Write();
+    obj->GetPCorr()->Write();
+
+    f->Close();
+
+    std::cout << "ObjAnColl saved in grafici.root" << std::endl;
+}

@@ -12,7 +12,7 @@
 #include "TLorentzVector.h"
 #include "TROOT.h"
 
-#include "./AnalysisObjects/ObjAn.h"
+#include "./AnalysisObjects/ObjAnAbs.h"
 #include "./AnalysisObjects/ObjColl.h"
 #include "./AnalysisObjects/ObjImpColl.h"
 #include "./AnalysisObjects/ObjNonColl.h"

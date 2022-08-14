@@ -1,7 +1,7 @@
 #include "../AnalysisObjects/ObjColl.h"
 #include "../AnalysisObjects/ObjImpColl.h"
 #include "../AnalysisObjects/ObjNonColl.h"
-#include "../AnalysisObjects/ObjAn.h"
+#include "../AnalysisObjects/ObjAnEs.h"
 #include "../AnalysisObjects/ObjAnColl.h"
 #include "ViPrint.h"
 
@@ -52,29 +52,52 @@ void ViPrint::Visit(ObjNonColl *obj)
     c->Close();
 }
 
-void ViPrint::Visit(ObjAn *obj)
+void ViPrint::Visit(ObjAnEs *obj)
 {
     c = new TCanvas("c", "c", 900, 650);
     c->cd();
 
     obj->GetHMin()->Draw("CONT4Z");
-    c->SaveAs("../analisi_risoluzione_energia/analitica/Resolution_an_min.png");
+    c->SaveAs("../analisi_risoluzione_energia/analitica/esatta/Resolution_anEs_min.png");
     obj->GetHMag()->Draw("CONT4Z");
-    c->SaveAs("../analisi_risoluzione_energia/analitica/Resolution_an_mag.png");
+    c->SaveAs("../analisi_risoluzione_energia/analitica/esatta/Resolution_anEs_mag.png");
     obj->GetHCorr()->Draw("CONT4Z");
-    c->SaveAs("../analisi_risoluzione_energia/analitica/Resolution_an_corr.png");
+    c->SaveAs("../analisi_risoluzione_energia/analitica/esatta/Resolution_anEs_corr.png");
     obj->GetHMean()->Draw("CONT4Z");
-    c->SaveAs("../analisi_risoluzione_energia/analitica/Resolution_an_mean.png");
+    c->SaveAs("../analisi_risoluzione_energia/analitica/esatta/Resolution_anEs_mean.png");
     obj->GetHCos()->Draw("CONT4Z");
-    c->SaveAs("../analisi_risoluzione_energia/analitica/Resolution_an_cos.png");
+    c->SaveAs("../analisi_risoluzione_energia/analitica/esatta/Resolution_anEs_cos.png");
 
     obj->GetPCorr()->Draw();
-    c->SaveAs("../analisi_risoluzione_energia/analitica/Profile_an_corr.png");
+    c->SaveAs("../analisi_risoluzione_energia/analitica/esatta/Profile_anEs_corr.png");
     obj->GetPMean()->Draw();
-    c->SaveAs("../analisi_risoluzione_energia/analitica/Profile_an_mean.png");
+    c->SaveAs("../analisi_risoluzione_energia/analitica/esatta/Profile_anEs_mean.png");
     obj->GetPCos()->Draw();
-    c->SaveAs("../analisi_risoluzione_energia/analitica/Profile_an_cos.png");
+    c->SaveAs("../analisi_risoluzione_energia/analitica/esatta/Profile_anEs_cos.png");
     c->Close();
 }
 
-void ViPrint::Visit(ObjAnColl *obj) {} // TODO
+void ViPrint::Visit(ObjAnColl *obj)
+{
+    c = new TCanvas("c", "c", 900, 650);
+    c->cd();
+
+    obj->GetHMin()->Draw("CONT4Z");
+    c->SaveAs("../analisi_risoluzione_energia/analitica/collineare/Resolution_anColl_min.png");
+    obj->GetHMag()->Draw("CONT4Z");
+    c->SaveAs("../analisi_risoluzione_energia/analitica/collineare/Resolution_anColl_mag.png");
+    obj->GetHCorr()->Draw("CONT4Z");
+    c->SaveAs("../analisi_risoluzione_energia/analitica/collineare/Resolution_anColl_corr.png");
+    obj->GetHMean()->Draw("CONT4Z");
+    c->SaveAs("../analisi_risoluzione_energia/analitica/collineare/Resolution_anColl_mean.png");
+    obj->GetHCos()->Draw("CONT4Z");
+    c->SaveAs("../analisi_risoluzione_energia/analitica/collineare/Resolution_anColl_cos.png");
+
+    obj->GetPCorr()->Draw();
+    c->SaveAs("../analisi_risoluzione_energia/analitica/collineare/Profile_anColl_corr.png");
+    obj->GetPMean()->Draw();
+    c->SaveAs("../analisi_risoluzione_energia/analitica/collineare/Profile_anColl_mean.png");
+    obj->GetPCos()->Draw();
+    c->SaveAs("../analisi_risoluzione_energia/analitica/collineare/Profile_anColl_cos.png");
+    c->Close();
+}

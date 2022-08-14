@@ -11,7 +11,7 @@ public:
     void Visit(ObjColl *) override;
     void Visit(ObjImpColl *) override;
     void Visit(ObjNonColl *) override;
-    void Visit(ObjAn *) override;
+    void Visit(ObjAnEs *) override;
     void Visit(ObjAnColl *) override;
 
 private:

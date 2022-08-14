@@ -1,15 +1,15 @@
-#ifndef ObjAnColl_h
-#define ObjAnColl_h
+#ifndef ObjAnEs_h
+#define ObjAnEs_h
 
 #include "ObjAnAbs.h"
 
 class Visitor;
 
-class ObjAnColl : public ObjAnAbs
+class ObjAnEs : public ObjAnAbs
 {
 public:
-    ObjAnColl();
-    virtual ~ObjAnColl();
+    ObjAnEs();
+    virtual ~ObjAnEs();
 
     virtual void AddPoint(const TLorentzVector &tlv_B, const TLorentzVector &tlv_vis) override;
     virtual void Accept(Visitor *v) override;

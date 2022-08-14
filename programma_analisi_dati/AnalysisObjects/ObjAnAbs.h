@@ -9,35 +9,35 @@
 class TLorentVector;
 class Visitor;
 
-class ObjAn : public AnalysisObject
+class ObjAnAbs : public AnalysisObject
 {
 public:
-    ObjAn();
-    ~ObjAn();
-    TH2D *GetHMin();
-    TH2D *GetHMag();
-    TH2D *GetHCos();
-    TH2D *GetHMean();
-    TH2D *GetHCorr();
+    ObjAnAbs();
+    virtual ~ObjAnAbs();
+    virtual TH2D *GetHMin();
+    virtual TH2D *GetHMag();
+    virtual TH2D *GetHCos();
+    virtual TH2D *GetHMean();
+    virtual TH2D *GetHCorr();
 
-    TProfile *GetPCos();
-    TProfile *GetPMean();
-    TProfile *GetPCorr();
+    virtual TProfile *GetPCos();
+    virtual TProfile *GetPMean();
+    virtual TProfile *GetPCorr();
 
-    TF1 *GetFCos();
-    TF1 *GetFCorr1();
-    TF1 *GetFCorr2();
-    TF1 *GetFMean();
+    virtual TF1 *GetFCos();
+    virtual TF1 *GetFCorr1();
+    virtual TF1 *GetFCorr2();
+    virtual TF1 *GetFMean();
 
-    TFitResultPtr GetFitProfileResultCos();
-    TFitResultPtr GetFitProfileResultCorr1();
-    TFitResultPtr GetFitProfileResultCorr2();
-    TFitResultPtr GetFitProfileResultMean();
+    virtual TFitResultPtr GetFitProfileResultCos();
+    virtual TFitResultPtr GetFitProfileResultCorr1();
+    virtual TFitResultPtr GetFitProfileResultCorr2();
+    virtual TFitResultPtr GetFitProfileResultMean();
 
-    void AddPoint(const TLorentzVector &tlv_B, const TLorentzVector &tlv_vis) override;
-    void Accept(Visitor *) override;
+    virtual void AddPoint(const TLorentzVector &tlv_B, const TLorentzVector &tlv_vis) = 0;
+    virtual void Accept(Visitor *) = 0;
 
-private:
+protected:
     // ignoro h2 in questo caso
     TH2D *Resolution_an_mag;  // sol maggiore
     TH2D *Resolution_an_min;  // sol minore

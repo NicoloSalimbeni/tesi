@@ -27,7 +27,9 @@ void run(std::string s = "none")
         gROOT->ProcessLine(".L ./AnalysisFramework/AnalysisSteering.cc");
         gROOT->ProcessLine(".L ./AnalysisFramework/AnalysisFactory.cc");
 
-        gROOT->ProcessLine(".L ./AnalysisObjects/ObjAn.cc");
+        gROOT->ProcessLine(".L ./AnalysisObjects/ObjAnAbs.cc");
+        gROOT->ProcessLine(".L ./AnalysisObjects/ObjAnEs.cc");
+        gROOT->ProcessLine(".L ./AnalysisObjects/ObjAnColl.cc");
         gROOT->ProcessLine(".L ./AnalysisObjects/ObjAnColl.cc");
         gROOT->ProcessLine(".L ./AnalysisObjects/ObjColl.cc");
         gROOT->ProcessLine(".L ./AnalysisObjects/ObjImpColl.cc");
