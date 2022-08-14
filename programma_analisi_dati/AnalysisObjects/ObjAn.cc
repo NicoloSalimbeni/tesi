@@ -78,7 +78,14 @@ ObjAn::ObjAn()
     an_cos_profile->GetXaxis()->SetTitle("massa visibile [GeV]");
     an_cos_profile->GetYaxis()->SetTitle("risoluzione energia");
     an_cos_profile->SetStats(0);
-    return;
+
+    // inizializzo le funzioni per eventuali fit
+    f_fit_corr1 = new TF1("f_an_corr_1", "pol1", 1.5, 3.2);
+    f_fit_corr2 = new TF1("f_an_corr_2", "pol1", 3.2, 4);
+
+    f_fit_mean = new TF1("f_an_mean", "pol4", 1, 4.2);
+
+    f_fit_cos = new TF1("f_an_cos", "pol4", 1, 4);
 }
 
 ObjAn::~ObjAn()
@@ -166,4 +173,44 @@ TProfile *ObjAn::GetPCorr()
 void ObjAn::Accept(Visitor *v)
 {
     v->Visit(this);
+}
+
+TF1 *ObjAn::GetFCorr1()
+{
+    return f_fit_corr1;
+}
+
+TF1 *ObjAn::GetFCorr2()
+{
+    return f_fit_corr2;
+}
+
+TF1 *ObjAn::GetFCos()
+{
+    return f_fit_cos;
+}
+
+TF1 *ObjAn::GetFMean()
+{
+    return f_fit_mean;
+}
+
+TFitResultPtr ObjAn::GetFitProfileResultCos()
+{
+    return risultati_fit_cos;
+}
+
+TFitResultPtr ObjAn::GetFitProfileResultCorr1()
+{
+    return risultati_fit_corr1;
+}
+
+TFitResultPtr ObjAn::GetFitProfileResultCorr2()
+{
+    return risultati_fit_corr2;
+}
+
+TFitResultPtr ObjAn::GetFitProfileResultMean()
+{
+    return risultati_fit_mean;
 }

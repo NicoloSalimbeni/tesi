@@ -3,6 +3,7 @@
 #include "TF1.h"
 #include "TProfile.h"
 #include "TLorentzVector.h"
+#include "TFitResult.h"
 
 AnalysisObject::AnalysisObject()
 {
@@ -29,6 +30,11 @@ TProfile *AnalysisObject::GetP() const
 TF1 *AnalysisObject::GetF() const
 {
     return f_fit;
+}
+
+TFitResultPtr AnalysisObject::GetFitProfileResult() const
+{
+    return risultati_fit;
 }
 
 void AnalysisObject::Update(const TLorentzVector &tlv_B, const TLorentzVector &tlv_vis)

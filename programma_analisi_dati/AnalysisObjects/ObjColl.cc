@@ -4,6 +4,10 @@
 #include "../AnalysisFramework/AnalysisSteering.h"
 #include "../AnalysisFramework/AnalysisFactory.h"
 
+#include "TFitResult.h"
+
+#include <string>
+
 class ObjCollFactory : public AnalysisFactory::AbsFactory
 {
 public:
@@ -32,7 +36,8 @@ ObjColl::ObjColl()
     pris->GetYaxis()->SetTitle("risoluzione energia");
     pris->SetStats(0);
 
-    f_fit = new TF1("f_coll", "pol4", 1, 4.2);
+    std::string grado_polinomio = "pol4";
+    f_fit = new TF1("f_coll", grado_polinomio.c_str(), 1, 4.2);
 }
 
 ObjColl::~ObjColl()

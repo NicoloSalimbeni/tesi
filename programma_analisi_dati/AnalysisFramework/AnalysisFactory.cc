@@ -48,3 +48,17 @@ AnalysisFactory::factoryMap()
     static std::map<std::string, AbsFactory *> *fm = new std::map<std::string, AbsFactory *>;
     return fm;
 }
+
+AnalysisObject *AnalysisFactory::GetObject(std::string oggetto)
+{
+    std::map<std::string, AnalysisObject *> *aList = GetAList();
+
+    std::map<std::string, AnalysisObject *>::iterator it = aList->find(oggetto);
+    std::map<std::string, AnalysisObject *>::iterator ie = aList->end();
+
+    if (it != ie)
+    {
+        return it->second;
+    }
+    return nullptr;
+}

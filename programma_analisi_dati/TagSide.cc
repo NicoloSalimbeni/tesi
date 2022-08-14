@@ -26,6 +26,7 @@
 
 #include "./AnalysisPlugins/ViPrint.h"
 #include "./AnalysisPlugins/ViSave.h"
+#include "./AnalysisPlugins/ViFitProfile.h"
 #include "./AnalysisPlugins/UtilitiesAnalytic.h"
 
 #include <string>
@@ -33,6 +34,7 @@
 
 ViPrint *print = new ViPrint();
 ViSave *save = new ViSave();
+ViFitProfile *fitprofile = new ViFitProfile();
 
 Double_t vis_mass;
 Double_t vis_mass2;
@@ -133,6 +135,7 @@ void TagSide::Loop(std::string argoments)
              << std::endl;
 
    // salvo e stampo
+   AnalysisSteering::AcceptAll(fitprofile);
    AnalysisSteering::AcceptAll(print);
    AnalysisSteering::AcceptAll(save);
 }

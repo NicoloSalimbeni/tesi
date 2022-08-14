@@ -3,6 +3,10 @@
 #include "../AnalysisFramework/AnalysisSteering.h"
 #include "../AnalysisFramework/AnalysisFactory.h"
 
+#include "TFitResult.h"
+
+#include <string>
+
 class ObjNonCollFactory : public AnalysisFactory::AbsFactory
 {
 public:
@@ -31,7 +35,9 @@ ObjNonColl::ObjNonColl()
     pris->GetYaxis()->SetTitle("risoluzione energia");
     pris->SetStats(0);
 
-    f_fit = new TF1("f_non_coll", "pol4", 1, 4.2);
+    std::string grado_polinomio = "pol4";
+    f_fit = new TF1("f_non_coll", grado_polinomio.c_str(), 1, 4.2);
+    f_fit = new TF1("f_coll", grado_polinomio.c_str(), 1, 4.2);
 }
 
 ObjNonColl::~ObjNonColl()

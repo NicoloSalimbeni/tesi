@@ -6,6 +6,7 @@
 #include <map>
 
 class AnalysisObject;
+class AnalysisInfo;
 
 class AnalysisFactory
 {
@@ -32,9 +33,12 @@ public:
     };
     static std::map<std::string, AnalysisObject *> *GetAList();
 
+    static AnalysisObject *GetObject(std::string); // FIXME non posso ritornare ObjAn perchè poi non potrei chiamare GetHCos GetH... ecc... ecc... dato che non sono funzioni in AnalysisFactory
+
 private:
     // function to add analyzer concrete factories
-    static void registerFactory(const std::string &name, AbsFactory *f);
+    static void
+    registerFactory(const std::string &name, AbsFactory *f);
     // map to associate analyzer names with corresponding factories
     static std::map<std::string, AbsFactory *> *factoryMap();
 };
