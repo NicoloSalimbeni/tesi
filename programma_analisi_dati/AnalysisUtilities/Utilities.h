@@ -17,10 +17,10 @@ public:
     static Double_t int_settore_circolare(Double_t a_min, Double_t a_max);
     static void ProgressBarr(float, int, int);
     // costanti utili
-    static const Double_t mass_B; // in GeV
+    static const Double_t mass_B;  // in GeV
+    static const Double_t mass_B2; // in GeV
 
 private:
-    static Double_t delta;
 };
 
 #endif

@@ -11,14 +11,15 @@ Utilities::~Utilities()
 }
 
 const Double_t Utilities::mass_B = 5.27915;
-Double_t Utilities::delta = 0;
+const Double_t Utilities::mass_B2 = pow(5.27915, 2);
 
 Double_t Utilities::SolveEq2(const Double_t &a, const Double_t &b, const Double_t &c, const char sol)
 {
-    delta = b * b - 4 * a * c;
+    double delta = b * b - 4 * a * c;
     if (delta < 0)
     {
-        std::cout << "Delta negativo" << std::endl;
+        std::cout << "Delta negativo: " << delta << std::endl;
+        return -1;
     }
     switch (sol)
     {

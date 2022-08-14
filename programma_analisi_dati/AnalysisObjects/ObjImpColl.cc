@@ -36,7 +36,7 @@ ObjImpColl::ObjImpColl()
     pris->GetYaxis()->SetTitle("risoluzione energia");
     pris->SetStats(0);
 
-    std::string grado_polinomio = "pol4";
+    std::string grado_polinomio = "pol6";
     f_fit = new TF1("f_imp_coll", grado_polinomio.c_str(), 1, 4.2);
     f_fit = new TF1("f_coll", grado_polinomio.c_str(), 1, 4.2);
 

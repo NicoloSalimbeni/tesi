@@ -16,6 +16,12 @@ public:
     Double_t GetSolCos();
     Double_t GetSolPost();
 
+    Double_t GetSolMagColl();
+    Double_t GetSolMinColl();
+    Double_t GetSolMeanColl();
+    Double_t GetSolCosColl();
+    Double_t GetSolPostColl();
+
     void Update(const TLorentzVector &tlv_B, const TLorentzVector &tlv_vis);
 
 private:
@@ -34,10 +40,20 @@ private:
     Double_t c;
 
     Double_t delta;
+
     Double_t sol_mag;
     Double_t sol_min;
     Double_t sol_cos;
     Double_t sol_post;
+
+    Double_t a_coll;
+    Double_t b_coll;
+    Double_t c_coll;
+
+    Double_t sol_mag_coll;
+    Double_t sol_min_coll;
+    Double_t sol_cos_coll;
+    Double_t sol_post_coll;
 };
 
 #endif

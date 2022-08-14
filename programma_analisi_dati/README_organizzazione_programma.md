@@ -16,3 +16,5 @@ Poi nella cartella corrente ci sono i file _run.cc_ che serve per caricare tutte
 ###Cose da fare
 FIXME il sistema di gestione degli oggetti funziona, ma solo se ogni volta chiudi e riapri root, altrimenti quelli che hai già creato rimangono in memoria come static, poichè gli oggetti che li creano sono globali giustamente anche dopo la fine dell'esecuzione continuano a esistere (un'idea per sistemare: fa in modo che alla fine dell'esecuzione tutti quei vettori,mappe statici ecc... vengano resettati)
 FIXME aggiungi agli istogrammi 2d il titolo per lìasse dei conteggi come count/(binwidth GeV* binwidth ris)
+FIXME aggiungi scritte giuste label y istogrammi residui
+FIXME aggiusta fit coseno con polinomio più alto
