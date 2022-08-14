@@ -83,6 +83,18 @@ void ViPrint::Visit(ObjAnEs *obj)
     c->SaveAs("../analisi_risoluzione_energia/analitica/esatta/Profile_anEs_mean.png");
     obj->GetPCos()->Draw();
     c->SaveAs("../analisi_risoluzione_energia/analitica/esatta/Profile_anEs_cos.png");
+
+    obj->GetHResiduiMin()->Draw("CONT4Z");
+    c->SaveAs("../analisi_risoluzione_energia/analitica/esatta/hist_residui_AnEs_min.png");
+    obj->GetHResiduiMag()->Draw("CONT4Z");
+    c->SaveAs("../analisi_risoluzione_energia/analitica/esatta/hist_residui_AnEs_mag.png");
+    obj->GetHResiduiCorr()->Draw("CONT4Z");
+    c->SaveAs("../analisi_risoluzione_energia/analitica/esatta/hist_residui_AnEs_corr.png");
+    obj->GetHResiduiMean()->Draw("CONT4Z");
+    c->SaveAs("../analisi_risoluzione_energia/analitica/esatta/hist_residui_AnEs_mean.png");
+    obj->GetHResiduiCos()->Draw("CONT4Z");
+    c->SaveAs("../analisi_risoluzione_energia/analitica/esatta/hist_residui_AnEs_cos.png");
+
     c->Close();
 }
 

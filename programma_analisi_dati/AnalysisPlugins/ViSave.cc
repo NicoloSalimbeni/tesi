@@ -76,15 +76,26 @@ void ViSave::Visit(ObjAnEs *obj)
     f->Delete("Resolution_anEs_cos;*");
     f->Delete("Resolution_anEs_mean;*");
     f->Delete("Resolution_anEs_corr;*");
-    f->Delete("Profile_anEs_corr;*");
-    f->Delete("Profile_anEs_mean;*");
-    f->Delete("Profile_anEs_cos;*");
     obj->GetHMag()->Write();
     obj->GetHMin()->Write();
     obj->GetHMean()->Write();
     obj->GetHCos()->Write();
     obj->GetHCorr()->Write();
 
+    f->Delete("Hist_residui_AnEs_mag;*");
+    f->Delete("Hist_residui_AnEs_min;*");
+    f->Delete("Hist_residui_AnEs_mean;*");
+    f->Delete("Hist_residui_AnEs_cos;*");
+    f->Delete("Hist_residui_AnEs_corr;*");
+    obj->GetHResiduiMin()->Write();
+    obj->GetHResiduiMag()->Write();
+    obj->GetHResiduiCorr()->Write();
+    obj->GetHResiduiMean()->Write();
+    obj->GetHResiduiCos()->Write();
+
+    f->Delete("Profile_anEs_corr;*");
+    f->Delete("Profile_anEs_mean;*");
+    f->Delete("Profile_anEs_cos;*");
     obj->GetPMean()->Write();
     obj->GetPCos()->Write();
     obj->GetPCorr()->Write();

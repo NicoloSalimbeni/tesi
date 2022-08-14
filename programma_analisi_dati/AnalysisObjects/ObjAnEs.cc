@@ -89,6 +89,53 @@ ObjAnEs::ObjAnEs()
     f_fit_mean = new TF1("f_anEs_mean", "pol4", 1, 4.2);
 
     f_fit_cos = new TF1("f_anEs_cos", "pol4", 1, 4);
+
+    // inizializzo istogrammi
+    Int_t nbin = 100;
+    Float_t start = -0.006, stop = 0.002;
+    Float_t binwidth = (stop - start) / nbin;
+    std::string s_binwidth = std::to_string(binwidth);
+    s_binwidth.resize(5);
+
+    h_residui_mag = new TH1D("Hist_residui_AnEs_mag", "residui percentuali analitica sol mag (E_{vera}-E_{stimata})/E_{vara}", nbin, start, stop);
+    h_residui_mag->GetXaxis()->SetTitle("Residui");
+    h_residui_mag->GetYaxis()->SetTitle(("Conteggi/" + s_binwidth).c_str());
+
+    nbin = 100;
+    start = 0, stop = 0.012;
+    binwidth = (stop - start) / nbin;
+    s_binwidth = std::to_string(binwidth);
+    s_binwidth.resize(5);
+    h_residui_min = new TH1D("Hist_residui_AnEs_min", "residui percentuali analitica sol min (E_{vera}-E_{stimata})/E_{vara}", nbin, start, stop);
+    h_residui_min->GetXaxis()->SetTitle("Residui");
+    h_residui_min->GetYaxis()->SetTitle(("Conteggi/" + s_binwidth).c_str());
+
+    nbin = 100;
+    start = -1.3, stop = 1.3;
+    binwidth = (stop - start) / nbin;
+    s_binwidth = std::to_string(binwidth);
+    s_binwidth.resize(5);
+    h_residui_mean = new TH1D("Hist_residui_AnEs_mean", "residui percentuali analitica media soluzioni (E_{vera}-E_{stimata})/E_{vara}", nbin, start, stop);
+    h_residui_mean->GetXaxis()->SetTitle("Residui");
+    h_residui_mean->GetYaxis()->SetTitle(("Conteggi/" + s_binwidth).c_str());
+
+    nbin = 100;
+    start = -0.012, stop = 0.012;
+    binwidth = (stop - start) / nbin;
+    s_binwidth = std::to_string(binwidth);
+    s_binwidth.resize(5);
+    h_residui_cos = new TH1D("Hist_residui_AnEs_cos", "residui percentuali analitica cos#theta > (E_{vera}-E_{stimata})/E_{vara}", nbin, start, stop);
+    h_residui_cos->GetXaxis()->SetTitle("Residui");
+    h_residui_cos->GetYaxis()->SetTitle(("Conteggi/" + s_binwidth).c_str());
+
+    nbin = 100;
+    start = -0.012, stop = 0.012;
+    binwidth = (stop - start) / nbin;
+    s_binwidth = std::to_string(binwidth);
+    s_binwidth.resize(5);
+    h_residui_corr = new TH1D("Hist_residui_AnEs_corr", "residui percentuali analitica posteriori (E_{vera}-E_{stimata})/E_{vara}", nbin, start, stop);
+    h_residui_corr->GetXaxis()->SetTitle("Residui");
+    h_residui_corr->GetYaxis()->SetTitle(("Conteggi/" + s_binwidth).c_str());
 }
 
 ObjAnEs::~ObjAnEs()
@@ -109,10 +156,16 @@ void ObjAnEs::AddPoint(const TLorentzVector &tlv_Btag, const TLorentzVector &tlv
     res_an_cos = (en_B - en_cos) / en_B;
     Resolution_an_cos->Fill(vis_mass, res_an_cos);
     an_cos_profile->Fill(vis_mass, res_an_cos, 1);
+    h_residui_cos->Fill(res_an_cos);
 
     // entrambe le soluzioni con maggiore e minore
-    Resolution_an_min->Fill(vis_mass, (en_B - sol_min) / en_B);
-    Resolution_an_mag->Fill(vis_mass, (en_B - sol_mag) / en_B);
+    Float_t ris_min = (en_B - sol_min) / en_B;
+    Float_t ris_mag = (en_B - sol_mag) / en_B;
+
+    Resolution_an_min->Fill(vis_mass, ris_min);
+    Resolution_an_mag->Fill(vis_mass, ris_mag);
+    h_residui_min->Fill(ris_min);
+    h_residui_mag->Fill(ris_mag);
 
     // media delle soluzioni analitiche
     Double_t sol_mean = util->GetSolMean();
@@ -121,6 +174,7 @@ void ObjAnEs::AddPoint(const TLorentzVector &tlv_Btag, const TLorentzVector &tlv
     ris_an_mean = (en_B - sol_mean) / en_B;
     Resolution_an_mean->Fill(vis_mass, ris_an_mean);
     an_mean_profile->Fill(vis_mass, ris_an_mean, 1);
+    h_residui_mean->Fill(ris_an_mean);
 
     // studio della soluzione scelta a posteriori
     static Double_t en_corr;
@@ -129,6 +183,7 @@ void ObjAnEs::AddPoint(const TLorentzVector &tlv_Btag, const TLorentzVector &tlv
     ris_an_corr = (en_B - en_corr) / en_B;
     Resolution_an_corr->Fill(vis_mass, ris_an_corr);
     an_corr_profile->Fill(vis_mass, ris_an_corr, 1);
+    h_residui_corr->Fill(ris_an_corr);
 }
 
 void ObjAnEs::Accept(Visitor *v)

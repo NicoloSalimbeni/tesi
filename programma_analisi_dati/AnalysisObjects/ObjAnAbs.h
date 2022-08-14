@@ -5,6 +5,7 @@
 #include "TProfile.h"
 #include "TF1.h"
 #include "TFitResult.h"
+#include "TH1D.h"
 
 class TLorentVector;
 class Visitor;
@@ -34,6 +35,12 @@ public:
     virtual TFitResultPtr GetFitProfileResultCorr2();
     virtual TFitResultPtr GetFitProfileResultMean();
 
+    virtual TH1D *GetHResiduiMag();
+    virtual TH1D *GetHResiduiMin();
+    virtual TH1D *GetHResiduiCos();
+    virtual TH1D *GetHResiduiMean();
+    virtual TH1D *GetHResiduiCorr();
+
     virtual void AddPoint(const TLorentzVector &tlv_B, const TLorentzVector &tlv_vis) = 0;
     virtual void Accept(Visitor *) = 0;
 
@@ -53,6 +60,12 @@ protected:
     TF1 *f_fit_corr1;
     TF1 *f_fit_corr2;
     TF1 *f_fit_mean;
+
+    TH1D *h_residui_mag;
+    TH1D *h_residui_min;
+    TH1D *h_residui_cos;
+    TH1D *h_residui_mean;
+    TH1D *h_residui_corr;
 
     TFitResultPtr risultati_fit_cos;
     TFitResultPtr risultati_fit_corr1;

@@ -97,3 +97,28 @@ TFitResultPtr ObjAnAbs::GetFitProfileResultMean()
 {
     return risultati_fit_mean;
 }
+
+TH1D *ObjAnAbs::GetHResiduiCorr()
+{
+    return h_residui_corr;
+}
+
+TH1D *ObjAnAbs::GetHResiduiCos()
+{
+    return h_residui_cos;
+}
+
+TH1D *ObjAnAbs::GetHResiduiMean()
+{
+    return h_residui_mean;
+}
+
+TH1D *ObjAnAbs::GetHResiduiMag()
+{
+    return h_residui_mag;
+}
+
+TH1D *ObjAnAbs::GetHResiduiMin()
+{
+    return h_residui_min;
+}
