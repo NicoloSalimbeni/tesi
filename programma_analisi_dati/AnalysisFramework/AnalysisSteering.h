@@ -13,6 +13,7 @@ public:
 
     static void subscribe(AnalysisObject *an);
     static void unsubscribe(AnalysisObject *an);
+    static void UnsubscribeAll();
 
 private:
     AnalysisSteering();

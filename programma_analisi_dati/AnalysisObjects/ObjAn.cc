@@ -7,12 +7,15 @@
 #include "../AnalysisFramework/AnalysisSteering.h"
 #include "../AnalysisFramework/AnalysisFactory.h"
 
+UtilitiesAnalytic *util = new UtilitiesAnalytic();
+
 class ObjAnFactory : public AnalysisFactory::AbsFactory
 {
 public:
     ObjAnFactory() : AnalysisFactory::AbsFactory("ObjAn"){};
     AnalysisObject *create() override
     {
+
         return new ObjAn();
     }
 };
@@ -92,8 +95,6 @@ ObjAn::~ObjAn()
 {
     return;
 }
-
-UtilitiesAnalytic *util = new UtilitiesAnalytic();
 
 void ObjAn::AddPoint(const TLorentzVector &tlv_Btag, const TLorentzVector &tlv_visibile)
 {

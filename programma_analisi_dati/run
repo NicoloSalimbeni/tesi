@@ -9,6 +9,7 @@ void run(std::string s = "none")
     if( !(gROOT->GetClass("Utilities")==nullptr))
     {
         gROOT->ProcessLine(("t.Loop( \" " + s + " \" )").c_str());
+        gPad->Close();
         return;
     }
 

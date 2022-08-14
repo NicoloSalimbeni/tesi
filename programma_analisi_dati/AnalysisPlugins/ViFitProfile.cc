@@ -31,7 +31,7 @@ void ViFitProfile::Visit(ObjColl *obj)
 
     f_ris_fit->Close();
 
-    std::cout << "fit ObjColl eseguito" << std::endl;
+    std::cout << "fit ObjColl executed" << std::endl;
 }
 
 void ViFitProfile::Visit(ObjImpColl *obj)
@@ -47,7 +47,7 @@ void ViFitProfile::Visit(ObjImpColl *obj)
 
     f_ris_fit->Close();
 
-    std::cout << "fit ObjImpColl eseguito" << std::endl;
+    std::cout << "fit ObjImpColl executed" << std::endl;
 }
 
 void ViFitProfile::Visit(ObjNonColl *obj)
@@ -63,7 +63,7 @@ void ViFitProfile::Visit(ObjNonColl *obj)
 
     f_ris_fit->Close();
 
-    std::cout << "fit ObjNonColl eseguito" << std::endl;
+    std::cout << "fit ObjNonColl executed" << std::endl;
 }
 
 void ViFitProfile::Visit(ObjAn *obj)
@@ -93,7 +93,7 @@ void ViFitProfile::Visit(ObjAn *obj)
 
     f_ris_fit->Close();
 
-    std::cout << "fit ObjAn eseguito" << std::endl;
+    std::cout << "fit ObjAn executed" << std::endl;
 }
 
 void ViFitProfile::Visit(ObjAnColl *obj) {} // TODO

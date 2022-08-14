@@ -5,6 +5,8 @@
 #include "../AnalysisObjects/ObjAnColl.h"
 #include "ViSave.h"
 
+#include <iostream>
+
 ViSave::ViSave()
 {
 }
@@ -25,6 +27,8 @@ void ViSave::Visit(ObjColl *obj)
     obj->GetP()->Write();
 
     f->Close();
+
+    std::cout << "ObjColl saved in grafici.root" << std::endl;
 }
 
 void ViSave::Visit(ObjImpColl *obj)
@@ -38,6 +42,8 @@ void ViSave::Visit(ObjImpColl *obj)
     obj->GetP()->Write();
 
     f->Close();
+
+    std::cout << "ObjImpColl saved in grafici.root" << std::endl;
 }
 
 void ViSave::Visit(ObjNonColl *obj)
@@ -51,6 +57,8 @@ void ViSave::Visit(ObjNonColl *obj)
     obj->GetP()->Write();
 
     f->Close();
+
+    std::cout << "ObjNonColl saved in grafici.root" << std::endl;
 }
 
 void ViSave::Visit(ObjAn *obj)
@@ -77,6 +85,8 @@ void ViSave::Visit(ObjAn *obj)
     obj->GetPCorr()->Write();
 
     f->Close();
+
+    std::cout << "ObjAn saved in grafici.root" << std::endl;
 }
 
 void ViSave::Visit(ObjAnColl *obj) {} // TODO

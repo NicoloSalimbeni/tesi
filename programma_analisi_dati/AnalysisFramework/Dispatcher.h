@@ -13,6 +13,7 @@ class Dispatcher
 
 public:
     static void Notify(const TLorentzVector &tlv_Btag, const TLorentzVector &tlv_visibile);
+    static void UnsubscribeAll();
 
 private:
     Dispatcher(){};

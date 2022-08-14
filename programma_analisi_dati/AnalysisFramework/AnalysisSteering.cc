@@ -33,3 +33,8 @@ void AnalysisSteering::AcceptAll(Visitor *v)
     }
     return;
 }
+
+void AnalysisSteering::UnsubscribeAll()
+{
+    aL()->clear();
+}

@@ -31,3 +31,8 @@ void Dispatcher::Notify(const TLorentzVector &tlv_Btag, const TLorentzVector &tl
     }
     return;
 }
+
+void Dispatcher::UnsubscribeAll()
+{
+    oL()->clear();
+}

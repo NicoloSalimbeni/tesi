@@ -85,9 +85,10 @@ void TagSide::Loop(std::string argoments)
    }
 
    // creo gli oggetti per l'analisi
-   AnalysisFactory::create(info);
+   std::cout << std::string(79, '=') << std::endl;
 
-   std::cout << "\nAnalysis started, wait:\t" << std::endl;
+   AnalysisFactory::create(info);
+   std::cout << "Analysis started, wait:\t" << std::endl;
    extern UtilitiesAnalytic *util;
    //==============================================================
 
@@ -131,11 +132,18 @@ void TagSide::Loop(std::string argoments)
       }
    }
    std::cout << std::endl;
-   std::cout << "completed without errors! :-)\n"
+   std::cout << "Analysis completed without errors! :-)\n"
              << std::endl;
 
    // salvo e stampo
    AnalysisSteering::AcceptAll(fitprofile);
    AnalysisSteering::AcceptAll(print);
    AnalysisSteering::AcceptAll(save);
+
+   // cancello gli elementi nelle liste create per gestire i loop
+   Dispatcher::UnsubscribeAll();
+   AnalysisSteering::UnsubscribeAll();
+   std::cout << "\n"
+             << std::string(79, '=') << "\n"
+             << std::endl;
 }

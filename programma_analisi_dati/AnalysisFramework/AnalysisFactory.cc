@@ -3,6 +3,8 @@
 #include "AnalysisInfo.h"
 #include <map>
 
+#include <iostream>
+
 AnalysisFactory::AnalysisFactory()
 {
 }
@@ -23,13 +25,19 @@ std::map<std::string, AnalysisObject *> AnalysisFactory::create(AnalysisInfo *in
     std::map<std::string, AnalysisObject *> *aList = GetAList();
     // loop over analysis object factories
     static std::map<std::string, AbsFactory *> *fm = factoryMap();
+
+    std::cout << "\nAnalysis objects: " << std::flush;
+
     for (const auto &element : *fm)
     {
         if (info->Contains(element.first) || info->Contains("all"))
         {
+            std::cout << element.first << " " << std::flush;
             aList->insert(std::make_pair(element.first, element.second->create()));
         }
     }
+
+    std::cout << "created" << std::endl;
     return *aList;
 }
 
