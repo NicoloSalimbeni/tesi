@@ -125,10 +125,10 @@ void TagSide::Loop(std::string argoments)
 
       // progress bar
       float progress;
-      if (!(jentry % (nentries / 100))) // così lo stampo una volta ogni tanto e non sempre
+      if (!(jentry % (nentries / 100)) or jentry == (nentries - 1)) // così lo stampo una volta ogni tanto e non sempre
       {
-         progress = jentry * 1.0 / nentries;
-         Utilities::ProgressBarr(progress);
+         progress = jentry * 1.0 / (nentries - 1);
+         Utilities::ProgressBarr(progress, 1, 1);
       }
    }
    std::cout << std::endl;
