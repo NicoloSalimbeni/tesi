@@ -2,12 +2,10 @@
 #include "TLorentzVector.h"
 #include "TH2D.h"
 #include "TProfile.h"
-#include "../AnalysisPlugins/UtilitiesAnalytic.h"
+#include "../AnalysisUtilities/Utilities.h"
 #include "../AnalysisFramework/Visitor.h"
 #include "../AnalysisFramework/AnalysisSteering.h"
 #include "../AnalysisFramework/AnalysisFactory.h"
-
-extern UtilitiesAnalytic *util;
 
 class ObjAnEsFactory : public AnalysisFactory::AbsFactory
 {
@@ -27,7 +25,7 @@ ObjAnEs::ObjAnEs()
 
     AnalysisSteering::subscribe(this);
 
-    Resolution_an_mag = new TH2D("Resolution_anEs_mag", "risoluzione vs massa visibile,  metodo analitico soluzione maggiore", 100, 1, 4.5, 300, -0.004, 0);
+    Resolution_an_mag = new TH2D("Resolution_anEs_mag", "risoluzione vs massa visibile,  metodo analitico soluzione maggiore", 100, 1, 4.5, 300, -0.3, 0.1);
     Resolution_an_mag->GetXaxis()->SetTitle("massa visibile [GeV]");
     Resolution_an_mag->GetYaxis()->SetTitle("risoluzione energia");
     Resolution_an_mag->GetZaxis()->SetTitle("Counts");
@@ -35,7 +33,7 @@ ObjAnEs::ObjAnEs()
     Resolution_an_mag->GetYaxis()->SetMaxDigits(1);
     Resolution_an_mag->GetZaxis()->SetMaxDigits(3);
 
-    Resolution_an_min = new TH2D("Resolution_anEs_min", "risoluzione vs massa visibile,  metodo analitico soluzione minore", 100, 1, 4.5, 300, 0, 0.01);
+    Resolution_an_min = new TH2D("Resolution_anEs_min", "risoluzione vs massa visibile,  metodo analitico soluzione minore", 100, 1, 4.5, 300, -0.05, 0.1);
     Resolution_an_min->GetXaxis()->SetTitle("massa visibile [GeV]");
     Resolution_an_min->GetYaxis()->SetTitle("risoluzione energia");
     Resolution_an_min->GetZaxis()->SetTitle("Counts");
@@ -43,7 +41,7 @@ ObjAnEs::ObjAnEs()
     Resolution_an_min->GetYaxis()->SetMaxDigits(1);
     Resolution_an_min->GetZaxis()->SetMaxDigits(3);
 
-    Resolution_an_corr = new TH2D("Resolution_anEs_corr", "risoluzione vs massa visibile,  risultati esatti", 100, 1, 4.5, 300, -0.004, 0.004);
+    Resolution_an_corr = new TH2D("Resolution_anEs_corr", "risoluzione vs massa visibile,  risultati esatti", 100, 1, 4.5, 300, -0.1, 0.1);
     Resolution_an_corr->GetXaxis()->SetTitle("massa visibile [GeV]");
     Resolution_an_corr->GetYaxis()->SetTitle("risoluzione energia");
     Resolution_an_corr->GetZaxis()->SetTitle("Counts");
@@ -51,12 +49,12 @@ ObjAnEs::ObjAnEs()
     Resolution_an_corr->GetYaxis()->SetMaxDigits(1);
     Resolution_an_corr->GetZaxis()->SetMaxDigits(3);
 
-    an_corr_profile = new TProfile("Profile_anEs_corr", "Profilo Massa vs risoluzione, risultati esatti", 25, 1, 4.5, -3, 3);
+    an_corr_profile = new TProfile("Profile_anEs_corr", "Profilo Massa vs risoluzione, risultati esatti", 25, 1, 4, -3, 3);
     an_corr_profile->GetXaxis()->SetTitle("massa visibile [GeV]");
     an_corr_profile->GetYaxis()->SetTitle("risoluzione energia");
     an_corr_profile->SetStats(0);
 
-    Resolution_an_mean = new TH2D("Resolution_anEs_mean", "risoluzione vs massa visibile,  media soluzioni analitiche", 100, 1, 4.5, 300, -1, 1);
+    Resolution_an_mean = new TH2D("Resolution_anEs_mean", "risoluzione vs massa visibile,  media soluzioni analitiche", 100, 1, 4.5, 300, -0.5, 0.5);
     Resolution_an_mean->GetXaxis()->SetTitle("massa visibile [GeV]");
     Resolution_an_mean->GetYaxis()->SetTitle("risoluzione energia");
     Resolution_an_mean->GetZaxis()->SetTitle("Counts");
@@ -69,7 +67,7 @@ ObjAnEs::ObjAnEs()
     an_mean_profile->GetYaxis()->SetTitle("risoluzione energia");
     an_mean_profile->SetStats(0);
 
-    Resolution_an_cos = new TH2D("Resolution_anEs_cos", "risoluzione vs massa visibile,  cos#theta maggiore", 100, 1, 4.5, 300, -0.004, 0.004);
+    Resolution_an_cos = new TH2D("Resolution_anEs_cos", "risoluzione vs massa visibile,  cos#theta maggiore", 100, 1, 4.5, 300, -0.5, 0.5);
     Resolution_an_cos->GetXaxis()->SetTitle("massa visibile [GeV]");
     Resolution_an_cos->GetYaxis()->SetTitle("risoluzione energia");
     Resolution_an_cos->GetZaxis()->SetTitle("Counts");
@@ -83,8 +81,8 @@ ObjAnEs::ObjAnEs()
     an_cos_profile->SetStats(0);
 
     // inizializzo le funzioni per eventuali fit
-    f_fit_corr1 = new TF1("f_anEs_corr_1", "pol1", 1.5, 3.2);
-    f_fit_corr2 = new TF1("f_anEs_corr_2", "pol1", 3.2, 4);
+    f_fit_corr1 = new TF1("f_anEs_corr_1", "pol8", 1.5, 4);
+    // f_fit_corr2 = new TF1("f_anEs_corr_2", "pol1", 3.2, 4);
 
     f_fit_mean = new TF1("f_anEs_mean", "pol4", 1, 4.2);
 
@@ -92,7 +90,7 @@ ObjAnEs::ObjAnEs()
 
     // inizializzo istogrammi
     Int_t nbin = 100;
-    Float_t start = -0.006, stop = 0.002;
+    Float_t start = 1.5, stop = 0.4;
     Float_t binwidth = (stop - start) / nbin;
     std::string s_binwidth = std::to_string(binwidth);
     s_binwidth.resize(5);
@@ -102,7 +100,7 @@ ObjAnEs::ObjAnEs()
     h_residui_mag->GetYaxis()->SetTitle(("Conteggi/" + s_binwidth).c_str());
 
     nbin = 100;
-    start = 0, stop = 0.012;
+    start = -0.3, stop = 1;
     binwidth = (stop - start) / nbin;
     s_binwidth = std::to_string(binwidth);
     s_binwidth.resize(5);
@@ -111,7 +109,7 @@ ObjAnEs::ObjAnEs()
     h_residui_min->GetYaxis()->SetTitle(("Conteggi/" + s_binwidth).c_str());
 
     nbin = 100;
-    start = -1.3, stop = 1.3;
+    start = -2, stop = 0.8;
     binwidth = (stop - start) / nbin;
     s_binwidth = std::to_string(binwidth);
     s_binwidth.resize(5);
@@ -120,7 +118,7 @@ ObjAnEs::ObjAnEs()
     h_residui_mean->GetYaxis()->SetTitle(("Conteggi/" + s_binwidth).c_str());
 
     nbin = 100;
-    start = -0.012, stop = 0.012;
+    start = -0.6, stop = 1;
     binwidth = (stop - start) / nbin;
     s_binwidth = std::to_string(binwidth);
     s_binwidth.resize(5);
@@ -129,7 +127,7 @@ ObjAnEs::ObjAnEs()
     h_residui_cos->GetYaxis()->SetTitle(("Conteggi/" + s_binwidth).c_str());
 
     nbin = 100;
-    start = -0.012, stop = 0.012;
+    start = -0.2, stop = 0.2;
     binwidth = (stop - start) / nbin;
     s_binwidth = std::to_string(binwidth);
     s_binwidth.resize(5);
@@ -143,50 +141,26 @@ ObjAnEs::~ObjAnEs()
     return;
 }
 
-void ObjAnEs::AddPoint(const TLorentzVector &tlv_Btag, const TLorentzVector &tlv_visibile)
+void ObjAnEs::ComputeSolutions()
 {
-    Double_t sol_mag = util->GetSolMag();
-    Double_t sol_min = util->GetSolMin();
-    Double_t vis_mass = tlv_visibile.M();
-    Double_t en_B = tlv_Btag.T();
-    // soluzione analitica scelta con il coseno maggiore
-    static Double_t en_cos;
-    en_cos = util->GetSolCos();
-    static Double_t res_an_cos;
-    res_an_cos = (en_B - en_cos) / en_B;
-    Resolution_an_cos->Fill(vis_mass, res_an_cos);
-    an_cos_profile->Fill(vis_mass, res_an_cos, 1);
-    h_residui_cos->Fill(res_an_cos);
-
-    // entrambe le soluzioni con maggiore e minore
-    Float_t ris_min = (en_B - sol_min) / en_B;
-    Float_t ris_mag = (en_B - sol_mag) / en_B;
-
-    Resolution_an_min->Fill(vis_mass, ris_min);
-    Resolution_an_mag->Fill(vis_mass, ris_mag);
-    h_residui_min->Fill(ris_min);
-    h_residui_mag->Fill(ris_mag);
-
-    // media delle soluzioni analitiche
-    Double_t sol_mean = util->GetSolMean();
-    Double_t ris_an_mean;
-
-    ris_an_mean = (en_B - sol_mean) / en_B;
-    Resolution_an_mean->Fill(vis_mass, ris_an_mean);
-    an_mean_profile->Fill(vis_mass, ris_an_mean, 1);
-    h_residui_mean->Fill(ris_an_mean);
-
-    // studio della soluzione scelta a posteriori
-    static Double_t en_corr;
-    en_corr = util->GetSolPost();
-    static Double_t ris_an_corr;
-    ris_an_corr = (en_B - en_corr) / en_B;
-    Resolution_an_corr->Fill(vis_mass, ris_an_corr);
-    an_corr_profile->Fill(vis_mass, ris_an_corr, 1);
-    h_residui_corr->Fill(ris_an_corr);
+    Double_t pvz = (tlv_visibile.Vect().Dot(tlv_Btag.Vect())) / tlv_Btag.Vect().Mag();
+    Double_t a = 4 * (pow(en_vis, 2) - pvz * pvz);
+    Double_t b = -4 * en_vis * (vis_mass2 + Utilities::mass_B2);
+    Double_t c = 4 * pow(Utilities::mass_B * pvz, 2) + pow(Utilities::mass_B2 + vis_mass2, 2);
+    sol_mag = Utilities::SolveEq2(a, b, c, '+');
+    sol_min = Utilities::SolveEq2(a, b, c, '-');
+    sol_mean = (sol_mag + sol_min) / 2;
 }
 
 void ObjAnEs::Accept(Visitor *v)
 {
     v->Visit(this);
+}
+
+void ObjAnEs::PrintFinalStats()
+{
+    std::cout << "\nANALYTIC NON COLLINEAR STATISTICS:" << std::endl;
+    std::cout << "Negative delta was founded in the " << n_delta_negativo * 100 / n_tot_accettabili << '%' << " of the events;" << std::endl;
+    std::cout << "In this accepted events the cos(theta)> method is non resolutive for the " << n_inconcludente_cos * 100 / n_tot_accettabili << '%' << " of the events;\n"
+              << std::endl;
 }

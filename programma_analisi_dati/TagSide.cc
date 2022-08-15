@@ -27,7 +27,7 @@
 #include "./AnalysisPlugins/ViPrint.h"
 #include "./AnalysisPlugins/ViSave.h"
 #include "./AnalysisPlugins/ViFitProfile.h"
-#include "./AnalysisPlugins/UtilitiesAnalytic.h"
+#include "./AnalysisPlugins/ViStats.h"
 
 #include <string>
 #include <iostream>
@@ -35,6 +35,7 @@
 ViPrint *print = new ViPrint();
 ViSave *save = new ViSave();
 ViFitProfile *fitprofile = new ViFitProfile();
+ViStats *printstats = new ViStats();
 
 Double_t vis_mass;
 Double_t vis_mass2;
@@ -89,7 +90,6 @@ void TagSide::Loop(std::string argoments)
 
    AnalysisFactory::create(info);
    std::cout << "Analysis started, wait:\t" << std::endl;
-   extern UtilitiesAnalytic *util;
    //==============================================================
 
    Long64_t nbytes = 0, nb = 0;
@@ -120,7 +120,6 @@ void TagSide::Loop(std::string argoments)
       {
          tlv_visibile = *tlv_mupTag + *tlv_kamTag;
       }
-      util->Update(tlv_Btag, tlv_visibile);
       Dispatcher::Notify(tlv_Btag, tlv_visibile);
 
       // progress bar
@@ -136,11 +135,14 @@ void TagSide::Loop(std::string argoments)
              << std::endl;
 
    // salvo e stampo
+   std::cout << std::string(10, '*') << "STATISTICS" << std::string(59, '*') << std::endl;
+   AnalysisSteering::AcceptAll(printstats);
+   std::cout << std::string(79, '*') << std::endl;
    AnalysisSteering::AcceptAll(fitprofile);
    AnalysisSteering::AcceptAll(print);
    AnalysisSteering::AcceptAll(save);
-
-   std::cout << "\n"
-             << std::string(79, '=') << "\n"
-             << std::endl;
+   std::cout
+       << "\n"
+       << std::string(79, '=') << "\n"
+       << std::endl;
 }

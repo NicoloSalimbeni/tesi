@@ -18,8 +18,8 @@ Double_t Utilities::SolveEq2(const Double_t &a, const Double_t &b, const Double_
     double delta = b * b - 4 * a * c;
     if (delta < 0)
     {
-        std::cout << "Delta negativo: " << delta << std::endl;
-        return -1;
+        // std::cout << "Delta negativo: " << delta << std::endl;
+        return TMath::Infinity();
     }
     switch (sol)
     {
@@ -30,7 +30,7 @@ Double_t Utilities::SolveEq2(const Double_t &a, const Double_t &b, const Double_
         return (-b - sqrt(delta)) / (2 * a);
         break;
     }
-    return -1;
+    return TMath::Infinity();
 }
 
 Double_t Utilities::int_settore_circolare(Double_t a_min, Double_t a_max)

@@ -11,8 +11,9 @@ public:
     ObjAnEs();
     virtual ~ObjAnEs();
 
-    virtual void AddPoint(const TLorentzVector &tlv_B, const TLorentzVector &tlv_vis) override;
+    virtual void ComputeSolutions() override;
     virtual void Accept(Visitor *v) override;
+    virtual void PrintFinalStats() override;
 
 private:
 };

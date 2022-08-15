@@ -2,20 +2,122 @@
 #include "TLorentzVector.h"
 #include "TH2D.h"
 #include "TProfile.h"
-#include "../AnalysisPlugins/UtilitiesAnalytic.h"
 #include "../AnalysisFramework/Visitor.h"
 #include "../AnalysisFramework/AnalysisSteering.h"
 #include "../AnalysisFramework/AnalysisFactory.h"
-
-UtilitiesAnalytic *util = new UtilitiesAnalytic();
+#include "../AnalysisUtilities/Utilities.h"
 
 ObjAnAbs::ObjAnAbs()
 {
+    n_tot = 0;
+    n_tot_accettabili = 0;
+    n_delta_negativo = 0;
+    n_inconcludente_cos = 0;
 }
 
 ObjAnAbs::~ObjAnAbs()
 {
     return;
+}
+
+void ObjAnAbs::LoadEnergyMag()
+{
+    ris = (en_B - sol_mag) / en_B;
+    Resolution_an_mag->Fill(vis_mass, ris);
+    h_residui_mag->Fill(ris);
+}
+
+void ObjAnAbs::LoadEnergyMin()
+{
+    ris = (en_B - sol_min) / en_B;
+    Resolution_an_min->Fill(vis_mass, ris);
+    h_residui_min->Fill(ris);
+}
+
+void ObjAnAbs::LoadEnergyMean()
+{
+    ris = (en_B - sol_mean) / en_B;
+    Resolution_an_mean->Fill(vis_mass, ris);
+    an_mean_profile->Fill(vis_mass, ris, 1);
+    h_residui_mean->Fill(ris);
+}
+
+void ObjAnAbs::LoadEnergyCos()
+{
+    pBp = sqrt(sol_mag * sol_mag - Utilities::mass_B2);
+    pBm = sqrt(sol_min * sol_min - Utilities::mass_B2);
+    cosp = (sol_mag * en_vis - (vis_mass2 + Utilities::mass_B2) / 2) / (p_vis * pBp);
+    cosm = (sol_min * en_vis - (vis_mass2 + Utilities::mass_B2) / 2) / (p_vis * pBm);
+
+    if (cosm < cosp)
+    {
+        ris = (en_B - sol_mag) / en_B;
+    }
+    else if (cosm > cosp)
+    {
+        ris = (en_B - sol_min) / en_B;
+    }
+    else if (cosp == cosm)
+    {
+        n_inconcludente_cos++;
+        return; // se l'analisi non è risolutiva si esce senza caricare il risultato
+    }
+
+    Resolution_an_cos->Fill(vis_mass, ris);
+    an_cos_profile->Fill(vis_mass, ris, 1);
+    h_residui_cos->Fill(ris);
+}
+
+void ObjAnAbs::LoadEnergyCorr()
+{
+    if (abs(sol_mag - en_B) < abs(sol_min - en_B))
+    {
+        ris = (en_B - sol_mag) / en_B;
+    }
+    else if (abs(sol_min - en_B) < abs(sol_mag - en_B))
+    {
+        ris = (en_B - sol_min) / en_B;
+    }
+    else
+    {
+        return; // se l'analisi non è risolutiva si esce senza caricare il risultato
+    }
+
+    Resolution_an_corr->Fill(vis_mass, ris);
+    an_corr_profile->Fill(vis_mass, ris, 1);
+    h_residui_corr->Fill(ris);
+}
+
+void ObjAnAbs::LoadEnergies()
+{
+    LoadEnergyMag();
+    LoadEnergyMin();
+    LoadEnergyMean();
+    LoadEnergyCos();
+    LoadEnergyCorr();
+}
+
+void ObjAnAbs::AddPoint(const TLorentzVector &tlv_B, const TLorentzVector &tlv_v)
+{
+    n_tot++;
+
+    tlv_Btag = tlv_B;
+    tlv_visibile = tlv_v;
+
+    en_vis = tlv_visibile.T();
+    en_B = tlv_Btag.T();
+    p_vis = tlv_visibile.P();
+    vis_mass = tlv_visibile.M();
+    vis_mass2 = tlv_visibile.M2();
+
+    ComputeSolutions();
+    if (sol_mag == TMath::Infinity() && sol_min == TMath::Infinity())
+    {
+        n_delta_negativo++;
+        return; // controllo se il sistema è risolvibile altrimenti non caricare le energie;
+    }
+    n_tot_accettabili++;
+    LoadEnergies();
 }
 
 TH2D *ObjAnAbs::GetHMin()

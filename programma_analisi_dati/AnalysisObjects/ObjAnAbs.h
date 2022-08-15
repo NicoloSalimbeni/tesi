@@ -6,8 +6,8 @@
 #include "TF1.h"
 #include "TFitResult.h"
 #include "TH1D.h"
+#include "TLorentzVector.h"
 
-class TLorentVector;
 class Visitor;
 
 class ObjAnAbs : public AnalysisObject
@@ -15,6 +15,17 @@ class ObjAnAbs : public AnalysisObject
 public:
     ObjAnAbs();
     virtual ~ObjAnAbs();
+
+    virtual void LoadEnergyMag();
+    virtual void LoadEnergyMin();
+    virtual void LoadEnergyMean();
+    virtual void LoadEnergyCos();
+    virtual void LoadEnergyCorr();
+
+    virtual void LoadEnergies();
+    virtual void ComputeSolutions() = 0;
+    virtual void PrintFinalStats() = 0;
+
     virtual TH2D *GetHMin();
     virtual TH2D *GetHMag();
     virtual TH2D *GetHCos();
@@ -41,8 +52,8 @@ public:
     virtual TH1D *GetHResiduiMean();
     virtual TH1D *GetHResiduiCorr();
 
-    virtual void AddPoint(const TLorentzVector &tlv_B, const TLorentzVector &tlv_vis) = 0;
-    virtual void Accept(Visitor *) = 0;
+    virtual void AddPoint(const TLorentzVector &tlv_B, const TLorentzVector &tlv_vis) override;
+    virtual void Accept(Visitor *) override = 0;
 
 protected:
     // ignoro h2 in questo caso
@@ -71,6 +82,29 @@ protected:
     TFitResultPtr risultati_fit_corr1;
     TFitResultPtr risultati_fit_corr2;
     TFitResultPtr risultati_fit_mean;
+
+    TLorentzVector tlv_Btag;
+    TLorentzVector tlv_visibile;
+
+    Double_t sol_min;
+    Double_t sol_mag;
+    Double_t sol_mean;
+    Double_t ris;
+
+    Double_t n_tot;
+    Double_t n_tot_accettabili;
+    Double_t n_delta_negativo;
+    Double_t n_inconcludente_cos;
+
+    Double_t vis_mass;
+    Double_t vis_mass2;
+    Double_t en_vis;
+    Double_t p_vis;
+    Double_t en_B;
+    Double_t pBp;
+    Double_t pBm;
+    Double_t cosp;
+    Double_t cosm;
 };
 
 #endif

@@ -42,6 +42,7 @@ void run(std::string s = "none")
         gROOT->ProcessLine(".L ./AnalysisPlugins/ViPrint.cc");
         gROOT->ProcessLine(".L ./AnalysisPlugins/ViSave.cc");
         gROOT->ProcessLine(".L ./AnalysisPlugins/ViFitProfile.cc");
+        gROOT->ProcessLine(".L ./AnalysisPlugins/ViStats.cc");
 
         gROOT->ProcessLine(".L TagSide.cc");
 
