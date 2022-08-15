@@ -15,6 +15,7 @@ UtilitiesAnalytic::~UtilitiesAnalytic()
 
 void UtilitiesAnalytic::SolveEq2_cos()
 {
+    // esatto
     Double_t pBp = sqrt(sol_mag * sol_mag - mass_B * mass_B);
     Double_t pBm = sqrt(sol_min * sol_min - mass_B * mass_B);
     Double_t cosp = (sol_mag * en_vis - (vis_mass2 + mass_B * mass_B) / 2) / (p_vis * pBp);
@@ -22,22 +23,23 @@ void UtilitiesAnalytic::SolveEq2_cos()
 
     if (cosm < cosp)
     {
-        sol_cos_coll = sol_mag_coll;
+        sol_cos = sol_mag;
     }
     else if (cosm > cosp)
     {
-        sol_cos_coll = sol_min_coll;
+        sol_cos = sol_min;
     }
     else
     {
-        sol_cos_coll = -1;
+        sol_cos = -1;
     }
 
+    // collineare
     Double_t pBp_coll = sqrt(sol_mag_coll * sol_mag_coll - mass_B * mass_B);
     Double_t pBm_coll = sqrt(sol_min_coll * sol_min_coll - mass_B * mass_B);
     Double_t cosp_coll = (sol_mag_coll * en_vis - (vis_mass2 + mass_B * mass_B) / 2) / (p_vis * pBp_coll);
     Double_t cosm_coll = (sol_min_coll * en_vis - (vis_mass2 + mass_B * mass_B) / 2) / (p_vis * pBm_coll);
-
+    // cout << cosp_coll << " " << cosm_coll << endl;
     if (cosm_coll < cosp_coll)
     {
         sol_cos_coll = sol_mag_coll;
@@ -55,24 +57,26 @@ void UtilitiesAnalytic::SolveEq2_cos()
 
 void UtilitiesAnalytic::SolveEq2_post()
 {
+    // esatto
     if (abs(sol_mag - en_B) < abs(sol_min - en_B))
     {
-        sol_post_coll = sol_mag_coll;
+        sol_post = sol_mag;
     }
     else if (abs(sol_min - en_B) < abs(sol_mag - en_B))
     {
-        sol_post_coll = sol_min_coll;
+        sol_post = sol_min;
     }
     else
     {
-        sol_post_coll = -1;
+        sol_post = -1;
     }
 
+    // collineare
     if (abs(sol_mag_coll - en_B) < abs(sol_min_coll - en_B))
     {
         sol_post_coll = sol_mag_coll;
     }
-    else if (abs(sol_min - en_B) < abs(sol_mag - en_B))
+    else if (abs(sol_min_coll - en_B) < abs(sol_mag_coll - en_B))
     {
         sol_post_coll = sol_min_coll;
     }
@@ -105,8 +109,8 @@ void UtilitiesAnalytic::Update(const TLorentzVector &tlv_Btag, const TLorentzVec
     // cout << "------" << endl;
 
     a_coll = 4 * (pow(tlv_visibile.T(), 2) - tlv_visibile.P() * tlv_visibile.P());
-    b_coll = -4 * tlv_visibile.T() * (vis_mass2 + tlv_Btag.M2());
-    c_coll = 4 * pow(tlv_Btag.M() * tlv_visibile.P(), 2) + pow(tlv_Btag.M2() + vis_mass2, 2);
+    b_coll = -4 * tlv_visibile.T() * (vis_mass2 + mass_B2);
+    c_coll = 4 * pow(mass_B * tlv_visibile.P(), 2) + pow(mass_B2 + vis_mass2, 2);
 
     // cout << "------Coll" << endl;
     // cout << a << " " << b << " " << c << endl;

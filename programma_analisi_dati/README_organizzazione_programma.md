@@ -12,6 +12,9 @@ Il programma si articola in varie classi che sono suddivise in cartelle a second
 
 Poi nella cartella corrente ci sono i file _run.cc_ che serve per caricare tutte le classi in root e avviare l'analisi, e _TagSide.h/.cc_ per il loop sugli eventi
 
+## cose da dire
+- questione del delta negativo dovuto alla massa del B diversa da tlb_BTag.M();
+- scegliere con il metodo del coseno non funziona per l'AnColl perchè entrambi vengono uno, il risultato è dovuto al comportamento casuale dei Double_t
 
 ###Cose da fare
 FIXME il sistema di gestione degli oggetti funziona, ma solo se ogni volta chiudi e riapri root, altrimenti quelli che hai già creato rimangono in memoria come static, poichè gli oggetti che li creano sono globali giustamente anche dopo la fine dell'esecuzione continuano a esistere (un'idea per sistemare: fa in modo che alla fine dell'esecuzione tutti quei vettori,mappe statici ecc... vengano resettati)

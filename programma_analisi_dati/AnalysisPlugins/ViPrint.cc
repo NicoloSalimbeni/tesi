@@ -120,5 +120,17 @@ void ViPrint::Visit(ObjAnColl *obj)
     c->SaveAs("../analisi_risoluzione_energia/analitica/collineare/Profile_anColl_mean.png");
     obj->GetPCos()->Draw();
     c->SaveAs("../analisi_risoluzione_energia/analitica/collineare/Profile_anColl_cos.png");
+
+    obj->GetHResiduiMin()->Draw("CONT4Z");
+    c->SaveAs("../analisi_risoluzione_energia/analitica/collineare/hist_residui_AnColl_min.png");
+    obj->GetHResiduiMag()->Draw("CONT4Z");
+    c->SaveAs("../analisi_risoluzione_energia/analitica/collineare/hist_residui_AnColl_mag.png");
+    obj->GetHResiduiCorr()->Draw("CONT4Z");
+    c->SaveAs("../analisi_risoluzione_energia/analitica/collineare/hist_residui_AnColl_corr.png");
+    obj->GetHResiduiMean()->Draw("CONT4Z");
+    c->SaveAs("../analisi_risoluzione_energia/analitica/collineare/hist_residui_AnColl_mean.png");
+    obj->GetHResiduiCos()->Draw("CONT4Z");
+    c->SaveAs("../analisi_risoluzione_energia/analitica/collineare/hist_residui_AnColl_cos.png");
+
     c->Close();
 }

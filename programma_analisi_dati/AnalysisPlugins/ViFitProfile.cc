@@ -102,16 +102,16 @@ void ViFitProfile::Visit(ObjAnColl *obj)
     f_ris_fit->cd();
 
     f_ris_fit->Delete("fit_res_anColl_corr_1;*");
-    f_ris_fit->Delete("fit_res_anColl_corr_2;*");
+    // f_ris_fit->Delete("fit_res_anColl_corr_2;*");
     f_ris_fit->Delete("fit_res_anColl_mean;*");
     f_ris_fit->Delete("fit_res_anColl_cos;*");
 
     risultati_fit = obj->GetPCorr()->Fit(obj->GetFCorr1(), "SR");
-    risultati_fit->SetNameTitle("fit_res_anColl_corr_1", "pol1");
+    risultati_fit->SetNameTitle("fit_res_anColl_corr_1", "pol4");
     risultati_fit->Write();
-    risultati_fit = obj->GetPCorr()->Fit(obj->GetFCorr2(), "SR+");
-    risultati_fit->SetNameTitle("fit_res_anColl_corr_2", "pol1");
-    risultati_fit->Write();
+    // risultati_fit = obj->GetPCorr()->Fit(obj->GetFCorr2(), "SR+");
+    // risultati_fit->SetNameTitle("fit_res_anColl_corr_2", "pol1");
+    // risultati_fit->Write();
 
     risultati_fit = obj->GetPMean()->Fit(obj->GetFMean(), "SR");
     risultati_fit->SetNameTitle("fit_res_anColl_mean", "pol4");

@@ -27,7 +27,7 @@ ObjAnColl::ObjAnColl()
 
     AnalysisSteering::subscribe(this);
 
-    Resolution_an_mag = new TH2D("Resolution_anColl_mag", "risoluzione vs massa visibile,  metodo analitico soluzione maggiore", 100, 1, 4.5, 300, -3, 3);
+    Resolution_an_mag = new TH2D("Resolution_anColl_mag", "risoluzione vs massa visibile,  metodo analitico soluzione maggiore", 100, 1, 4.5, 300, -3.5, 1);
     Resolution_an_mag->GetXaxis()->SetTitle("massa visibile [GeV]");
     Resolution_an_mag->GetYaxis()->SetTitle("risoluzione energia");
     Resolution_an_mag->GetZaxis()->SetTitle("Counts");
@@ -35,7 +35,7 @@ ObjAnColl::ObjAnColl()
     Resolution_an_mag->GetYaxis()->SetMaxDigits(1);
     Resolution_an_mag->GetZaxis()->SetMaxDigits(3);
 
-    Resolution_an_min = new TH2D("Resolution_anColl_min", "risoluzione vs massa visibile,  metodo analitico soluzione minore", 100, 1, 4.5, 300, -1, 3);
+    Resolution_an_min = new TH2D("Resolution_anColl_min", "risoluzione vs massa visibile,  metodo analitico soluzione minore", 100, 1, 4.5, 300, -0.5, 1);
     Resolution_an_min->GetXaxis()->SetTitle("massa visibile [GeV]");
     Resolution_an_min->GetYaxis()->SetTitle("risoluzione energia");
     Resolution_an_min->GetZaxis()->SetTitle("Counts");
@@ -43,7 +43,7 @@ ObjAnColl::ObjAnColl()
     Resolution_an_min->GetYaxis()->SetMaxDigits(1);
     Resolution_an_min->GetZaxis()->SetMaxDigits(3);
 
-    Resolution_an_corr = new TH2D("Resolution_anColl_corr", "risoluzione vs massa visibile,  risultati esatti", 100, 1, 4.5, 300, -0.004, 0.004);
+    Resolution_an_corr = new TH2D("Resolution_anColl_corr", "risoluzione vs massa visibile,  risultati esatti", 100, 1, 4.5, 300, -1, 1);
     Resolution_an_corr->GetXaxis()->SetTitle("massa visibile [GeV]");
     Resolution_an_corr->GetYaxis()->SetTitle("risoluzione energia");
     Resolution_an_corr->GetZaxis()->SetTitle("Counts");
@@ -56,7 +56,7 @@ ObjAnColl::ObjAnColl()
     an_corr_profile->GetYaxis()->SetTitle("risoluzione energia");
     an_corr_profile->SetStats(0);
 
-    Resolution_an_mean = new TH2D("Resolution_anColl_mean", "risoluzione vs massa visibile,  media soluzioni analitiche", 100, 1, 4.5, 300, -3, 3);
+    Resolution_an_mean = new TH2D("Resolution_anColl_mean", "risoluzione vs massa visibile,  media soluzioni analitiche", 100, 1, 4.5, 300, -3, 1);
     Resolution_an_mean->GetXaxis()->SetTitle("massa visibile [GeV]");
     Resolution_an_mean->GetYaxis()->SetTitle("risoluzione energia");
     Resolution_an_mean->GetZaxis()->SetTitle("Counts");
@@ -69,7 +69,7 @@ ObjAnColl::ObjAnColl()
     an_mean_profile->GetYaxis()->SetTitle("risoluzione energia");
     an_mean_profile->SetStats(0);
 
-    Resolution_an_cos = new TH2D("Resolution_anColl_cos", "risoluzione vs massa visibile,  cos#theta maggiore", 100, 1, 4.5, 300, -3, 1);
+    Resolution_an_cos = new TH2D("Resolution_anColl_cos", "risoluzione vs massa visibile,  cos#theta maggiore", 100, 1, 4.5, 300, -3, 1.5);
     Resolution_an_cos->GetXaxis()->SetTitle("massa visibile [GeV]");
     Resolution_an_cos->GetYaxis()->SetTitle("risoluzione energia");
     Resolution_an_cos->GetZaxis()->SetTitle("Counts");
@@ -83,8 +83,8 @@ ObjAnColl::ObjAnColl()
     an_cos_profile->SetStats(0);
 
     // inizializzo le funzioni per eventuali fit
-    f_fit_corr1 = new TF1("f_anColl_corr_1", "pol1", 1.5, 3.2);
-    f_fit_corr2 = new TF1("f_anColl_corr_2", "pol1", 3.2, 4);
+    f_fit_corr1 = new TF1("f_anColl_corr_1", "pol4", 1.5, 4);
+    // f_fit_corr2 = new TF1("f_anColl_corr_2", "pol1", 3.2, 4);
 
     f_fit_mean = new TF1("f_anColl_mean", "pol4", 1, 4.2);
 
@@ -92,7 +92,7 @@ ObjAnColl::ObjAnColl()
 
     // inizializzo istogrammi
     Int_t nbin = 100;
-    Float_t start = -0.006, stop = 0.002;
+    Float_t start = -3.5, stop = 1;
     Float_t binwidth = (stop - start) / nbin;
     std::string s_binwidth = std::to_string(binwidth);
     s_binwidth.resize(5);
@@ -102,7 +102,7 @@ ObjAnColl::ObjAnColl()
     h_residui_mag->GetYaxis()->SetTitle(("Conteggi/" + s_binwidth).c_str());
 
     nbin = 100;
-    start = 0, stop = 0.012;
+    start = -0.5, stop = 1;
     binwidth = (stop - start) / nbin;
     s_binwidth = std::to_string(binwidth);
     s_binwidth.resize(5);
@@ -111,7 +111,7 @@ ObjAnColl::ObjAnColl()
     h_residui_min->GetYaxis()->SetTitle(("Conteggi/" + s_binwidth).c_str());
 
     nbin = 100;
-    start = -1.3, stop = 1.3;
+    start = -3, stop = 1;
     binwidth = (stop - start) / nbin;
     s_binwidth = std::to_string(binwidth);
     s_binwidth.resize(5);
@@ -120,7 +120,7 @@ ObjAnColl::ObjAnColl()
     h_residui_mean->GetYaxis()->SetTitle(("Conteggi/" + s_binwidth).c_str());
 
     nbin = 100;
-    start = -0.012, stop = 0.012;
+    start = -3, stop = 2;
     binwidth = (stop - start) / nbin;
     s_binwidth = std::to_string(binwidth);
     s_binwidth.resize(5);
@@ -129,7 +129,7 @@ ObjAnColl::ObjAnColl()
     h_residui_cos->GetYaxis()->SetTitle(("Conteggi/" + s_binwidth).c_str());
 
     nbin = 100;
-    start = -0.012, stop = 0.012;
+    start = -1, stop = 1;
     binwidth = (stop - start) / nbin;
     s_binwidth = std::to_string(binwidth);
     s_binwidth.resize(5);
@@ -156,10 +156,16 @@ void ObjAnColl::AddPoint(const TLorentzVector &tlv_Btag, const TLorentzVector &t
     res_an_cos = (en_B - en_cos) / en_B;
     Resolution_an_cos->Fill(vis_mass, res_an_cos);
     an_cos_profile->Fill(vis_mass, res_an_cos, 1);
+    h_residui_cos->Fill(res_an_cos);
 
     // entrambe le soluzioni con maggiore e minore
-    Resolution_an_min->Fill(vis_mass, (en_B - sol_min) / en_B);
-    Resolution_an_mag->Fill(vis_mass, (en_B - sol_mag) / en_B);
+    Float_t ris_min = (en_B - sol_min) / en_B;
+    Float_t ris_mag = (en_B - sol_mag) / en_B;
+
+    Resolution_an_min->Fill(vis_mass, ris_min);
+    Resolution_an_mag->Fill(vis_mass, ris_mag);
+    h_residui_min->Fill(ris_min);
+    h_residui_mag->Fill(ris_mag);
 
     // media delle soluzioni analitiche
     Double_t sol_mean = util->GetSolMeanColl();
@@ -168,6 +174,7 @@ void ObjAnColl::AddPoint(const TLorentzVector &tlv_Btag, const TLorentzVector &t
     ris_an_mean = (en_B - sol_mean) / en_B;
     Resolution_an_mean->Fill(vis_mass, ris_an_mean);
     an_mean_profile->Fill(vis_mass, ris_an_mean, 1);
+    h_residui_mean->Fill(ris_an_mean);
 
     // studio della soluzione scelta a posteriori
     static Double_t en_corr;
@@ -176,6 +183,7 @@ void ObjAnColl::AddPoint(const TLorentzVector &tlv_Btag, const TLorentzVector &t
     ris_an_corr = (en_B - en_corr) / en_B;
     Resolution_an_corr->Fill(vis_mass, ris_an_corr);
     an_corr_profile->Fill(vis_mass, ris_an_corr, 1);
+    h_residui_corr->Fill(ris_an_corr);
 }
 
 void ObjAnColl::Accept(Visitor *v)

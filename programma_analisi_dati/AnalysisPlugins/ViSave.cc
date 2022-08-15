@@ -115,15 +115,26 @@ void ViSave::Visit(ObjAnColl *obj)
     f->Delete("Resolution_anColl_cos;*");
     f->Delete("Resolution_anColl_mean;*");
     f->Delete("Resolution_anColl_corr;*");
-    f->Delete("Profile_anColl_corr;*");
-    f->Delete("Profile_anColl_mean;*");
-    f->Delete("Profile_anColl_cos;*");
     obj->GetHMag()->Write();
     obj->GetHMin()->Write();
     obj->GetHMean()->Write();
     obj->GetHCos()->Write();
     obj->GetHCorr()->Write();
 
+    f->Delete("Hist_residui_AnColl_mag;*");
+    f->Delete("Hist_residui_AnColl_min;*");
+    f->Delete("Hist_residui_AnColl_mean;*");
+    f->Delete("Hist_residui_AnColl_cos;*");
+    f->Delete("Hist_residui_AnColl_corr;*");
+    obj->GetHResiduiMin()->Write();
+    obj->GetHResiduiMag()->Write();
+    obj->GetHResiduiCorr()->Write();
+    obj->GetHResiduiMean()->Write();
+    obj->GetHResiduiCos()->Write();
+
+    f->Delete("Profile_anColl_corr;*");
+    f->Delete("Profile_anColl_mean;*");
+    f->Delete("Profile_anColl_cos;*");
     obj->GetPMean()->Write();
     obj->GetPCos()->Write();
     obj->GetPCorr()->Write();
