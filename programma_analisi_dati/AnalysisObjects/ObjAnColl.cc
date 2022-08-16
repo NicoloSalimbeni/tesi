@@ -80,6 +80,19 @@ ObjAnColl::ObjAnColl()
     an_cos_profile->GetYaxis()->SetTitle("risoluzione energia");
     an_cos_profile->SetStats(0);
 
+    Resolution_an_collcomp = new TH2D("Resolution_anColl_collcomp", "risoluzione vs massa visibile cos#theta=1,  coll comp", 100, 1, 4.5, 300, 0, 0.7);
+    Resolution_an_collcomp->GetXaxis()->SetTitle("massa visibile [GeV]");
+    Resolution_an_collcomp->GetYaxis()->SetTitle("risoluzione energia");
+    Resolution_an_collcomp->GetZaxis()->SetTitle("Counts");
+    Resolution_an_collcomp->SetStats(0);
+    Resolution_an_collcomp->GetYaxis()->SetMaxDigits(1);
+    Resolution_an_collcomp->GetZaxis()->SetMaxDigits(3);
+
+    an_collcomp_profile = new TProfile("Profile_anColl_collcomp", "Profilo Massa vs risoluzione cos#theta=1,  collcomp", 25, 1, 4.5, -3, 3);
+    an_collcomp_profile->GetXaxis()->SetTitle("massa visibile [GeV]");
+    an_collcomp_profile->GetYaxis()->SetTitle("risoluzione energia");
+    an_collcomp_profile->SetStats(0);
+
     // inizializzo le funzioni per eventuali fit
     f_fit_corr1 = new TF1("f_anColl_corr_1", "pol4", 1.5, 4);
     // f_fit_corr2 = new TF1("f_anColl_corr_2", "pol1", 3.2, 4);
@@ -87,6 +100,8 @@ ObjAnColl::ObjAnColl()
     f_fit_mean = new TF1("f_anColl_mean", "pol4", 1, 4.2);
 
     f_fit_cos = new TF1("f_anColl_cos", "pol8", 1, 4);
+
+    f_fit_collcomp = new TF1("f_anColl_collcomp", "pol4", 1, 4);
 
     // inizializzo istogrammi
     Int_t nbin = 100;
@@ -134,6 +149,15 @@ ObjAnColl::ObjAnColl()
     h_residui_corr = new TH1D("Hist_residui_AnColl_corr", "residui percentuali analitica cos#theta=1 posteriori (E_{vera}-E_{stimata})/E_{vara}", nbin, start, stop);
     h_residui_corr->GetXaxis()->SetTitle("Residui");
     h_residui_corr->GetYaxis()->SetTitle(("Conteggi/" + s_binwidth).c_str());
+
+    nbin = 100;
+    start = -0.2, stop = 1;
+    binwidth = (stop - start) / nbin;
+    s_binwidth = std::to_string(binwidth);
+    s_binwidth.resize(5);
+    h_residui_collcomp = new TH1D("Hist_residui_AnColl_collcomp", "residui percentuali analitica cos#theta=1 coll comp (E_{vera}-E_{stimata})/E_{vara}", nbin, start, stop);
+    h_residui_collcomp->GetXaxis()->SetTitle("Residui");
+    h_residui_collcomp->GetYaxis()->SetTitle(("Conteggi/" + s_binwidth).c_str());
 }
 
 ObjAnColl::~ObjAnColl()
@@ -144,8 +168,8 @@ ObjAnColl::~ObjAnColl()
 void ObjAnColl::ComputeSolutions()
 {
     Double_t a_coll = 4 * (pow(en_vis, 2) - tlv_visibile.P() * tlv_visibile.P());
-    Double_t b_coll = -4 * tlv_visibile.T() * (vis_mass2 + Utilities::mass_B2);
-    Double_t c_coll = 4 * pow(Utilities::mass_B * tlv_visibile.P(), 2) + pow(Utilities::mass_B2 + vis_mass2, 2);
+    Double_t b_coll = -4 * tlv_visibile.T() * (vis_mass2 + tlv_Btag.M2());
+    Double_t c_coll = 4 * pow(tlv_Btag.M() * tlv_visibile.P(), 2) + pow(tlv_Btag.M2() + vis_mass2, 2);
     sol_mag = Utilities::SolveEq2(a_coll, b_coll, c_coll, '+');
     sol_min = Utilities::SolveEq2(a_coll, b_coll, c_coll, '-');
     sol_mean = (sol_mag + sol_min) / 2;
@@ -160,6 +184,6 @@ void ObjAnColl::PrintFinalStats()
 {
     std::cout << "\nANALYTIC COLLINEAR STATISTICS:" << std::endl;
     std::cout << "Negative delta was founded in the " << n_delta_negativo * 100 / n_tot_accettabili << '%' << " of the events;" << std::endl;
-    std::cout << "In this accepted events the cos(theta)> method is non resolutive for the " << n_inconcludente_cos * 100 / n_tot_accettabili << '%' << "of the events;\n"
+    std::cout << "In this accepted events the cos(theta)> method is non resolutive for the " << n_inconcludente_cos * 100 / n_tot_accettabili << '%' << " of the events;\n"
               << std::endl;
 }

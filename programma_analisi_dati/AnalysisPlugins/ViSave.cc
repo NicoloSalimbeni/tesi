@@ -76,29 +76,35 @@ void ViSave::Visit(ObjAnEs *obj)
     f->Delete("Resolution_anEs_cos;*");
     f->Delete("Resolution_anEs_mean;*");
     f->Delete("Resolution_anEs_corr;*");
+    f->Delete("Resolution_anEs_collcomp;*");
     obj->GetHMag()->Write();
     obj->GetHMin()->Write();
     obj->GetHMean()->Write();
     obj->GetHCos()->Write();
     obj->GetHCorr()->Write();
+    obj->GetHCollComp()->Write();
 
     f->Delete("Hist_residui_AnEs_mag;*");
     f->Delete("Hist_residui_AnEs_min;*");
     f->Delete("Hist_residui_AnEs_mean;*");
     f->Delete("Hist_residui_AnEs_cos;*");
     f->Delete("Hist_residui_AnEs_corr;*");
+    f->Delete("Hist_residui_AnEs_collcomp;*");
     obj->GetHResiduiMin()->Write();
     obj->GetHResiduiMag()->Write();
     obj->GetHResiduiCorr()->Write();
     obj->GetHResiduiMean()->Write();
     obj->GetHResiduiCos()->Write();
+    obj->GetHResiduiCollComp()->Write();
 
     f->Delete("Profile_anEs_corr;*");
     f->Delete("Profile_anEs_mean;*");
     f->Delete("Profile_anEs_cos;*");
+    f->Delete("Profile_anEs_collcomp;*");
     obj->GetPMean()->Write();
     obj->GetPCos()->Write();
     obj->GetPCorr()->Write();
+    obj->GetPCollComp()->Write();
 
     f->Close();
 
@@ -115,29 +121,35 @@ void ViSave::Visit(ObjAnColl *obj)
     f->Delete("Resolution_anColl_cos;*");
     f->Delete("Resolution_anColl_mean;*");
     f->Delete("Resolution_anColl_corr;*");
+    f->Delete("Resolution_anColl_collcomp;*");
     obj->GetHMag()->Write();
     obj->GetHMin()->Write();
     obj->GetHMean()->Write();
     obj->GetHCos()->Write();
     obj->GetHCorr()->Write();
+    obj->GetHCollComp()->Write();
 
     f->Delete("Hist_residui_AnColl_mag;*");
     f->Delete("Hist_residui_AnColl_min;*");
     f->Delete("Hist_residui_AnColl_mean;*");
     f->Delete("Hist_residui_AnColl_cos;*");
     f->Delete("Hist_residui_AnColl_corr;*");
+    f->Delete("Hist_residui_AnColl_collcomp;*");
     obj->GetHResiduiMin()->Write();
     obj->GetHResiduiMag()->Write();
     obj->GetHResiduiCorr()->Write();
     obj->GetHResiduiMean()->Write();
     obj->GetHResiduiCos()->Write();
+    obj->GetHResiduiCollComp()->Write();
 
     f->Delete("Profile_anColl_corr;*");
     f->Delete("Profile_anColl_mean;*");
     f->Delete("Profile_anColl_cos;*");
+    f->Delete("Profile_anColl_collcomp;*");
     obj->GetPMean()->Write();
     obj->GetPCos()->Write();
     obj->GetPCorr()->Write();
+    obj->GetPCollComp()->Write();
 
     f->Close();
 

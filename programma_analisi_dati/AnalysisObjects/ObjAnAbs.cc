@@ -44,10 +44,10 @@ void ObjAnAbs::LoadEnergyMean()
 
 void ObjAnAbs::LoadEnergyCos()
 {
-    pBp = sqrt(sol_mag * sol_mag - Utilities::mass_B2);
-    pBm = sqrt(sol_min * sol_min - Utilities::mass_B2);
-    cosp = (sol_mag * en_vis - (vis_mass2 + Utilities::mass_B2) / 2) / (p_vis * pBp);
-    cosm = (sol_min * en_vis - (vis_mass2 + Utilities::mass_B2) / 2) / (p_vis * pBm);
+    pBp = sqrt(sol_mag * sol_mag - tlv_Btag.M2());
+    pBm = sqrt(sol_min * sol_min - tlv_Btag.M2());
+    cosp = (sol_mag * en_vis - (vis_mass2 + tlv_Btag.M2()) / 2) / (p_vis * pBp);
+    cosm = (sol_min * en_vis - (vis_mass2 + tlv_Btag.M2()) / 2) / (p_vis * pBm);
 
     if (cosm < cosp)
     {
@@ -88,6 +88,28 @@ void ObjAnAbs::LoadEnergyCorr()
     h_residui_corr->Fill(ris);
 }
 
+void ObjAnAbs::LoadEnergyCollComp()
+{
+    Double_t en_coll = en_vis * Utilities::mass_B / vis_mass;
+
+    if (abs(sol_mag - en_coll) < abs(sol_min - en_coll))
+    {
+        ris = (en_B - sol_mag) / en_B;
+    }
+    else if (abs(sol_min - en_coll) < abs(sol_mag - en_coll))
+    {
+        ris = (en_B - sol_min) / en_B;
+    }
+    else
+    {
+        return; // se l'analisi non è risolutiva si esce senza caricare il risultato
+    }
+
+    Resolution_an_collcomp->Fill(vis_mass, ris);
+    an_collcomp_profile->Fill(vis_mass, ris, 1);
+    h_residui_collcomp->Fill(ris);
+}
+
 void ObjAnAbs::LoadEnergies()
 {
     LoadEnergyMag();
@@ -95,6 +117,7 @@ void ObjAnAbs::LoadEnergies()
     LoadEnergyMean();
     LoadEnergyCos();
     LoadEnergyCorr();
+    LoadEnergyCollComp();
 }
 
 void ObjAnAbs::AddPoint(const TLorentzVector &tlv_B, const TLorentzVector &tlv_v)
@@ -145,6 +168,11 @@ TH2D *ObjAnAbs::GetHCorr()
     return Resolution_an_corr;
 }
 
+TH2D *ObjAnAbs::GetHCollComp()
+{
+    return Resolution_an_collcomp;
+}
+
 TProfile *ObjAnAbs::GetPMean()
 {
     return an_mean_profile;
@@ -158,6 +186,11 @@ TProfile *ObjAnAbs::GetPCos()
 TProfile *ObjAnAbs::GetPCorr()
 {
     return an_corr_profile;
+}
+
+TProfile *ObjAnAbs::GetPCollComp()
+{
+    return an_collcomp_profile;
 }
 
 TF1 *ObjAnAbs::GetFCorr1()
@@ -180,6 +213,11 @@ TF1 *ObjAnAbs::GetFMean()
     return f_fit_mean;
 }
 
+TF1 *ObjAnAbs::GetFCollComp()
+{
+    return f_fit_collcomp;
+}
+
 TFitResultPtr ObjAnAbs::GetFitProfileResultCos()
 {
     return risultati_fit_cos;
@@ -198,6 +236,11 @@ TFitResultPtr ObjAnAbs::GetFitProfileResultCorr2()
 TFitResultPtr ObjAnAbs::GetFitProfileResultMean()
 {
     return risultati_fit_mean;
+}
+
+TFitResultPtr ObjAnAbs::GetFitProfileResultCollComp()
+{
+    return risultati_fit_collcomp;
 }
 
 TH1D *ObjAnAbs::GetHResiduiCorr()
@@ -223,4 +266,9 @@ TH1D *ObjAnAbs::GetHResiduiMag()
 TH1D *ObjAnAbs::GetHResiduiMin()
 {
     return h_residui_min;
+}
+
+TH1D *ObjAnAbs::GetHResiduiCollComp()
+{
+    return h_residui_collcomp;
 }
