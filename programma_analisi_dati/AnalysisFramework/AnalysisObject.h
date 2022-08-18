@@ -15,8 +15,8 @@ public:
     AnalysisObject();
     virtual ~AnalysisObject();
 
-    virtual void AddPoint(const TLorentzVector &tlv_B, const TLorentzVector &tlv_vis) = 0;
-    void Update(const TLorentzVector &tlv_B, const TLorentzVector &tlv_vis) override;
+    virtual void AddPoint(const TLorentzVector &tlv_B, const TLorentzVector &tlv_vis, const TLorentzVector &tlv_vertex) = 0;
+    void Update(const TLorentzVector &tlv_B, const TLorentzVector &tlv_vis, const TLorentzVector &tlv_vertex) override;
 
     TH2D *GetH() const;
     TProfile *GetP() const;

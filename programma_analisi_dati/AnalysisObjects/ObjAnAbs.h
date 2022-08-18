@@ -65,7 +65,7 @@ public:
     virtual TH1D *GetHResiduiCollComp();
     virtual TH1D *GetHResiduiRandom();
 
-    virtual void AddPoint(const TLorentzVector &tlv_B, const TLorentzVector &tlv_vis) override;
+    virtual void AddPoint(const TLorentzVector &tlv_B, const TLorentzVector &tlv_vis, const TLorentzVector &tlv_vertex) override;
     virtual void Accept(Visitor *) override = 0;
 
 protected:
@@ -110,6 +110,7 @@ protected:
 
     TLorentzVector tlv_Btag;
     TLorentzVector tlv_visibile;
+    TLorentzVector tlv_vertex;
 
     Double_t sol_min;
     Double_t sol_mag;

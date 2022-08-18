@@ -21,13 +21,13 @@ void Dispatcher::unsubscribe(Observer *obs)
     oL()->erase(obs);
 }
 
-void Dispatcher::Notify(const TLorentzVector &tlv_Btag, const TLorentzVector &tlv_visibile)
+void Dispatcher::Notify(const TLorentzVector &tlv_Btag, const TLorentzVector &tlv_visibile, const TLorentzVector &tlv_vertex)
 {
     std::set<Observer *>::iterator it = oL()->begin();
     std::set<Observer *>::iterator ei = oL()->end();
     while (it != ei)
     {
-        (*it++)->Update(tlv_Btag, tlv_visibile);
+        (*it++)->Update(tlv_Btag, tlv_visibile, tlv_vertex);
     }
     return;
 }

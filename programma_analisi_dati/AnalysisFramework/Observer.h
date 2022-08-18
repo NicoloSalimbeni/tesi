@@ -7,7 +7,7 @@ class Observer
 public:
     Observer();
     virtual ~Observer();
-    virtual void Update(const TLorentzVector &tlv_B, const TLorentzVector &tlv_vis) = 0;
+    virtual void Update(const TLorentzVector &tlv_B, const TLorentzVector &tlv_vis, const TLorentzVector &tlv_vertex) = 0;
 };
 
 #endif

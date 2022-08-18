@@ -12,7 +12,7 @@ class Dispatcher
     friend class Observer;
 
 public:
-    static void Notify(const TLorentzVector &tlv_Btag, const TLorentzVector &tlv_visibile);
+    static void Notify(const TLorentzVector &tlv_Btag, const TLorentzVector &tlv_visibile, const TLorentzVector &tlv_vertex);
     static void UnsubscribeAll();
 
 private:

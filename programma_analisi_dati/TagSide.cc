@@ -120,7 +120,7 @@ void TagSide::Loop(std::string argoments)
       {
          tlv_visibile = *tlv_mupTag + *tlv_kamTag;
       }
-      Dispatcher::Notify(tlv_Btag, tlv_visibile);
+      Dispatcher::Notify(tlv_Btag, tlv_visibile, *tlv_vertex);
 
       // progress bar
       float progress;

@@ -140,12 +140,13 @@ void ObjAnAbs::LoadEnergies()
     LoadEnergyRandom();
 }
 
-void ObjAnAbs::AddPoint(const TLorentzVector &tlv_B, const TLorentzVector &tlv_v)
+void ObjAnAbs::AddPoint(const TLorentzVector &tlv_B, const TLorentzVector &tlv_vis, const TLorentzVector &tlv_vert)
 {
     n_tot++;
 
     tlv_Btag = tlv_B;
-    tlv_visibile = tlv_v;
+    tlv_visibile = tlv_vis;
+    tlv_vertex = tlv_vert;
 
     en_vis = tlv_visibile.T();
     en_B = tlv_Btag.T();

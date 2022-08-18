@@ -133,7 +133,6 @@ ObjAnColl::ObjAnColl()
     start = -0.5, stop = 1;
     binwidth = (stop - start) / nbin;
     s_binwidth = std::to_string(binwidth);
-    s_binwidth.resize(5);
     h_residui_min = new TH1D("Hist_residui_AnColl_min", "residui percentuali analitica cos#theta=1 sol min (E_{vera}-E_{stimata})/E_{vara}", nbin, start, stop);
     h_residui_min->GetXaxis()->SetTitle("Residui");
     h_residui_min->GetYaxis()->SetTitle(("Conteggi/" + s_binwidth).c_str());
@@ -142,7 +141,6 @@ ObjAnColl::ObjAnColl()
     start = -3, stop = 1;
     binwidth = (stop - start) / nbin;
     s_binwidth = std::to_string(binwidth);
-    s_binwidth.resize(5);
     h_residui_mean = new TH1D("Hist_residui_AnColl_mean", "residui percentuali analitica cos#theta=1 media soluzioni (E_{vera}-E_{stimata})/E_{vara}", nbin, start, stop);
     h_residui_mean->GetXaxis()->SetTitle("Residui");
     h_residui_mean->GetYaxis()->SetTitle(("Conteggi/" + s_binwidth).c_str());
@@ -160,7 +158,6 @@ ObjAnColl::ObjAnColl()
     start = -1, stop = 1;
     binwidth = (stop - start) / nbin;
     s_binwidth = std::to_string(binwidth);
-    s_binwidth.resize(5);
     h_residui_corr = new TH1D("Hist_residui_AnColl_corr", "residui percentuali analitica cos#theta=1 posteriori (E_{vera}-E_{stimata})/E_{vara}", nbin, start, stop);
     h_residui_corr->GetXaxis()->SetTitle("Residui");
     h_residui_corr->GetYaxis()->SetTitle(("Conteggi/" + s_binwidth).c_str());
@@ -169,7 +166,6 @@ ObjAnColl::ObjAnColl()
     start = -1, stop = 1;
     binwidth = (stop - start) / nbin;
     s_binwidth = std::to_string(binwidth);
-    s_binwidth.resize(5);
     h_residui_collcomp = new TH1D("Hist_residui_AnColl_collcomp", "residui percentuali analitica cos#theta=1 coll comp (E_{vera}-E_{stimata})/E_{vara}", nbin, start, stop);
     h_residui_collcomp->GetXaxis()->SetTitle("Residui");
     h_residui_collcomp->GetYaxis()->SetTitle(("Conteggi/" + s_binwidth).c_str());
@@ -178,7 +174,6 @@ ObjAnColl::ObjAnColl()
     start = -2, stop = 2;
     binwidth = (stop - start) / nbin;
     s_binwidth = std::to_string(binwidth);
-    s_binwidth.resize(5);
     h_residui_random = new TH1D("Hist_residui_AnColl_random", "residui percentuali analitica cos#theta=1 random (E_{vera}-E_{stimata})/E_{vara}", nbin, start, stop);
     h_residui_random->GetXaxis()->SetTitle("Residui");
     h_residui_random->GetYaxis()->SetTitle(("Conteggi/" + s_binwidth).c_str());

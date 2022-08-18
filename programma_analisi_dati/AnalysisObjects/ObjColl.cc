@@ -53,7 +53,7 @@ ObjColl::~ObjColl()
 {
 }
 
-void ObjColl::AddPoint(const TLorentzVector &tlv_Btag, const TLorentzVector &tlv_visibile)
+void ObjColl::AddPoint(const TLorentzVector &tlv_Btag, const TLorentzVector &tlv_visibile, const TLorentzVector &tlv_vertex)
 {
     Double_t visible_energy = tlv_visibile.T();
     Double_t visible_mass = tlv_visibile.M();

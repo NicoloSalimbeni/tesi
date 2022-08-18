@@ -54,7 +54,7 @@ ObjImpColl::~ObjImpColl()
 {
 }
 
-void ObjImpColl::AddPoint(const TLorentzVector &tlv_Btag, const TLorentzVector &tlv_visibile)
+void ObjImpColl::AddPoint(const TLorentzVector &tlv_Btag, const TLorentzVector &tlv_visibile, const TLorentzVector &tlv_vertex)
 {
     Double_t visible_mass = tlv_visibile.M();
     Double_t visible_mass2 = tlv_visibile.M2();

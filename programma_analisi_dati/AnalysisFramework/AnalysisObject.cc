@@ -44,7 +44,7 @@ TH1D *AnalysisObject::GetHResidui() const
     return h_residui;
 }
 
-void AnalysisObject::Update(const TLorentzVector &tlv_B, const TLorentzVector &tlv_vis)
+void AnalysisObject::Update(const TLorentzVector &tlv_B, const TLorentzVector &tlv_vis, const TLorentzVector &tlv_vertex)
 {
-    AddPoint(tlv_B, tlv_vis);
+    AddPoint(tlv_B, tlv_vis, tlv_vertex);
 }
