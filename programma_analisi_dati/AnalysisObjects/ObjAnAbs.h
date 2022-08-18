@@ -4,10 +4,11 @@
 #include "TH2D.h"
 #include "TProfile.h"
 #include "TF1.h"
-#include "TFitResult.h"
+#include "TFitResultPtr.h"
 #include "TH1D.h"
 #include "TLorentzVector.h"
 
+class TRandom;
 class Visitor;
 
 class ObjAnAbs : public AnalysisObject
@@ -22,6 +23,7 @@ public:
     virtual void LoadEnergyCos();
     virtual void LoadEnergyCorr();
     virtual void LoadEnergyCollComp();
+    virtual void LoadEnergyRandom();
 
     virtual void LoadEnergies();
     virtual void ComputeSolutions() = 0;
@@ -33,23 +35,27 @@ public:
     virtual TH2D *GetHMean();
     virtual TH2D *GetHCorr();
     virtual TH2D *GetHCollComp();
+    virtual TH2D *GetHRandom();
 
     virtual TProfile *GetPCos();
     virtual TProfile *GetPMean();
     virtual TProfile *GetPCorr();
     virtual TProfile *GetPCollComp();
+    virtual TProfile *GetPRandom();
 
     virtual TF1 *GetFCos();
     virtual TF1 *GetFCorr1();
     virtual TF1 *GetFCorr2();
     virtual TF1 *GetFMean();
     virtual TF1 *GetFCollComp();
+    virtual TF1 *GetFRandom();
 
     virtual TFitResultPtr GetFitProfileResultCos();
     virtual TFitResultPtr GetFitProfileResultCorr1();
     virtual TFitResultPtr GetFitProfileResultCorr2();
     virtual TFitResultPtr GetFitProfileResultMean();
     virtual TFitResultPtr GetFitProfileResultCollComp();
+    virtual TFitResultPtr GetFitProfileResultRandom();
 
     virtual TH1D *GetHResiduiMag();
     virtual TH1D *GetHResiduiMin();
@@ -57,6 +63,7 @@ public:
     virtual TH1D *GetHResiduiMean();
     virtual TH1D *GetHResiduiCorr();
     virtual TH1D *GetHResiduiCollComp();
+    virtual TH1D *GetHResiduiRandom();
 
     virtual void AddPoint(const TLorentzVector &tlv_B, const TLorentzVector &tlv_vis) override;
     virtual void Accept(Visitor *) override = 0;
@@ -69,17 +76,20 @@ protected:
     TH2D *Resolution_an_mean;     // media delle soluzioni
     TH2D *Resolution_an_corr;     // soluzione a posteriori
     TH2D *Resolution_an_collcomp; //
+    TH2D *Resolution_an_random;
 
     TProfile *an_corr_profile;
     TProfile *an_cos_profile;
     TProfile *an_mean_profile;
     TProfile *an_collcomp_profile;
+    TProfile *an_random_profile;
 
     TF1 *f_fit_cos;
     TF1 *f_fit_corr1;
     TF1 *f_fit_corr2;
     TF1 *f_fit_mean;
     TF1 *f_fit_collcomp;
+    TF1 *f_fit_random;
 
     TH1D *h_residui_mag;
     TH1D *h_residui_min;
@@ -87,12 +97,16 @@ protected:
     TH1D *h_residui_mean;
     TH1D *h_residui_corr;
     TH1D *h_residui_collcomp;
+    TH1D *h_residui_random;
 
     TFitResultPtr risultati_fit_cos;
     TFitResultPtr risultati_fit_corr1;
     TFitResultPtr risultati_fit_corr2;
     TFitResultPtr risultati_fit_mean;
     TFitResultPtr risultati_fit_collcomp;
+    TFitResultPtr risultati_fit_random;
+
+    TRandom *random;
 
     TLorentzVector tlv_Btag;
     TLorentzVector tlv_visibile;

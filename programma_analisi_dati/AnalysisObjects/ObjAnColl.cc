@@ -93,6 +93,19 @@ ObjAnColl::ObjAnColl()
     an_collcomp_profile->GetYaxis()->SetTitle("risoluzione energia");
     an_collcomp_profile->SetStats(0);
 
+    Resolution_an_random = new TH2D("Resolution_anColl_random", "risoluzione vs massa visibile cos#theta=1,  random", 100, 1, 4.5, 300, -1.5, 1.5);
+    Resolution_an_random->GetXaxis()->SetTitle("massa visibile [GeV]");
+    Resolution_an_random->GetYaxis()->SetTitle("risoluzione energia");
+    Resolution_an_random->GetZaxis()->SetTitle("Counts");
+    Resolution_an_random->SetStats(0);
+    Resolution_an_random->GetYaxis()->SetMaxDigits(1);
+    Resolution_an_random->GetZaxis()->SetMaxDigits(3);
+
+    an_random_profile = new TProfile("Profile_anColl_random", "Profilo Massa vs risoluzione cos#theta=1,  random", 25, 1, 4.5, -3, 3);
+    an_random_profile->GetXaxis()->SetTitle("massa visibile [GeV]");
+    an_random_profile->GetYaxis()->SetTitle("risoluzione energia");
+    an_random_profile->SetStats(0);
+
     // inizializzo le funzioni per eventuali fit
     f_fit_corr1 = new TF1("f_anColl_corr_1", "pol4", 1.5, 4);
     // f_fit_corr2 = new TF1("f_anColl_corr_2", "pol1", 3.2, 4);
@@ -102,6 +115,8 @@ ObjAnColl::ObjAnColl()
     f_fit_cos = new TF1("f_anColl_cos", "pol8", 1, 4);
 
     f_fit_collcomp = new TF1("f_anColl_collcomp", "pol4", 1, 4);
+
+    f_fit_random = new TF1("f_anColl_random", "pol4", 1, 4);
 
     // inizializzo istogrammi
     Int_t nbin = 100;
@@ -151,13 +166,22 @@ ObjAnColl::ObjAnColl()
     h_residui_corr->GetYaxis()->SetTitle(("Conteggi/" + s_binwidth).c_str());
 
     nbin = 100;
-    start = -0.2, stop = 1;
+    start = -1, stop = 1;
     binwidth = (stop - start) / nbin;
     s_binwidth = std::to_string(binwidth);
     s_binwidth.resize(5);
     h_residui_collcomp = new TH1D("Hist_residui_AnColl_collcomp", "residui percentuali analitica cos#theta=1 coll comp (E_{vera}-E_{stimata})/E_{vara}", nbin, start, stop);
     h_residui_collcomp->GetXaxis()->SetTitle("Residui");
     h_residui_collcomp->GetYaxis()->SetTitle(("Conteggi/" + s_binwidth).c_str());
+
+    nbin = 100;
+    start = -2, stop = 2;
+    binwidth = (stop - start) / nbin;
+    s_binwidth = std::to_string(binwidth);
+    s_binwidth.resize(5);
+    h_residui_random = new TH1D("Hist_residui_AnColl_random", "residui percentuali analitica cos#theta=1 random (E_{vera}-E_{stimata})/E_{vara}", nbin, start, stop);
+    h_residui_random->GetXaxis()->SetTitle("Residui");
+    h_residui_random->GetYaxis()->SetTitle(("Conteggi/" + s_binwidth).c_str());
 }
 
 ObjAnColl::~ObjAnColl()

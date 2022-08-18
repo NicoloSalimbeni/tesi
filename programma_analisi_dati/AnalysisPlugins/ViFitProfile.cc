@@ -95,6 +95,10 @@ void ViFitProfile::Visit(ObjAnEs *obj)
     risultati_fit->SetNameTitle("fit_res_anEs_collcomp", "pol4");
     risultati_fit->Write();
 
+    risultati_fit = obj->GetPRandom()->Fit(obj->GetFRandom(), "SR");
+    risultati_fit->SetNameTitle("fit_res_anEs_random", "pol4");
+    risultati_fit->Write();
+
     f_ris_fit->Close();
 
     std::cout << "fit ObjAnEs executed" << std::endl;
@@ -128,6 +132,10 @@ void ViFitProfile::Visit(ObjAnColl *obj)
 
     risultati_fit = obj->GetPCollComp()->Fit(obj->GetFCollComp(), "SR");
     risultati_fit->SetNameTitle("fit_res_anColl_collcomp", "pol4");
+    risultati_fit->Write();
+
+    risultati_fit = obj->GetPRandom()->Fit(obj->GetFRandom(), "SR");
+    risultati_fit->SetNameTitle("fit_res_anColl_random", "pol4");
     risultati_fit->Write();
 
     f_ris_fit->Close();

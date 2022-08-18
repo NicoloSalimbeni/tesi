@@ -77,12 +77,14 @@ void ViSave::Visit(ObjAnEs *obj)
     f->Delete("Resolution_anEs_mean;*");
     f->Delete("Resolution_anEs_corr;*");
     f->Delete("Resolution_anEs_collcomp;*");
+    f->Delete("Resolution_anEs_random;*");
     obj->GetHMag()->Write();
     obj->GetHMin()->Write();
     obj->GetHMean()->Write();
     obj->GetHCos()->Write();
     obj->GetHCorr()->Write();
     obj->GetHCollComp()->Write();
+    obj->GetHRandom()->Write();
 
     f->Delete("Hist_residui_AnEs_mag;*");
     f->Delete("Hist_residui_AnEs_min;*");
@@ -90,21 +92,25 @@ void ViSave::Visit(ObjAnEs *obj)
     f->Delete("Hist_residui_AnEs_cos;*");
     f->Delete("Hist_residui_AnEs_corr;*");
     f->Delete("Hist_residui_AnEs_collcomp;*");
+    f->Delete("Hist_residui_AnEs_random;*");
     obj->GetHResiduiMin()->Write();
     obj->GetHResiduiMag()->Write();
     obj->GetHResiduiCorr()->Write();
     obj->GetHResiduiMean()->Write();
     obj->GetHResiduiCos()->Write();
     obj->GetHResiduiCollComp()->Write();
+    obj->GetHResiduiRandom()->Write();
 
     f->Delete("Profile_anEs_corr;*");
     f->Delete("Profile_anEs_mean;*");
     f->Delete("Profile_anEs_cos;*");
     f->Delete("Profile_anEs_collcomp;*");
+    f->Delete("Profile_anEs_random;*");
     obj->GetPMean()->Write();
     obj->GetPCos()->Write();
     obj->GetPCorr()->Write();
     obj->GetPCollComp()->Write();
+    obj->GetPRandom()->Write();
 
     f->Close();
 

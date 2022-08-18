@@ -2,6 +2,7 @@
 #include "TLorentzVector.h"
 #include "TH2D.h"
 #include "TProfile.h"
+#include "TRandom.h"
 #include "../AnalysisFramework/Visitor.h"
 #include "../AnalysisFramework/AnalysisSteering.h"
 #include "../AnalysisFramework/AnalysisFactory.h"
@@ -9,6 +10,7 @@
 
 ObjAnAbs::ObjAnAbs()
 {
+    random = new TRandom();
     n_tot = 0;
     n_tot_accettabili = 0;
     n_delta_negativo = 0;
@@ -110,6 +112,23 @@ void ObjAnAbs::LoadEnergyCollComp()
     h_residui_collcomp->Fill(ris);
 }
 
+void ObjAnAbs::LoadEnergyRandom()
+{
+    Double_t r = random->Uniform(1);
+    if (r <= 0.5)
+    {
+        ris = (en_B - sol_min) / en_B;
+    }
+    else if (r > 0.5)
+    {
+        ris = (en_B - sol_mag) / en_B;
+    }
+
+    Resolution_an_random->Fill(vis_mass, ris);
+    an_random_profile->Fill(vis_mass, ris, 1);
+    h_residui_random->Fill(ris);
+}
+
 void ObjAnAbs::LoadEnergies()
 {
     LoadEnergyMag();
@@ -118,6 +137,7 @@ void ObjAnAbs::LoadEnergies()
     LoadEnergyCos();
     LoadEnergyCorr();
     LoadEnergyCollComp();
+    LoadEnergyRandom();
 }
 
 void ObjAnAbs::AddPoint(const TLorentzVector &tlv_B, const TLorentzVector &tlv_v)
@@ -173,6 +193,11 @@ TH2D *ObjAnAbs::GetHCollComp()
     return Resolution_an_collcomp;
 }
 
+TH2D *ObjAnAbs::GetHRandom()
+{
+    return Resolution_an_random;
+}
+
 TProfile *ObjAnAbs::GetPMean()
 {
     return an_mean_profile;
@@ -191,6 +216,11 @@ TProfile *ObjAnAbs::GetPCorr()
 TProfile *ObjAnAbs::GetPCollComp()
 {
     return an_collcomp_profile;
+}
+
+TProfile *ObjAnAbs::GetPRandom()
+{
+    return an_random_profile;
 }
 
 TF1 *ObjAnAbs::GetFCorr1()
@@ -218,6 +248,11 @@ TF1 *ObjAnAbs::GetFCollComp()
     return f_fit_collcomp;
 }
 
+TF1 *ObjAnAbs::GetFRandom()
+{
+    return f_fit_random;
+}
+
 TFitResultPtr ObjAnAbs::GetFitProfileResultCos()
 {
     return risultati_fit_cos;
@@ -241,6 +276,11 @@ TFitResultPtr ObjAnAbs::GetFitProfileResultMean()
 TFitResultPtr ObjAnAbs::GetFitProfileResultCollComp()
 {
     return risultati_fit_collcomp;
+}
+
+TFitResultPtr ObjAnAbs::GetFitProfileResultRandom()
+{
+    return risultati_fit_random;
 }
 
 TH1D *ObjAnAbs::GetHResiduiCorr()
@@ -271,4 +311,9 @@ TH1D *ObjAnAbs::GetHResiduiMin()
 TH1D *ObjAnAbs::GetHResiduiCollComp()
 {
     return h_residui_collcomp;
+}
+
+TH1D *ObjAnAbs::GetHResiduiRandom()
+{
+    return h_residui_random;
 }
